@@ -17,24 +17,35 @@ export default class Player {
         /** Coordinates */
         this.posX = 0;
         this.posY = 0; 
+        
         /** Direction vector (where the character looks at) */
         this.dirX = 0;
         this.dirY = 0;
+
         /** Additional altitude (used to simulate breathing) */
         this.altitude = 0.5;
         this.offset = 0; 
         
         /** Speed when walking/running */
         this.speed = 0;
+
         /** Breathing speed */
         this.offSpeed = PLAYER_OFFSET_SPEED;
+
         /** Movement: set to a value > 0 to strafe */
         this.strafeSpeed = 0;
+
         /** Used when the character raises/lowers his head */
         this.pitch = 0; 
 
         /** projection plane (screen) distance */
         this.plane = { x: 0, y: 0.66 };
+
+        /** player's health */
+        this.health = 100;
+
+        /** player's sobriety */
+        this.sobriety = 0;
 
     }
 
@@ -162,17 +173,36 @@ export default class Player {
         this.speed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
+
     stop2() {
         this.translSpeed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
+
     walk(dir) {
         this.speed = PLAYER_MOVEMENT_SPEED * dir;
         this.offSpeed = PLAYER_OFFSET_SPEED*2;
 
     }
+
     strafe(dir) {
         this.translSpeed = PLAYER_ROTATION_SPEED * dir;
+    }
+
+    hit(amout){
+        this.health -= amout;
+    }
+
+    regen(amout){
+        this.health += amout;
+    }
+
+    drink(amout){
+        this.sobriety += amout;
+    }
+
+    spit(amout){
+        this.sobriety -= amout;
     }
 
 }
