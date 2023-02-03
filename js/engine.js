@@ -33,8 +33,8 @@ export class Engine {
      * @param {Number} dist the distance in the world
      * @returns {Number} a real between 0 (dark) and 1 (light)
      */
-    brightnessForDistance(dist) {
-        const min = 1, max = 10;
+    brightnessForDistance(dist, max) {
+        const min = 1;
         if (dist > max) {
             return 0;
         }
@@ -156,7 +156,7 @@ Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-
             this.zBuffer[x] = perpWallDist;
 
             // adjust brightness
-            let b = this.brightnessForDistance(perpWallDist)
+            let b = this.brightnessForDistance(perpWallDist, game.player.lighting)
 
             //Calculate height of line to draw on screen
             let lineHeight = Math.floor(H / perpWallDist);
@@ -237,7 +237,7 @@ Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-
             let floorX = game.player.posX + rowDistance * rayDirX0;
             let floorY = game.player.posY + rowDistance * rayDirY0;
 
-            let b = this.brightnessForDistance(rowDistance);
+            let b = this.brightnessForDistance(rowDistance, game.player.lighting);
 
             for(let x = 0; x < W; ++x) {
                 // the cell coord is simply got from the integer parts of floorX and floorY
@@ -313,7 +313,7 @@ Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-
                 return;
             }
 
-            let br = that.brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY));
+            let br = that.brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY), game.player.lighting);
 
             if (br == 0) {
                 return;

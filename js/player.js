@@ -36,6 +36,8 @@ export default class Player {
         /** projection plane (screen) distance */
         this.plane = { x: 0, y: 0.66 };
 
+        /** lighting */
+        this.lighting = 2;
     }
 
 
