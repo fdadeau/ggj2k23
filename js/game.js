@@ -51,6 +51,9 @@ export class Game {
             case 'KeyD':
                 this.player.strafe(1);
                 break;
+            case 'KeyB':
+                this.player.lighting = (this.player.lighting == 2) ? 5 : 2;
+                break;
             case 'KeyP':
                 this.paused = !this.paused;
                 break;
