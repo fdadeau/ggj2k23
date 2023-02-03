@@ -1,12 +1,15 @@
 import { Game } from "./game.js";
 import { Engine } from "./engine.js";
+import { Hud } from "./hud.js";
 
 document.addEventListener("DOMContentLoaded", function() {
 
     // Pseudo-3D engine
-    const engine = new Engine(document.getElementById("cvs"));
+    const canvas = document.getElementById("cvs");
+    const engine = new Engine(canvas);
     // Game itself 
     const game = new Game();
+    const hud = new Hud(canvas);
 
     // Event listener for keyboards events
     document.addEventListener("keydown", function(e) {
@@ -45,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
             framerate = 0;
             framesMeasure= now;
         }
+        hud.render(engine.ctx);
     }
     mainloop();
 

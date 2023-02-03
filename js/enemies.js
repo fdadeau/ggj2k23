@@ -53,7 +53,7 @@ class Enemy {
 
     collides(x, y) {
         return false;
-        return x < this.x - 0.1 || x > this.x + 0.1 || y < this.y - 0.1 || y > this.y - 0.1; 
+        // return x < this.x - 0.1 || x > this.x + 0.1 || y < this.y - 0.1 || y > this.y - 0.1; 
     }
 
 }
@@ -124,6 +124,7 @@ class Dino extends Enemy {
         else {
             dec = angle > 90 && angle < 270 ? 10 : 0; 
         }
+        ctx.fillStyle = '#fff';
         ctx.fillText(`Dino:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle}`, 10, 30);
         ctx.drawImage(DINO_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * DINO_HEIGHT), width, DINO_HEIGHT, x, y, maxX - minX, sizeY);
     }
