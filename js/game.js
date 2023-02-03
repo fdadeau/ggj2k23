@@ -3,8 +3,6 @@ import Player from "./player.js";
 
 import { levels } from "./levels.js";
 
-import { buildEnemy } from "./enemies.js";
-
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
@@ -42,8 +40,6 @@ export class Game {
     }
 
    
-
-
     // Commands
     press(key) {
         switch (key) {
