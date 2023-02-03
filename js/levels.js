@@ -59,7 +59,7 @@ const ENEMIES2 = function() {
     }.bind(dino0);
 
     // static dino
-    const dino1 = buildEnemy("dino", 2.5, 2.5, -1, 0);
+    const dino1 = buildEnemy("dino", 6.5, 4.5, 1, 0);
 
     return [dino0, dino1];
 };
@@ -79,7 +79,5 @@ export const levels = {
         map: MAP1,
         enemies: () => []
     }
-
-
 
 }
