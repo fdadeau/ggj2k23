@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const engine = new Engine(canvas);
     // Game itself 
     const game = new Game();
-    const hud = new Hud(canvas);
+    const hud = new Hud(canvas, 75);
 
     // Event listener for keyboards events
     document.addEventListener("keydown", function(e) {
@@ -30,9 +30,11 @@ document.addEventListener("DOMContentLoaded", function() {
         let dY = e.movementY;
         game.mouseMove(dX, dY);
     });
-    
+
     let lastUpdate = Date.now();
-    let framerate = 0, framesMeasure = lastUpdate;
+    let framerate = 0,
+        framesMeasure = lastUpdate;
+
     function mainloop() {
         requestAnimationFrame(mainloop);
         let now = Date.now();
@@ -43,13 +45,12 @@ document.addEventListener("DOMContentLoaded", function() {
         game.player.currentWeapon.render(engine.ctx);
         if (now < framesMeasure + 1000) {
             framerate++;
-        }
-        else {
+        } else {
             engine.framerate = framerate;
             framerate = 0;
-            framesMeasure= now;
+            framesMeasure = now;
         }
-        hud.render(engine.ctx);
+        hud.render(engine.ctx, game.player);
     }
     mainloop();
 

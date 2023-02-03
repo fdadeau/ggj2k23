@@ -2,12 +2,11 @@ const WEAPON_AXE = 1; // Hache
 const WEAPON_CHAINSAW = 2; // Tronçonneuse
 const WEAPON_LIGHTER = 3; // Briquet
 
-const HUD_HEIGHT = 75;
 const NB_SLOTS = 7;
 
 export class Hud {
 
-    constructor(cvs) {
+    constructor(cvs, hudHeight) {
         // Score
         this.score = 0;
         // Level
@@ -20,24 +19,29 @@ export class Hud {
         this.weapon = WEAPON_AXE;
         // Canvas
         this.cvs = cvs;
+        // Hud Height
+        this.height = hudHeight;
     }
 
-    render(ctx) {
-        let hudY_origin = cvs.height - HUD_HEIGHT;
+    render(ctx, player) {
+        this.health = player.health;
+        this.sobriety = player.sobriety;
+
+        let hudY_origin = cvs.height - this.height;
 
         // Draw the window
         ctx.fillStyle = '#0000a6';
-        ctx.fillRect(0, hudY_origin, cvs.width, HUD_HEIGHT);
+        ctx.fillRect(0, hudY_origin, cvs.width, this.height);
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 2;
         ctx.strokeRect(0, hudY_origin, cvs.width, 0);
 
         // Draw the separators
         let slot = cvs.width / NB_SLOTS;
-        ctx.strokeRect(slot, hudY_origin + 10, 0, HUD_HEIGHT - 20);
-        ctx.strokeRect(slot * 2, hudY_origin + 10, 0, HUD_HEIGHT - 20);
-        ctx.strokeRect(slot * 3, hudY_origin, 0, HUD_HEIGHT);
-        ctx.strokeRect(slot * 4, hudY_origin, 0, HUD_HEIGHT);
+        ctx.strokeRect(slot, hudY_origin + 10, 0, this.height - 20);
+        ctx.strokeRect(slot * 2, hudY_origin + 10, 0, this.height - 20);
+        ctx.strokeRect(slot * 3, hudY_origin, 0, this.height);
+        ctx.strokeRect(slot * 4, hudY_origin, 0, this.height);
 
         ctx.fillStyle = '#fff';
         ctx.font = "12pt ka1";
@@ -53,12 +57,12 @@ export class Hud {
         // Weapon slot
         let axeImg = new Image();
         axeImg.src = '../data/images/axe.png';
-        ctx.drawImage(axeImg, 200, hudY_origin + 5, HUD_HEIGHT - 10, HUD_HEIGHT - 10);
+        ctx.drawImage(axeImg, 200, hudY_origin + 5, this.height - 10, this.height - 10);
 
         // Skin slot
         let skinImg = new Image();
         skinImg.src = '../data/images/timber.jpeg';
-        ctx.drawImage(skinImg, 275, hudY_origin + 1, slot - 2, HUD_HEIGHT);
+        ctx.drawImage(skinImg, 275, hudY_origin + 1, slot - 2, this.height);
 
         // Draw the health and sobriety bars
         this.drawBar(ctx, 'health');
@@ -69,7 +73,7 @@ export class Hud {
     }
 
     drawBar(ctx, type) {
-        let height = cvs.height - HUD_HEIGHT;
+        let height = cvs.height - this.height;
         let slot = cvs.width / NB_SLOTS;
         let levelRef;
         let barColor;
