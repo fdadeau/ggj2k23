@@ -71,6 +71,74 @@ export class Engine {
         this.ctx.fillText(game.player.getInfos(), 10, 20);
     }
 
+
+    castRay(x, game) {
+        //calculate ray position and direction
+        const cameraX = 2 * x / WIDTH - 1; // x-coordinate in camera space
+        let rayDirX = game.player.dirX + game.player.plane.x * cameraX;
+        let rayDirY = game.player.dirY + game.player.plane.y * cameraX;
+
+        //which box of the map we're in
+        let posX = game.player.posX | 0, posY = game.player.posY | 0;
+        let mapX = posX, mapY = posY;
+
+        //length of ray from one x or y-side to next x or y-side
+        let deltaDistX = (rayDirX == 0) ? +Infinity : Math.abs(1 / rayDirX);
+        let deltaDistY = (rayDirY == 0) ? +Infinity : Math.abs(1 / rayDirY);
+
+        //what direction to step in x or y-direction (either +1 or -1)
+        let stepX, stepY;
+        //length of ray from current position to next x or y-side
+        let sideDistX, sideDistY;
+
+        //calculate step and initial sideDist
+        if (rayDirX < 0) {
+            stepX = -1;
+            sideDistX = (game.player.posX - mapX) * deltaDistX;
+        }
+        else {
+            stepX = 1;
+            sideDistX = (mapX + 1.0 - game.player.posX) * deltaDistX;
+        }
+        if (rayDirY < 0) {
+            stepY = -1;
+            sideDistY = (game.player.posY - mapY) * deltaDistY;
+        }
+        else {
+            stepY = 1;
+            sideDistY = (mapY + 1.0 - game.player.posY) * deltaDistY;
+        }
+
+        let hit = 0; //was there a wall hit?
+        let side; //was a NS or a EW wall hit?
+
+        //perform Digital Differential Analysis (DDA)
+        while (hit == 0) {
+            //jump to next map square, either in x-direction, or in y-direction
+            if (sideDistX < sideDistY) {
+                sideDistX += deltaDistX;
+                mapX += stepX;
+                side = 0;
+            }
+            else {
+                sideDistY += deltaDistY;
+                mapY += stepY;
+                side = 1;
+            }
+            //Check if ray has hit a wall
+            if (game.map[mapX][mapY] > 0) hit = 1;
+        } 
+
+        return [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY];
+
+            /**
+             * Xi=[((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-Ya)/(Xb-Xa))-((Yd-Yc)/(Xd-Xc))]
+Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-Ya)/(Xb-Xa))-((Yd-Yc)/(Xd-Xc))]-Xa)+Ya
+             */
+    }
+
+
+
     wallCasting(game) {
         const W = WIDTH;
         const H = HEIGHT;
@@ -78,65 +146,11 @@ export class Engine {
         this.zBuffer = [];
 
         for(let x = 0; x < W; x++) {
-            //calculate ray position and direction
-            const cameraX = 2 * x / W - 1; // x-coordinate in camera space
-            let rayDirX = game.player.dirX + game.player.plane.x * cameraX;
-            let rayDirY = game.player.dirY + game.player.plane.y * cameraX;
 
-            //which box of the map we're in
-            let posX = Math.floor(game.player.posX), posY = Math.floor(game.player.posY);
-            let mapX = posX, mapY = posY;
-
-            //length of ray from one x or y-side to next x or y-side
-            let deltaDistX = (rayDirX == 0) ? +Infinity : Math.abs(1 / rayDirX);
-            let deltaDistY = (rayDirY == 0) ? +Infinity : Math.abs(1 / rayDirY);
-            let perpWallDist;
-
-            //what direction to step in x or y-direction (either +1 or -1)
-            let stepX, stepY;
-            //length of ray from current position to next x or y-side
-            let sideDistX, sideDistY;
-
-            //calculate step and initial sideDist
-            if (rayDirX < 0) {
-                stepX = -1;
-                sideDistX = (game.player.posX - mapX) * deltaDistX;
-            }
-            else {
-                stepX = 1;
-                sideDistX = (mapX + 1.0 - game.player.posX) * deltaDistX;
-            }
-            if (rayDirY < 0) {
-                stepY = -1;
-                sideDistY = (game.player.posY - mapY) * deltaDistY;
-            }
-            else {
-                stepY = 1;
-                sideDistY = (mapY + 1.0 - game.player.posY) * deltaDistY;
-            }
-
-            let hit = 0; //was there a wall hit?
-            let side; //was a NS or a EW wall hit?
-
-            //perform Digital Differential Analysis (DDA)
-            while (hit == 0) {
-                //jump to next map square, either in x-direction, or in y-direction
-                if (sideDistX < sideDistY) {
-                    sideDistX += deltaDistX;
-                    mapX += stepX;
-                    side = 0;
-                }
-                else {
-                    sideDistY += deltaDistY;
-                    mapY += stepY;
-                    side = 1;
-                }
-                //Check if ray has hit a wall
-                if (game.map[mapX][mapY] > 0) hit = 1;
-            } 
+            let [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY] = this.castRay(x, game);
 
             //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
-            perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
+            let perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
 
             // add to zBuffer index 
             this.zBuffer[x] = perpWallDist;
@@ -153,7 +167,7 @@ export class Engine {
             let drawEnd = lineHeight / 2 + H * game.player.altitude + game.player.pitch;
             if (drawEnd >= H) drawEnd = H - 1;
 
-    
+
             /*** TEXTURES ON THE WALLS ***/
 
             //texturing calculations
@@ -392,9 +406,49 @@ export class Engine {
         this.ctx.fillStyle = "black";
         for (let x = 0; x < game.map.length; x++) {
             for (let y = 0; y < game.map[x].length; y++) {
-                if (game.map[x][y] >= 1) {
+                if (game.map[x][y] == 1) {
                     let y1 = game.map[x].length - 1 - y;
                     this.ctx.fillRect(10 + x * square, 10 + y1 * square, square, square);
+                }
+                else if (game.map[x][y] == 2) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+                else if (game.map[x][y] == 3) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+                else if (game.map[x][y] == 4) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+                else if (game.map[x][y] == 5) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
                 }
             }
         }
