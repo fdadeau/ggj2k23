@@ -390,23 +390,36 @@ export class Engine {
         this.ctx.fillRect(0, 0, WIDTH, HEIGHT)
         let square = (HEIGHT - 20) / Math.min(game.map.length, game.map[0].length);
         this.ctx.fillStyle = "black";
-        for (let y = 0; y < game.map.length; y++) {
-            for (let x = 0; x < game.map[y].length; x++) {
-                if (game.map[y][x] >= 1) {
+        for (let x = 0; x < game.map.length; x++) {
+            for (let y = 0; y < game.map[x].length; y++) {
+                if (game.map[x][y] >= 1) {
                     this.ctx.fillRect(10 + x * square, 10 + y * square, square, square);
                 }
             }
         }
         this.ctx.fillStyle = "#0000FF";
+        this.ctx.strokeStyle = "#0000FF";
         this.ctx.beginPath();
         this.ctx.arc(10 + game.player.posX*square, 10 + game.player.posY*square, 0.2 * square, 0, 2*Math.PI);
         this.ctx.fill();
-        
+        this.ctx.beginPath();
+        this.ctx.moveTo(10 + game.player.posX*square, 10 + game.player.posY*square);
+        this.ctx.lineTo(10 + game.player.posX*square + game.player.dirX * square, 10 + game.player.posY*square + game.player.dirY * square);
+        this.ctx.closePath();
+        this.ctx.stroke();
+
         this.ctx.fillStyle = "#FF0000";
+        this.ctx.strokeStyle = "#FF0000";
         game.enemies.forEach(e => {
             this.ctx.beginPath();
             this.ctx.arc(10 + e.x*square, 10 + e.y*square, 0.2 * square, 0, 2*Math.PI);
             this.ctx.fill();
+            this.ctx.closePath();
+            this.ctx.beginPath();
+            this.ctx.moveTo(10 + e.x*square, 10 + e.y*square);
+            this.ctx.lineTo(10 + e.x*square + e.dirX * square, 10 + e.y*square + e.dirY * square);
+            this.ctx.closePath();
+            this.ctx.stroke();
         });
         
     }

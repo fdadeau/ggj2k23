@@ -6,12 +6,20 @@ import { levels } from "./levels.js";
 import { buildEnemy } from "./enemies.js";
 
 
+const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
+
 export class Game {
 
     constructor() {
 
         this.paused = false;
         this.on2D = false;
+        if (localStorage.getItem(STORAGE_KEY_MOUSE)) {
+            this.inverted = 1*localStorage.getItem(STORAGE_KEY_MOUSE);
+        }
+        else {
+            this.inverted = 1;
+        }
 
         this.enemies = [];
         this.player = new Player();
@@ -60,6 +68,11 @@ export class Game {
                 break;
             case 'Semicolon':
                 this.on2D = !this.on2D;
+                break;
+            case 'KeyI':
+                this.inverted *= -1;
+                localStorage.setItem(STORAGE_KEY_MOUSE, this.inverted);
+                break;
         }
     }
     release(key) {
@@ -80,7 +93,7 @@ export class Game {
         }
     }
     mouseMove(dx, dy) {
-        this.player.moveHead(dx,dy);
+        this.player.moveHead(dx,dy*this.inverted);
     }
 
 }
