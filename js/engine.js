@@ -416,12 +416,12 @@ export class Engine {
         this.ctx.strokeStyle = "#FF0000";
         game.enemies.forEach(e => {
             this.ctx.beginPath();
-            this.ctx.arc(10 + e.x*square, 10 + e.y*square, 0.2 * square, 0, 2*Math.PI);
+            this.ctx.arc(10 + e.x*square, 10 + (game.map[0].length - e.y)*square, 0.2 * square, 0, 2*Math.PI);
             this.ctx.fill();
             this.ctx.closePath();
             this.ctx.beginPath();
-            this.ctx.moveTo(10 + e.x*square, 10 + e.y*square);
-            this.ctx.lineTo(10 + e.x*square + e.dirX * square, 10 + e.y*square + e.dirY * square);
+            this.ctx.moveTo(10 + e.x*square, 10 + (game.map[0].length - e.y)*square);
+            this.ctx.lineTo(10 + e.x*square + e.dirX * square, 10 + (game.map[0].length - e.y)*square - e.dirY * square);
             this.ctx.closePath();
             this.ctx.stroke();
         });
