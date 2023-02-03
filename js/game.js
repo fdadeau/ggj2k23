@@ -39,6 +39,8 @@ export class Game {
             e.update(dt);   // TODO add player for detecting collisions?
         });
         this.player.update(dt, this.map, this.enemies);
+
+        //this.player.currentWeapon.update(dt);   // TODO remove (only debug)
     }
 
    
@@ -72,6 +74,9 @@ export class Game {
             case 'KeyI':
                 this.inverted *= -1;
                 localStorage.setItem(STORAGE_KEY_MOUSE, this.inverted);
+                break;
+            case 'KeyE':
+                this.player.attack();
                 break;
         }
     }

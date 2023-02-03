@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
         game.update(dt);
         lastUpdate = now;
         engine.render(game);
+        game.player.currentWeapon.render(engine.ctx);
         if (now < framesMeasure + 1000) {
             framerate++;
         }

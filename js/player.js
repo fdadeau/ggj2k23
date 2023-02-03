@@ -1,3 +1,5 @@
+import { buildWeapon } from "./weapons.js";
+
 /***
  * Class describing the main character of the game.
  */
@@ -47,6 +49,14 @@ export default class Player {
         /** player's sobriety */
         this.sobriety = 0;
 
+        /** weapon management */
+        this.weapons = [
+            buildWeapon("axe")
+        ];
+        this.currentWeapon = this.weapons[0];
+
+        /** Tells if the player can attack or not */
+        this.isAttacking = false;
     }
 
 
@@ -203,6 +213,22 @@ export default class Player {
 
     spit(amout){
         this.sobriety -= amout;
+    }
+
+    attack(){
+        if(this.isAttacking){
+            return;
+        }
+        this.isAttacking = true;
+        var counter = 0;
+        var anim = setInterval(function(player){
+            player.isAttacking = player.currentWeapon.update();
+            counter++;
+            if(counter >= 3){
+                clearInterval(anim);
+            }
+        
+        }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
     }
 
 }
