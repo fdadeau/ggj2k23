@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+canvas {
+    box-sizing: border-box;
+    border: solid 1px #000;
+    width: 640;
+    height: calc(640 * 10 / 16);
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
