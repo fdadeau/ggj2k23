@@ -2,20 +2,6 @@ import { buildWeapon } from "./weapons.js";
 
 import { Hud } from "./hud.js";
 
-const AXE_HEIGHT = 5000/5 | 0;
-const AXE_ATTACK = [0,1,2,3,4];
-const AXE_IDLE = [0];
-
-const WHISKY_HEIGHT = 4200/6 | 0;
-const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
-const WHISKY_IDLE = [0];
-const WHISKY_EMPTY = [5];
-
-const TEQUILA_HEIGHT = 4200/6 | 0;
-const TEQUILA_DRINK = [0,1,2,2,2,3,3,3,4,5];
-const TEQUILA_IDLE = [0];
-const TEQUILA_EMPTY = [5];
-
 const FRAME_DELAY = 100;
 
 
@@ -74,16 +60,17 @@ export default class Player {
             buildWeapon("tequila"),
             buildWeapon("axe"),
         ];
+
         this.currentWeapon = this.weapons[2];
         this.lighter = buildWeapon('lighter');
-        this.setAnimation(AXE_IDLE);
+        this.setAnimation(this.currentWeapon.idle);
         this.frameDelay = FRAME_DELAY;
 
         /** Tells if the player can attack or not */
         this.isAttacking = false;
 
         /** Consumable */
-        this.nbWhisky = 2;
+        this.nbWhisky = 0;
         this.nbTequila = 0;
 
         /** lighting */
@@ -93,7 +80,6 @@ export default class Player {
         this.isDrunk = false;
 
         this.hud = new Hud(75);
-    
     }
 
 
@@ -200,25 +186,7 @@ export default class Player {
             this.frame = (this.frame + 1) % this.animation.length;
             if(this.frame == 0){
                 this.isAttacking = false;
-                switch(this.currentWeapon.constructor.name){
-                    case 'Axe':
-                        this.setAnimation(AXE_IDLE);
-                        break;
-                    case 'Whisky':
-                        if(this.nbWhisky == 0){
-                            this.setAnimation(WHISKY_EMPTY);
-                        }else{
-                            this.setAnimation(WHISKY_IDLE);
-                        }
-                        break;
-                    case 'Tequila':
-                        if(this.nbTequila == 0){
-                            this.setAnimation(TEQUILA_EMPTY);
-                        }else{
-                            this.setAnimation(TEQUILA_IDLE);
-                        }
-                        break;
-                }
+                this.setAnimation(this.currentWeapon.idle);
             }
         }
 
@@ -263,45 +231,31 @@ export default class Player {
     strafe(dir) {
         this.translSpeed = PLAYER_ROTATION_SPEED * dir;
     }
-
-    hit(amout) {
-        this.health -= amout;
-    }
-
-    regen(amout) {
-        this.health += amout;
-    }
-
-    drink(amout) {
-        this.sobriety += amout;
-    }
-
-    spit(amout) {
-        this.sobriety -= amout;
-    }
-
+    
     equipeAxe(){
         if (this.isAttacking) {
             return -1;
         }
-        this.setAnimation(AXE_IDLE);
         this.currentWeapon = this.weapons[2];
+        this.setAnimation(this.currentWeapon.idle);
     }
 
     equipeWhisky(){
         if (this.isAttacking) {
             return -1;
         }
-        this.setAnimation((this.nbWhisky > 0)?WHISKY_IDLE:WHISKY_EMPTY);
         this.currentWeapon = this.weapons[0];
+        this.setAnimation(this.currentWeapon.idle);
+        this.hud.equipeWhisky();
     }
 
     equipeTequila(){
         if (this.isAttacking) {
             return -1;
         }
-        this.setAnimation(TEQUILA_IDLE);
         this.currentWeapon = this.weapons[1];
+        this.setAnimation(this.currentWeapon.idle);
+        this.hud.equipeTequila();
     }
 
     switchToNextWeapon(){
@@ -311,11 +265,8 @@ export default class Player {
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+1)%this.weapons.length;
         this.currentWeapon = this.weapons[newWeapon];
-        if(newWeapon == 0){
-            this.setAnimation((this.nbWhisky > 0)?WHISKY_IDLE:WHISKY_EMPTY); 
-        }
-        // TODO animation
-        return newWeapon;
+        this.setAnimation(this.currentWeapon.idle);
+        this.hud.changeWeapon(newWeapon);
     }
 
     setAnimation(anim) {
@@ -326,18 +277,7 @@ export default class Player {
 
     render(ctx){
         this.hud.render(ctx, this);
-
-        switch(this.currentWeapon.constructor.name){
-            case 'Axe':
-                this.currentWeapon.render(ctx,((this.animation[this.frame]) * AXE_HEIGHT));
-                break;
-            case 'Whisky':
-                this.currentWeapon.render(ctx,((this.animation[this.frame]) * WHISKY_HEIGHT));
-                break;
-            case 'Tequila':
-                this.currentWeapon.render(ctx,((this.animation[this.frame]) * TEQUILA_HEIGHT));
-                break;
-        }
+        this.currentWeapon.render(ctx,((this.animation[this.frame])));
     }
 
     attack(enemies) {
@@ -345,9 +285,14 @@ export default class Player {
             return;
         }
         this.isAttacking = true;
+        this.setAnimation(this.currentWeapon.use);
+        enemies.forEach(function(e) {
+            if(e.distance <= this.currentWeapon.range){{
+                e.hit(this.currentWeapon.damage);
+            }}
+        },this);
         switch(this.currentWeapon.constructor.name){
             case 'Axe':
-                this.setAnimation(AXE_ATTACK);
                 enemies.forEach(function(e) {
                     if(e.distance <= this.currentWeapon.range){{
                         e.hit(this.currentWeapon.damage);
@@ -358,7 +303,7 @@ export default class Player {
                 if(this.nbWhisky == 0){
                     return;
                 }
-                this.setAnimation(WHISKY_DRINK);
+
                 this.sobriety += 10;
                 this.nbWhisky--;
                 break;
@@ -366,7 +311,6 @@ export default class Player {
                 if(this.nbTequila == 0){
                     return;
                 }
-                this.setAnimation(TEQUILA_DRINK);
                 this.sobriety += 20;
                 this.nbTequila--;
                 this.isDrunk = true;

@@ -17,6 +17,34 @@ export function buildWeapon(type,){
     }
 }
 
+/** Whisky */
+const WHISKY_SPRITESHEET = new Image();
+WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
+const WHISKY_HEIGHT = 4200/6 | 0;
+const WHISKY_WIDTH = 1000;
+
+const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
+const WHISKY_IDLE = [0];
+
+/** AXE */
+const AXE_SPRITESHEET = new Image();
+AXE_SPRITESHEET.src = "../data/axe-spritesheet.png";
+const AXE_HEIGHT = 5000/5 | 0;
+const AXE_WIDTH = 1000;
+
+const AXE_ATTACK = [0,1,2,3,4];
+const AXE_IDLE = [0];
+
+/** TEQUILA */
+const TEQUILA_SPRITESHEET = new Image();
+TEQUILA_SPRITESHEET.src = "../data/tequila-spritesheet.png";
+const TEQUILA_HEIGHT = 4200/6 | 0;
+const TEQUILA_WIDTH = 1000;
+
+
+const TEQUILA_DRINK = [0,1,2,2,2,3,3,3,4,5];
+const TEQUILA_IDLE = [0];
+
 class Weapon{
     /**
      * 
@@ -29,6 +57,8 @@ class Weapon{
         this.delay = delay; // TODO : not used 
         this.range = range;
     }
+
+    behavior() { }
 }
 
 class Consumable extends Weapon{
@@ -37,47 +67,39 @@ class Consumable extends Weapon{
     }
 }
 
-const WHISKY_SPRITESHEET = new Image();
-WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
-const WHISKY_HEIGHT = 4200/6 | 0;
-const WHISKY_WIDTH = 1000;
-
 class Whisky extends Consumable{
     constructor(){
         super();
+        this.idle = WHISKY_IDLE;
+        this.use = WHISKY_DRINK;
     }
 
     render(ctx, frame){
-        ctx.drawImage(WHISKY_SPRITESHEET, 0, frame, WHISKY_WIDTH, WHISKY_HEIGHT, 350, 325-170, 200, 170); // TODO : make it clean (temporary, wait final textures)
+        ctx.drawImage(WHISKY_SPRITESHEET, 0, frame * WHISKY_HEIGHT, WHISKY_WIDTH, WHISKY_HEIGHT, 350, 325-170, 200, 170); // TODO : make it clean (temporary, wait final textures)
     }
 }
-
-const TEQUILA_SPRITESHEET = new Image();
-TEQUILA_SPRITESHEET.src = "../data/tequila-spritesheet.png";
-const TEQUILA_HEIGHT = 4200/6 | 0;
-const TEQUILA_WIDTH = 1000;
 
 class Tequila extends Consumable {
     constructor(){
         super();
+        this.idle = TEQUILA_IDLE;
+        this.use = TEQUILA_DRINK;
     }
 
     render(ctx, frame){
-        ctx.drawImage(TEQUILA_SPRITESHEET, 0, frame, TEQUILA_WIDTH, TEQUILA_HEIGHT, 350, 325-170, 200, 170); // TODO : make it clean (temporary, wait final textures)
+        ctx.drawImage(TEQUILA_SPRITESHEET, 0, frame * TEQUILA_HEIGHT, TEQUILA_WIDTH, TEQUILA_HEIGHT, 350, 325-170, 200, 170); // TODO : make it clean (temporary, wait final textures)
     }
 }
-
-const AXE_SPRITESHEET = new Image();
-AXE_SPRITESHEET.src = "../data/axe-spritesheet.png";
-const AXE_HEIGHT = 5000/5 | 0;
-const AXE_WIDTH = 1000;
 
 class Axe extends Weapon{
     constructor(){
         super(25,800,2.5);
+        this.idle = AXE_IDLE;
+        this.use = AXE_ATTACK;
     }
+    
     render(ctx, frame){
-        ctx.drawImage(AXE_SPRITESHEET, 0, frame, AXE_WIDTH, AXE_HEIGHT, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
+        ctx.drawImage(AXE_SPRITESHEET, 0, frame * AXE_HEIGHT, AXE_WIDTH, AXE_HEIGHT, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
     }
 }
 
