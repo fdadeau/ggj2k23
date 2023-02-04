@@ -87,13 +87,31 @@ const ENEMIES3 = function() {
     // static tree
     const tree1 = buildEnemy("tree", 3.5, 10.5, 0, 1);
 
+    // tree running around
+    const turnip0 = buildEnemy("turnip", 6.5, 7.5, 0, 1);
+    tree0.behavior = function() {
+        if (!this.xTarget || !this.yTarget) {
+            this.xTarget = 3.5;
+            this.yTarget = 7.5;
+            this.walk();
+        }
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+            this.dirY = -this.dirY;
+            this.yTarget += this.dirY * 4;
+            this.angle = (this.angle + 180) % 360;
+        }
+    }.bind(turnip0);
+
+    // static tree
+    const turnip1 = buildEnemy("turnip", 4.5, 5.5, 0, 1);
+
     // Whisky power up
     const whisky0 = buildPowerUp("whisky", 3.5, 20.5, 0, 1);
 
     // Tequila power up
     const tequila0 = buildPowerUp("tequila", 2.5, 20.5, 0, 1);
 
-    return [tree0, tree1, whisky0, tequila0];
+    return [tree0, tree1, whisky0, tequila0, turnip0, turnip1];
 };
 
 

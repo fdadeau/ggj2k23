@@ -23,6 +23,17 @@ TREE_SPRITESHEET.src = "../data/tree-spritesheet.png";
 const TREE_HEIGHT = 12800/16 | 0;
 const TREE_WIDTH = 800;
 
+/** DEADLY TURNIP */
+
+const TURNIP_WALK = [0,4,8];
+const TURNIP_IDLE = [0];
+const TURNIP_BITE = [12,12,13,13];
+
+const TURNIP_SPRITESHEET = new Image();
+TURNIP_SPRITESHEET.src = "../data/turnip-spritesheet.png";
+const TURNIP_HEIGHT = 5852/14 | 0;
+const TURNIP_WIDTH = 419;
+
 
 /**
  * Build an enemy of the specified type.
@@ -39,6 +50,8 @@ export function buildEnemy(type,x,y,dx,dy) {
             return new Dino(x,y,dx,dy,WALK,IDLE);
         case "tree":
             return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE);
+        case "turnip":
+            return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE);
         // ... TODO ... make more enemies
     }
 }
@@ -193,6 +206,53 @@ class Tree extends Enemy {
         
         ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(TREE_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
+    
+    }
+}
+
+
+
+class Turnip extends Enemy {
+
+    constructor(x, y, dirX, dirY, walkAnim, idleTree) {
+        super(x, y, dirX, dirY, walkAnim, idleTree, 100);
+        this.setAnimation(TURNIP_IDLE);
+        this.factor = 0.5;
+        this.height = TURNIP_HEIGHT;
+        this.width = TURNIP_WIDTH;
+        this.vMove = 20;
+    }
+
+    bite(){
+        this.setAnimation(TURNIP_BITE);
+    }
+
+    update(dt) {
+        super.update(dt);
+        this.frameDelay -= dt;
+        if (this.frameDelay <= 0) {
+            this.frameDelay = FRAME_DELAY;
+            this.frame = (this.frame + 1) % this.animation.length;
+        }
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+        let sourceX = minX / sizeX * this.width | 0;
+        let width = (maxX - minX) / sizeX * this.width | 0;
+        let dec = 3;
+        
+        if (angle >= 45 && angle < 135) {
+            dec = 2;
+        }
+        else if (angle >= 135 && angle < 225) {
+            dec = 1;
+        }
+        else if (angle >= 225 && angle < 315) {
+            dec = 0;
+        }
+        
+        ctx.fillText(`Turnip:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
+        ctx.drawImage(TURNIP_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     
     }
 }
