@@ -2,6 +2,27 @@
 const SPEED = 0.001;
 const FRAME_DELAY = 100;
 
+/** CUTE DINOSAUR */
+
+const WALK = [4,5,6,7,8,9,10,11,12,13];
+const IDLE = [0];
+
+const DINO_SPRITESHEET = new Image();
+DINO_SPRITESHEET.src = "../data/dino-spritesheet.png";
+const DINO_HEIGHT = 5664/24 | 0;
+const DINO_WIDTH = 240;
+
+/** ANGRY TREE */
+
+const TREE_WALK = [0,4,8];
+const TREE_IDLE = [0];
+const TREE_PUNCH = [12,12,13,14,15];
+
+const TREE_SPRITESHEET = new Image();
+TREE_SPRITESHEET.src = "../data/tree-spritesheet.png";
+const TREE_HEIGHT = 10400/13 | 0;
+const TREE_WIDTH = 800;
+
 
 /**
  * Build an enemy of the specified type.
@@ -15,7 +36,9 @@ const FRAME_DELAY = 100;
 export function buildEnemy(type,x,y,dx,dy) {
     switch (type) {
         case "dino":
-            return new Dino(x,y,dx,dy);
+            return new Dino(x,y,dx,dy,WALK,IDLE);
+        case "tree":
+            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE);
         // ... TODO ... make more enemies
     }
 }
@@ -27,7 +50,7 @@ export function buildEnemy(type,x,y,dx,dy) {
 
 class Enemy {
 
-    constructor(x, y, dirX, dirY) {
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim) {
         this.x = x;
         this.y = y;
         this.dirX = dirX;
@@ -40,6 +63,8 @@ class Enemy {
         if (this.angle < 0) {
             this.angle += 360;
         }
+        this.walkA = walkAnim;
+        this.idleA = idleAnim;
     }
 
     /** Common behavior */
@@ -56,18 +81,25 @@ class Enemy {
         // return x < this.x - 0.1 || x > this.x + 0.1 || y < this.y - 0.1 || y > this.y - 0.1; 
     }
 
+    setAnimation(anim) {
+        this.animation = anim;
+        this.frameDelay = FRAME_DELAY;
+        this.frame = 0;
+    }
+
+    walk() {
+        this.speed = SPEED;
+        console.log(this);
+        this.setAnimation(this.walkA);
+    }
+
+    stop() {
+        this.speed = 0;
+        this.setAnimation(this.idleA);
+    }
+    
+
 }
-
-
-/** CUTE DINOSAUR */
-
-const WALK = [4,5,6,7,8,9,10,11,12,13];
-const IDLE = [0];
-
-const DINO_SPRITESHEET = new Image();
-DINO_SPRITESHEET.src = "../data/dino-spritesheet.png";
-const DINO_HEIGHT = 5664/24 | 0;
-const DINO_WIDTH = 240;
 
 class Dino extends Enemy {
 
@@ -80,22 +112,6 @@ class Dino extends Enemy {
         this.vMove = 20;
     }
 
-    setAnimation(anim) {
-        this.animation = anim;
-        this.frameDelay = FRAME_DELAY;
-        this.frame = 0;
-    }
-
-    walk() {
-        this.speed = SPEED;
-        this.setAnimation(WALK);
-    }
-
-    stop() {
-        this.speed = 0;
-        this.setAnimation(IDLE);
-    }
-
     update(dt) {
         super.update(dt);
         this.frameDelay -= dt;
@@ -106,8 +122,8 @@ class Dino extends Enemy {
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
-        let sourceX = minX / sizeX * DINO_WIDTH | 0;
-        let width = (maxX - minX) / sizeX * DINO_WIDTH | 0;
+        let sourceX = minX / sizeX * this.width | 0;
+        let width = (maxX - minX) / sizeX * this.width | 0;
         
         let dec = 2;
         if (this.speed == 0) {
@@ -126,8 +142,53 @@ class Dino extends Enemy {
         }
         ctx.fillStyle = '#fff';
         ctx.fillText(`Dino:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle}`, 10, 30);
-        ctx.drawImage(DINO_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * DINO_HEIGHT), width, DINO_HEIGHT, x, y, maxX - minX, sizeY);
+
+        ctx.drawImage(DINO_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     }
 
+}
 
+class Tree extends Enemy {
+
+    constructor(x, y, dirX, dirY, walkAnim, idleTree) {
+        super(x, y, dirX, dirY, walkAnim, idleTree);
+        this.setAnimation(TREE_IDLE);
+        this.factor = 1;
+        this.height = TREE_HEIGHT;
+        this.width = TREE_WIDTH;
+        this.vMove = 20;
+    }
+
+    punch(){
+        this.setAnimation(TREE_PUNCH);
+    }
+
+    update(dt) {
+        super.update(dt);
+        this.frameDelay -= dt;
+        if (this.frameDelay <= 0) {
+            this.frameDelay = FRAME_DELAY;
+            this.frame = (this.frame + 1) % this.animation.length;
+        }
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+        let sourceX = minX / sizeX * this.width | 0;
+        let width = (maxX - minX) / sizeX * this.width | 0;
+        let dec = 3;
+        
+        if (angle >= 45 && angle < 135) {
+            dec = 1;
+        }
+        else if (angle >= 135 && angle < 225) {
+            dec = 2;
+        }
+        else if (angle >= 225 && angle < 315) {
+            dec = 0;
+        }
+        
+        ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle}`, 10, 30);
+        ctx.drawImage(TREE_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
+    
+    }
 }
