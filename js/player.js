@@ -63,6 +63,9 @@ export default class Player {
 
         /** Consumable */
         this.nbWhisky = 0;
+
+        /** lighting */
+        this.lighting = 2;
     }
 
 

@@ -2,6 +2,8 @@ import { Game } from "./game.js";
 import { Engine } from "./engine.js";
 import { Hud } from "./hud.js";
 
+const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
+
 document.addEventListener("DOMContentLoaded", function() {
 
     // Pseudo-3D engine
@@ -12,8 +14,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const game = new Game(hud);
     
 
+    if (localStorage.getItem(STORAGE_KEY_MOUSE)) {
+        game.inverted = 1*localStorage.getItem(STORAGE_KEY_MOUSE);
+    }
+    
     // Event listener for keyboards events
     document.addEventListener("keydown", function(e) {
+        if (e.key == 'KeyI') {
+            game.inverted *= -1;
+            localStorage.setItem(STORAGE_KEY_MOUSE, game.inverted);
+            return;
+        }
         game.press(e.code);
     });
     document.addEventListener("keyup", function(e) {

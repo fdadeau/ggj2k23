@@ -3,29 +3,20 @@ import Player from "./player.js";
 
 import { levels } from "./levels.js";
 
-import { buildEnemy } from "./enemies.js";
-
-
-const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
-
 export class Game {
 
     constructor(hud) {
 
         this.paused = false;
         this.on2D = false;
-        if (localStorage.getItem(STORAGE_KEY_MOUSE)) {
-            this.inverted = 1*localStorage.getItem(STORAGE_KEY_MOUSE);
-        }
-        else {
-            this.inverted = 1;
-        }
-
+        this.inverted = 1;
+        
         this.enemies = [];
         this.player = new Player();
 
         this.loadLevel("demo");
         this.hud = hud;
+        //this.loadLevel("test");
     }
 
     loadLevel(id) {
@@ -45,8 +36,6 @@ export class Game {
     }
 
    
-
-
     // Commands
     press(key) {
         switch (key) {
@@ -65,6 +54,9 @@ export class Game {
             case 'ArrowRight':
             case 'KeyD':
                 this.player.strafe(1);
+                break;
+            case 'KeyB':
+                this.player.lighting = (this.player.lighting == 2) ? 5 : 2;
                 break;
             case 'KeyP':
                 this.paused = !this.paused;

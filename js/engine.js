@@ -33,8 +33,8 @@ export class Engine {
      * @param {Number} dist the distance in the world
      * @returns {Number} a real between 0 (dark) and 1 (light)
      */
-    brightnessForDistance(dist) {
-        const min = 1, max = 10;
+    brightnessForDistance(dist, max) {
+        const min = 1;
         if (dist > max) {
             return 0;
         }
@@ -71,6 +71,74 @@ export class Engine {
         this.ctx.fillText(game.player.getInfos(), 10, 20);
     }
 
+
+    castRay(x, game) {
+        //calculate ray position and direction
+        const cameraX = 2 * x / WIDTH - 1; // x-coordinate in camera space
+        let rayDirX = game.player.dirX + game.player.plane.x * cameraX;
+        let rayDirY = game.player.dirY + game.player.plane.y * cameraX;
+
+        //which box of the map we're in
+        let posX = game.player.posX | 0, posY = game.player.posY | 0;
+        let mapX = posX, mapY = posY;
+
+        //length of ray from one x or y-side to next x or y-side
+        let deltaDistX = (rayDirX == 0) ? +Infinity : Math.abs(1 / rayDirX);
+        let deltaDistY = (rayDirY == 0) ? +Infinity : Math.abs(1 / rayDirY);
+
+        //what direction to step in x or y-direction (either +1 or -1)
+        let stepX, stepY;
+        //length of ray from current position to next x or y-side
+        let sideDistX, sideDistY;
+
+        //calculate step and initial sideDist
+        if (rayDirX < 0) {
+            stepX = -1;
+            sideDistX = (game.player.posX - mapX) * deltaDistX;
+        }
+        else {
+            stepX = 1;
+            sideDistX = (mapX + 1.0 - game.player.posX) * deltaDistX;
+        }
+        if (rayDirY < 0) {
+            stepY = -1;
+            sideDistY = (game.player.posY - mapY) * deltaDistY;
+        }
+        else {
+            stepY = 1;
+            sideDistY = (mapY + 1.0 - game.player.posY) * deltaDistY;
+        }
+
+        let hit = 0; //was there a wall hit?
+        let side; //was a NS or a EW wall hit?
+
+        //perform Digital Differential Analysis (DDA)
+        while (hit == 0) {
+            //jump to next map square, either in x-direction, or in y-direction
+            if (sideDistX < sideDistY) {
+                sideDistX += deltaDistX;
+                mapX += stepX;
+                side = 0;
+            }
+            else {
+                sideDistY += deltaDistY;
+                mapY += stepY;
+                side = 1;
+            }
+            //Check if ray has hit a wall
+            if (game.map[mapX][mapY] > 0) hit = 1;
+        } 
+
+        return [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY];
+
+            /**
+             * Xi=[((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-Ya)/(Xb-Xa))-((Yd-Yc)/(Xd-Xc))]
+Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-Ya)/(Xb-Xa))-((Yd-Yc)/(Xd-Xc))]-Xa)+Ya
+             */
+    }
+
+
+
     wallCasting(game) {
         const W = WIDTH;
         const H = HEIGHT;
@@ -78,71 +146,17 @@ export class Engine {
         this.zBuffer = [];
 
         for(let x = 0; x < W; x++) {
-            //calculate ray position and direction
-            const cameraX = 2 * x / W - 1; // x-coordinate in camera space
-            let rayDirX = game.player.dirX + game.player.plane.x * cameraX;
-            let rayDirY = game.player.dirY + game.player.plane.y * cameraX;
 
-            //which box of the map we're in
-            let posX = Math.floor(game.player.posX), posY = Math.floor(game.player.posY);
-            let mapX = posX, mapY = posY;
-
-            //length of ray from one x or y-side to next x or y-side
-            let deltaDistX = (rayDirX == 0) ? +Infinity : Math.abs(1 / rayDirX);
-            let deltaDistY = (rayDirY == 0) ? +Infinity : Math.abs(1 / rayDirY);
-            let perpWallDist;
-
-            //what direction to step in x or y-direction (either +1 or -1)
-            let stepX, stepY;
-            //length of ray from current position to next x or y-side
-            let sideDistX, sideDistY;
-
-            //calculate step and initial sideDist
-            if (rayDirX < 0) {
-                stepX = -1;
-                sideDistX = (game.player.posX - mapX) * deltaDistX;
-            }
-            else {
-                stepX = 1;
-                sideDistX = (mapX + 1.0 - game.player.posX) * deltaDistX;
-            }
-            if (rayDirY < 0) {
-                stepY = -1;
-                sideDistY = (game.player.posY - mapY) * deltaDistY;
-            }
-            else {
-                stepY = 1;
-                sideDistY = (mapY + 1.0 - game.player.posY) * deltaDistY;
-            }
-
-            let hit = 0; //was there a wall hit?
-            let side; //was a NS or a EW wall hit?
-
-            //perform Digital Differential Analysis (DDA)
-            while (hit == 0) {
-                //jump to next map square, either in x-direction, or in y-direction
-                if (sideDistX < sideDistY) {
-                    sideDistX += deltaDistX;
-                    mapX += stepX;
-                    side = 0;
-                }
-                else {
-                    sideDistY += deltaDistY;
-                    mapY += stepY;
-                    side = 1;
-                }
-                //Check if ray has hit a wall
-                if (game.map[mapX][mapY] > 0) hit = 1;
-            } 
+            let [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY] = this.castRay(x, game);
 
             //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
-            perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
+            let perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
 
             // add to zBuffer index 
             this.zBuffer[x] = perpWallDist;
 
             // adjust brightness
-            let b = this.brightnessForDistance(perpWallDist)
+            let b = this.brightnessForDistance(perpWallDist, game.player.lighting)
 
             //Calculate height of line to draw on screen
             let lineHeight = Math.floor(H / perpWallDist);
@@ -153,7 +167,7 @@ export class Engine {
             let drawEnd = lineHeight / 2 + H * game.player.altitude + game.player.pitch;
             if (drawEnd >= H) drawEnd = H - 1;
 
-    
+
             /*** TEXTURES ON THE WALLS ***/
 
             //texturing calculations
@@ -223,7 +237,7 @@ export class Engine {
             let floorX = game.player.posX + rowDistance * rayDirX0;
             let floorY = game.player.posY + rowDistance * rayDirY0;
 
-            let b = this.brightnessForDistance(rowDistance);
+            let b = this.brightnessForDistance(rowDistance, game.player.lighting);
 
             for(let x = 0; x < W; ++x) {
                 // the cell coord is simply got from the integer parts of floorX and floorY
@@ -299,7 +313,7 @@ export class Engine {
                 return;
             }
 
-            let br = that.brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY));
+            let br = that.brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY), game.player.lighting);
 
             if (br == 0) {
                 return;
@@ -392,36 +406,82 @@ export class Engine {
         this.ctx.fillStyle = "black";
         for (let x = 0; x < game.map.length; x++) {
             for (let y = 0; y < game.map[x].length; y++) {
-                if (game.map[x][y] >= 1) {
-                    this.ctx.fillRect(10 + x * square, 10 + y * square, square, square);
+                if (game.map[x][y] == 1) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.fillRect(10 + x * square, 10 + y1 * square, square, square);
+                }
+                else if (game.map[x][y] == 2) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+                else if (game.map[x][y] == 3) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+                else if (game.map[x][y] == 4) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
+                }
+                else if (game.map[x][y] == 5) {
+                    let y1 = game.map[x].length - 1 - y;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
+                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.fill();
+                    this.ctx.closePath();
                 }
             }
         }
         this.ctx.fillStyle = "#0000FF";
         this.ctx.strokeStyle = "#0000FF";
         this.ctx.beginPath();
-        this.ctx.arc(10 + game.player.posX*square, 10 + game.player.posY*square, 0.2 * square, 0, 2*Math.PI);
+        let posY = game.map[0].length - game.player.posY;
+        this.ctx.arc(10 + game.player.posX*square, 10 + posY*square, 0.2 * square, 0, 2*Math.PI);
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.moveTo(10 + game.player.posX*square, 10 + game.player.posY*square);
-        this.ctx.lineTo(10 + game.player.posX*square + game.player.dirX * square, 10 + game.player.posY*square + game.player.dirY * square);
+        this.ctx.moveTo(10 + game.player.posX*square, 10 + posY*square);
+        this.ctx.lineTo(10 + game.player.posX*square + game.player.dirX * square, 10 + posY*square - game.player.dirY * square);
         this.ctx.closePath();
         this.ctx.stroke();
+
+        this.ctx.fillText(game.player.getInfos(), game.map.length * square, 10);
 
         this.ctx.fillStyle = "#FF0000";
         this.ctx.strokeStyle = "#FF0000";
         game.enemies.forEach(e => {
             this.ctx.beginPath();
-            this.ctx.arc(10 + e.x*square, 10 + e.y*square, 0.2 * square, 0, 2*Math.PI);
+            this.ctx.arc(10 + e.x*square, 10 + (game.map[0].length - e.y)*square, 0.2 * square, 0, 2*Math.PI);
             this.ctx.fill();
             this.ctx.closePath();
             this.ctx.beginPath();
-            this.ctx.moveTo(10 + e.x*square, 10 + e.y*square);
-            this.ctx.lineTo(10 + e.x*square + e.dirX * square, 10 + e.y*square + e.dirY * square);
+            this.ctx.moveTo(10 + e.x*square, 10 + (game.map[0].length - e.y)*square);
+            this.ctx.lineTo(10 + e.x*square + e.dirX * square, 10 + (game.map[0].length - e.y)*square - e.dirY * square);
             this.ctx.closePath();
             this.ctx.stroke();
         });
         
+        
+
     }
 
 }
