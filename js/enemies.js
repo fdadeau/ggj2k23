@@ -20,11 +20,13 @@ const TREE_PUNCH = [12,12,13,14,15];
 
 const TREE_SPRITESHEET = new Image();
 TREE_SPRITESHEET.src = "../data/tree-spritesheet.png";
-const TREE_HEIGHT = 12800/16 | 0;
+const TREE_HEIGHT = 13600/17 | 0;
 const TREE_WIDTH = 800;
 
-/** DEADLY TURNIP */
+/** DEAD TREE */
+const TREE_HURT = [16,16,16,16,16];
 
+/** DEADLY TURNIP */
 const TURNIP_WALK = [0,4,8];
 const TURNIP_IDLE = [0];
 const TURNIP_BITE = [12,12,13,13];
@@ -34,6 +36,8 @@ TURNIP_SPRITESHEET.src = "../data/turnip-spritesheet.png";
 const TURNIP_HEIGHT = 5852/14 | 0;
 const TURNIP_WIDTH = 419;
 
+/** DEAD TURNIP */
+const TURNIP_HURT = [14,14,14,14,14];
 
 /**
  * Build an enemy of the specified type.
@@ -49,9 +53,9 @@ export function buildEnemy(type,x,y,dx,dy) {
         case "dino":
             return new Dino(x,y,dx,dy,WALK,IDLE);
         case "tree":
-            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE);
+            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE,TREE_HURT);
         case "turnip":
-            return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE);
+            return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE,TURNIP_HURT);
         // ... TODO ... make more enemies
     }
 }
@@ -63,7 +67,7 @@ export function buildEnemy(type,x,y,dx,dy) {
 
 class Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hp) {
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, hp) {
         this.x = x;
         this.y = y;
         this.dirX = dirX;
@@ -78,6 +82,8 @@ class Enemy {
         }
         this.walkA = walkAnim;
         this.idleA = idleAnim;
+        this.hurtA = hurtAnim;
+        console.log(hp)
         this.health = hp;
     }
 
@@ -103,7 +109,6 @@ class Enemy {
 
     walk() {
         this.speed = SPEED;
-        console.log(this);
         this.setAnimation(this.walkA);
     }
 
@@ -113,15 +118,20 @@ class Enemy {
     }
 
     hit(amount){
+        this.animationBeforeHit = this.animation;
+        this.stop();
         this.health -= amount;
-        // TODO : kill when 0
+        this.setAnimation(this.hurtA);
+        if(this.health <= 0){
+            this.stop();
+        }
     }
 }
 
 class Dino extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkA, idleA) {
-        super(x, y, dirX, dirY, walkA, idleA,9999);
+    constructor(x, y, dirX, dirY, walkA, idleA, hurtA) {
+        super(x, y, dirX, dirY, walkA, idleA, hurtA, 9999);
         this.setAnimation(IDLE);
         this.factor = 2;
         this.height = DINO_HEIGHT;
@@ -167,8 +177,8 @@ class Dino extends Enemy {
 
 class Tree extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleTree) {
-        super(x, y, dirX, dirY, walkAnim, idleTree, 100);
+    constructor(x, y, dirX, dirY, walkAnim, idleTree, hurtA) {
+        super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, 100);
         this.setAnimation(TREE_IDLE);
         this.factor = 0.5;
         this.height = TREE_HEIGHT;
@@ -186,21 +196,36 @@ class Tree extends Enemy {
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
+            if(this.animation == TREE_HURT && this.frame == this.animation.length -1){
+                if(this.animationBeforeHit == TREE_WALK){
+                    this.walk();
+                }else{
+                    this.stop();
+                }
+            }
         }
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+        if(this.health <= 0){
+            return;
+        }
+        
         let sourceX = minX / sizeX * this.width | 0;
         let width = (maxX - minX) / sizeX * this.width | 0;
         let dec = 3;
         
-        if (angle >= 45 && angle < 135) {
-            dec = 1;
-        }
-        else if (angle >= 135 && angle < 225) {
-            dec = 2;
-        }
-        else if (angle >= 225 && angle < 315) {
+        if(this.animation != TREE_HURT){
+            if (angle >= 45 && angle < 135) {
+                dec = 1;
+            }
+            else if (angle >= 135 && angle < 225) {
+                dec = 2;
+            }
+            else if (angle >= 225 && angle < 315) {
+                dec = 0;
+            } 
+        }else{
             dec = 0;
         }
         
@@ -214,8 +239,8 @@ class Tree extends Enemy {
 
 class Turnip extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleTree) {
-        super(x, y, dirX, dirY, walkAnim, idleTree, 100);
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim) {
+        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, 100);
         this.setAnimation(TURNIP_IDLE);
         this.factor = 0.5;
         this.height = TURNIP_HEIGHT;
@@ -233,21 +258,36 @@ class Turnip extends Enemy {
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
+            if(this.animation == TURNIP_HURT && this.frame == this.animation.length -1){
+                if(this.animationBeforeHit == TURNIP_WALK){
+                    this.walk();
+                }else{
+                    this.stop();
+                }
+            }
         }
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+        if(this.health <= 0){
+            return;
+        }
+
         let sourceX = minX / sizeX * this.width | 0;
         let width = (maxX - minX) / sizeX * this.width | 0;
         let dec = 3;
         
-        if (angle >= 45 && angle < 135) {
-            dec = 2;
-        }
-        else if (angle >= 135 && angle < 225) {
-            dec = 1;
-        }
-        else if (angle >= 225 && angle < 315) {
+        if(this.animation != TURNIP_HURT){
+            if (angle >= 45 && angle < 135) {
+                dec = 2;
+            }
+            else if (angle >= 135 && angle < 225) {
+                dec = 1;
+            }
+            else if (angle >= 225 && angle < 315) {
+                dec = 0;
+            }
+        }else{
             dec = 0;
         }
         

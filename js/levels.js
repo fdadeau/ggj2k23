@@ -89,7 +89,7 @@ const ENEMIES3 = function() {
 
     // tree running around
     const turnip0 = buildEnemy("turnip", 6.5, 7.5, 0, 1);
-    tree0.behavior = function() {
+    turnip0.behavior = function() {
         if (!this.xTarget || !this.yTarget) {
             this.xTarget = 3.5;
             this.yTarget = 7.5;
@@ -101,9 +101,11 @@ const ENEMIES3 = function() {
             this.angle = (this.angle + 180) % 360;
         }
     }.bind(turnip0);
+    
 
     // static tree
     const turnip1 = buildEnemy("turnip", 4.5, 5.5, 0, 1);
+    
 
     // Whisky power up
     const whisky0 = buildPowerUp("whisky", 3.5, 20.5, 0, 1);
