@@ -81,10 +81,10 @@ const AXE_ATTACK = [0,1,2,3,4];
 class Axe extends Weapon{
     constructor(){
         super(25,5,800,2.5); // TODO : optimize
-        this.setAnimation(AXE_ATTACK);
+        //this.setAnimation(AXE_ATTACK);
     }
 
-    setAnimation(anim) {
+    /*setAnimation(anim) {
         this.animation = anim;
         this.frameDelay = this.delay/this.nbFrames;
         this.frame = 0;
@@ -97,10 +97,10 @@ class Axe extends Weapon{
             this.frame = (this.frame + 1) % this.animation.length;
         }
         return this.frame != 0;
-    }
+    }*/
 
-    render(ctx){
-        ctx.drawImage(AXE_SPRITESHEET, 0, ((this.animation[this.frame]) * AXE_HEIGHT), AXE_WIDTH, AXE_HEIGHT, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
+    render(ctx, frame){
+        ctx.drawImage(AXE_SPRITESHEET, 0, frame, AXE_WIDTH, AXE_HEIGHT, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
     }
 }
 
