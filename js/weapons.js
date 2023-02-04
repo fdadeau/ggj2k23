@@ -8,6 +8,8 @@ export function buildWeapon(type,){
     switch(type){
         case 'whisky':
             return new Whisky();
+        case 'tequila':
+            return new Tequila();
         case 'axe':
             return new Axe();
         case 'lighter':
@@ -40,13 +42,28 @@ WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
 const WHISKY_HEIGHT = 4200/6 | 0;
 const WHISKY_WIDTH = 1000;
 
-class Whisky extends Consumable{
+class Whisky extends Consumable {
     constructor(){
         super();
     }
 
     render(ctx, frame){
         ctx.drawImage(WHISKY_SPRITESHEET, 0, frame, WHISKY_WIDTH, WHISKY_HEIGHT, 350, 325-170, 200, 170); // TODO : make it clean (temporary, wait final textures)
+    }
+}
+
+const TEQUILA_SPRITESHEET = new Image();
+TEQUILA_SPRITESHEET.src = "../data/whisky-spritesheet.png"; // to change
+const TEQUILA_HEIGHT = 4200/6 | 0;
+const TEQUILA_WIDTH = 1000;
+
+class Tequila extends Consumable {
+    constructor(){
+        super();
+    }
+
+    render(ctx, frame){
+        ctx.drawImage(TEQUILA_SPRITESHEET, 0, frame, TEQUILA_WIDTH, TEQUILA_HEIGHT, 350, 325-170, 200, 170); // TODO : make it clean (temporary, wait final textures)
     }
 }
 

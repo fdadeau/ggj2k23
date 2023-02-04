@@ -72,6 +72,7 @@ export default class Player {
         /** weapon management */
         this.weapons = [
             buildWeapon("whisky"),
+            buildWeapon("tequila"),
             buildWeapon("axe"),
 
         ];
@@ -85,6 +86,7 @@ export default class Player {
 
         /** Consumable */
         this.nbWhisky = 2;
+        this.nbTequila = 0;
 
         /** lighting */
         this.lighting = 20;
@@ -272,7 +274,7 @@ export default class Player {
             return -1;
         }
         this.setAnimation(AXE_IDLE);
-        this.currentWeapon = this.weapons[1];
+        this.currentWeapon = this.weapons[2];
     }
 
     equipeWhisky(){
@@ -281,6 +283,14 @@ export default class Player {
         }
         this.setAnimation(WHISKY_IDLE);
         this.currentWeapon = this.weapons[0];
+    }
+
+    equipeTequila(){
+        if (this.isAttacking) {
+            return -1;
+        }
+        this.setAnimation(WHISKY_IDLE); // To change
+        this.currentWeapon = this.weapons[1];
     }
 
     switchToNextWeapon(){
@@ -307,6 +317,9 @@ export default class Player {
                 break;
             case 'Whisky':
                 this.currentWeapon.render(ctx,((this.animation[this.frame]) * WHISKY_HEIGHT));
+                break;
+            case 'Tequila':
+                this.currentWeapon.render(ctx,((this.animation[this.frame]) * WHISKY_HEIGHT)); // To change
                 break;
         }
     }
@@ -340,8 +353,14 @@ export default class Player {
         powerup.forEach(function(e) {
             switch(e.constructor.name) {
                 case 'WhiskyItem' :
-                    if(e.distance <= 1){
+                    if(e.distance <= 1 && ! e.taken){
                         this.nbWhisky++;
+                        e.taken = true;
+                    }
+                    break;
+                case 'TequilaItem' :
+                    if(e.distance <= 1 && ! e.taken){
+                        this.nbTequila++;
                         e.taken = true;
                     }
                     break;

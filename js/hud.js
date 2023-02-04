@@ -1,6 +1,7 @@
 const WEAPON_WHISKY = 0;
 const WEAPON_AXE = 1;
 const WEAPON_LIGHTER = 2;
+const WEAPON_TEQUILA = 3;
 
 const NB_SLOTS = 7;
 
@@ -12,6 +13,9 @@ HEART_IMG.src = '../data/images/heart.png';
 
 const WHISKY_IMG = new Image();
 WHISKY_IMG.src = '../data/images/whisky.png';
+
+const TEQUILA_IMG = new Image();
+TEQUILA_IMG.src = '../data/images/tequila.png';
 
 const TIMBER_IMG = new Image();
 TIMBER_IMG.src = '../data/images/timber.jpeg';
@@ -38,12 +42,15 @@ export class Hud {
         this.height = hudHeight;
         // Number of whisky bottles
         this.nbWhisky = 0;
+        // Number of tequila bottles
+        this.nbTequila = 0;
     }
 
     render(ctx, player) {
         this.health = player.health;
         this.sobriety = player.sobriety;
         this.nbWhisky = player.nbWhisky;
+        this.nbTequila = player.nbTequila;
 
         let hudY_origin = cvs.height - this.height;
 
@@ -95,6 +102,10 @@ export class Hud {
             case WEAPON_WHISKY:
                 ctx.drawImage(WHISKY_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 ctx.fillText(this.nbWhisky, 248, hudY_origin + 64);
+                break;
+            case WEAPON_TEQUILA:
+                ctx.drawImage(TEQUILA_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                ctx.fillText(this.nbTequila, 248, hudY_origin + 64);
                 break;
         }
     }
@@ -189,5 +200,9 @@ export class Hud {
 
     equipeWhisky(){
         this.weapon = WEAPON_WHISKY;
+    }
+
+    equipeTequila(){
+        this.weapon = WEAPON_TEQUILA;
     }
 }
