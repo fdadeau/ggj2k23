@@ -3,9 +3,15 @@ import Player from "./player.js";
 
 import { levels } from "./levels.js";
 
+/** Game states */
+export const STATES = { LOADING: 0, PLAYING: 1, PAUSED: 2 };
+
 export class Game {
 
     constructor(hud) {
+
+        this.state = STATES.LOADING;
+        this.loading = { }
 
         this.paused = false;
         this.on2D = false;
@@ -14,9 +20,16 @@ export class Game {
         this.enemies = [];
         this.player = new Player();
 
-        //this.loadLevel("tree");
         this.hud = hud;
-        this.loadLevel("tree");
+        
+    }
+
+    setLoadingProgress(loaded, total) {
+        this.loading = { loaded, total };
+        if (loaded == total) {
+            this.loadLevel("tree");
+            this.state = STATES.PLAYING;
+        }
     }
 
     loadLevel(id) {

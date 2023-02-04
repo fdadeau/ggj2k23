@@ -11,17 +11,25 @@ const WIDTH = 640;
 /** Screen height */
 const HEIGHT = WIDTH * 10 / 16;
 
+import { STATES } from "./Game.js";
+
+import { data } from "./preload.js";
+
 export class Engine {
 
     constructor(cvs) {
         cvs.width = WIDTH;
         cvs.height = HEIGHT;
+        
         /** 2D context for scene rendering */
         this.ctx = cvs.getContext("2d");
+
         /** Image buffer, to be filled by scene renderers (floor, ceiling and wall casters) */
         this.buffer = this.ctx.createImageData(WIDTH, HEIGHT);
+        
         /** Framerate information */
         this.framerate = 60;
+
         /** Set of textures */
         this.textures = initTextures();
         /** Depth of different x walls */
@@ -50,7 +58,16 @@ export class Engine {
      */
     render(game) {
 
-        if (game.on2D) {
+        if (game.state == STATES.LOADING) {
+            this.ctx.fillStyle = '#000000';
+            this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            this.ctx.fillStyle = '#FFFFFF';
+            this.ctx.font = "18px ka1";
+            this.ctx.fillText(`Loading assets: ${game.loading.loaded}/${game.loading.total}`, WIDTH / 2 - 100, HEIGHT/2 - 9);
+            return;
+        }
+
+        if (game.state == STATES.PLAYING && game.on2D) {
             this.render2D(game);
             return;
         }
@@ -241,7 +258,7 @@ export class Engine {
             /*** TEXTURES ON THE WALLS ***/
 
             //texturing calculations
-            let texNum = game.map[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
+            let texNum = 1//game.map[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
 
             //calculate value of wallX (where exactly the wall was hit)
             let wallX = (side == 0) ? game.player.posY + perpWallDist * rayDirY : game.player.posX + perpWallDist * rayDirX;
@@ -261,12 +278,13 @@ export class Engine {
                 // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
                 let texY = (texPos | 0) % (texHeight);
                 texPos += step;
-                let color = this.textures[texNum][texHeight * texY + texX];
+                
+                let colorIdx = (texHeight * texY + texX) * 4;
                 //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
                 let i = (y * WIDTH + x) * 4;
-                this.buffer.data[i+0] = (b * (color / 65536)) | 0;
-                this.buffer.data[i+1] = (b * ((color % 65536) / 256)) | 0;
-                this.buffer.data[i+2] = (b * (color % 256)) | 0;
+                this.buffer.data[i+0] = b * this.textures[texNum][colorIdx+0] | 0;
+                this.buffer.data[i+1] = b * this.textures[texNum][colorIdx+1] | 0;
+                this.buffer.data[i+2] = b * this.textures[texNum][colorIdx+2] | 0;
                 this.buffer.data[i+3] = 255;
             }
         }
@@ -322,27 +340,13 @@ export class Engine {
                 floorY += floorStepY;
     
                 // choose texture and draw the pixel
-                let floorTexture = 8;       // TODO --> defined a map for floor/ceiling texture choice
-                let ceilingTexture = 9;
-
-                let color;
-
+                let floorTexture = is_floor ? 3 : 4;     
+                
                 let i = (y * W + x) * 4;
 
-                // floor
-                if (is_floor) {
-                    color = this.textures[floorTexture][texWidth * ty + tx];
-                    color = (color >> 1) & 8355711; // make a bit darker
-                }
-                else {    
-                    //ceiling (symmetrical, at screenHeight - y - 1 instead of y)
-                    color = this.textures[ceilingTexture][texWidth * ty + tx];
-                    color = (color >> 1) & 8355711; // make a bit darker
-                }
-                
-                this.buffer.data[i+0] = (b * (color / 65536)) | 0;
-                this.buffer.data[i+1] = (b * ((color % 65536) / 256)) | 0;
-                this.buffer.data[i+2] = (b * (color % 256)) | 0;
+                this.buffer.data[i+0] = b * this.textures[floorTexture][texWidth * ty + tx] | 0;
+                this.buffer.data[i+1] = b * this.textures[floorTexture][texWidth * ty + tx] | 0;
+                this.buffer.data[i+2] = b * this.textures[floorTexture][texWidth * ty + tx] | 0;
                 this.buffer.data[i+3] = 255;
                 
             }
@@ -471,51 +475,51 @@ export class Engine {
     render2D(game) {
         this.ctx.fillStyle = "white";
         this.ctx.fillRect(0, 0, WIDTH, HEIGHT)
-        let square = (HEIGHT - 20) / Math.min(game.map.length, game.map[0].length);
+        let square = (HEIGHT - 20) / game.map[0].length | 0;
         this.ctx.fillStyle = "black";
         for (let x = 0; x < game.map.length; x++) {
             for (let y = 0; y < game.map[x].length; y++) {
                 if (game.map[x][y] == 1) {
                     let y1 = game.map[x].length - 1 - y;
-                    this.ctx.fillRect(10 + x * square, 10 + y1 * square, square, square);
+                    this.ctx.fillRect(10 + x * square | 0, 10 + y1 * square | 0, square, square);
                 }
                 else if (game.map[x][y] == 2) {
                     let y1 = game.map[x].length - 1 - y;
                     this.ctx.beginPath();
-                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
-                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
-                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
-                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.moveTo(10 + x * square | 0, 10 + y1 * square | 0);
+                    this.ctx.lineTo(10 + (x+1) * square | 0, 10 + y1 * square | 0);
+                    this.ctx.lineTo(10 + x * square | 0, 10 + (y1+1) * square | 0);
+                    this.ctx.lineTo(10 + x * square | 0, 10 + y1 * square | 0);
                     this.ctx.fill();
                     this.ctx.closePath();
                 }
                 else if (game.map[x][y] == 3) {
                     let y1 = game.map[x].length - 1 - y;
                     this.ctx.beginPath();
-                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
-                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
-                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
-                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.moveTo(10 + x * square | 0, 10 + y1 * square | 0);
+                    this.ctx.lineTo(10 + (x+1) * square | 0, 10 + y1 * square | 0);
+                    this.ctx.lineTo(10 + (x+1) * square | 0, 10 + (y1+1) * square | 0);
+                    this.ctx.lineTo(10 + x * square | 0, 10 + y1 * square | 0);
                     this.ctx.fill();
                     this.ctx.closePath();
                 }
                 else if (game.map[x][y] == 4) {
                     let y1 = game.map[x].length - 1 - y;
                     this.ctx.beginPath();
-                    this.ctx.moveTo(10 + (x+1) * square, 10 + y1 * square);
-                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
-                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
-                    this.ctx.lineTo(10 + (x+1) * square, 10 + y1 * square);
+                    this.ctx.moveTo(10 + (x+1) * square | 0, 10 + y1 * square | 0);
+                    this.ctx.lineTo(10 + (x+1) * square | 0, 10 + (y1+1) * square | 0);
+                    this.ctx.lineTo(10 + x * square | 0, 10 + (y1+1) * square | 0);
+                    this.ctx.lineTo(10 + (x+1) * square | 0, 10 + y1 * square | 0);
                     this.ctx.fill();
                     this.ctx.closePath();
                 }
                 else if (game.map[x][y] == 5) {
                     let y1 = game.map[x].length - 1 - y;
                     this.ctx.beginPath();
-                    this.ctx.moveTo(10 + x * square, 10 + y1 * square);
-                    this.ctx.lineTo(10 + (x+1) * square, 10 + (y1+1) * square);
-                    this.ctx.lineTo(10 + x * square, 10 + (y1+1) * square);
-                    this.ctx.lineTo(10 + x * square, 10 + y1 * square);
+                    this.ctx.moveTo(10 + x * square | 0, 10 + y1 * square | 0);
+                    this.ctx.lineTo(10 + (x+1) * square | 0, 10 + (y1+1) * square | 0);
+                    this.ctx.lineTo(10 + x * square | 0, 10 + (y1+1) * square | 0);
+                    this.ctx.lineTo(10 + x * square | 0, 10 + y1 * square | 0);
                     this.ctx.fill();
                     this.ctx.closePath();
                 }
@@ -525,11 +529,11 @@ export class Engine {
         this.ctx.strokeStyle = "#0000FF";
         this.ctx.beginPath();
         let posY = game.map[0].length - game.player.posY;
-        this.ctx.arc(10 + game.player.posX*square, 10 + posY*square, 0.2 * square, 0, 2*Math.PI);
+        this.ctx.arc(10 + game.player.posX*square | 0, 10 + posY*square | 0, 0.2 * square | 0, 0, 2*Math.PI);
         this.ctx.fill();        
         this.ctx.beginPath();
-        this.ctx.moveTo(10 + game.player.posX*square, 10 + posY*square);
-        this.ctx.lineTo(10 + game.player.posX*square + game.player.dirX * square, 10 + posY*square - game.player.dirY * square);
+        this.ctx.moveTo(10 + game.player.posX*square | 0, 10 + posY*square | 0);
+        this.ctx.lineTo(10 + game.player.posX*square + game.player.dirX * square | 0, 10 + posY*square - game.player.dirY * square | 0);
         this.ctx.closePath();
         this.ctx.stroke();
 
@@ -541,12 +545,12 @@ export class Engine {
             this.ctx.fillText(`mapX=${mapX}, mapY=${mapY}, whichSide=${whichSide}`, game.map.length * square + 20, 50*(i+1)+20);
             this.ctx.fillText(`ptX=${pt.x}, ptY=${pt.y}`, game.map.length * square + 20, 50*(i+1)+30);
             this.ctx.beginPath();
-            this.ctx.arc(10 + pt.x * square, 10 + (game.map[0].length-1-pt.y) * square, 2, 0, Math.PI*2);
+            this.ctx.arc(10 + pt.x * square | 0, 10 + (game.map[0].length-1-pt.y) * square | 0, 2, 0, Math.PI*2);
             this.ctx.fill();
             if (pt_) {
                 this.ctx.fillStyle = "#FF66FF";
                 this.ctx.beginPath();
-                this.ctx.arc(10 + pt_.x * square, 10 + (game.map[0].length-1-pt_.y) * square, 2, 0, Math.PI*2);
+                this.ctx.arc(10 + pt_.x * square | 0, 10 + (game.map[0].length-1-pt_.y) * square | 0, 2, 0, Math.PI*2);
                 this.ctx.fill();
                 this.ctx.fillStyle = "#0000FF";
             }
@@ -563,12 +567,12 @@ export class Engine {
         this.ctx.strokeStyle = "#FF0000";
         game.enemies.forEach(e => {
             this.ctx.beginPath();
-            this.ctx.arc(10 + e.x*square, 10 + (game.map[0].length - e.y)*square, 0.2 * square, 0, 2*Math.PI);
+            this.ctx.arc(10 + e.x*square | 0, 10 + (game.map[0].length - e.y)*square | 0, 0.2 * square | 0, 0, 2*Math.PI);
             this.ctx.fill();
             this.ctx.closePath();
             this.ctx.beginPath();
-            this.ctx.moveTo(10 + e.x*square, 10 + (game.map[0].length - e.y)*square);
-            this.ctx.lineTo(10 + e.x*square + e.dirX * square, 10 + (game.map[0].length - e.y)*square - e.dirY * square);
+            this.ctx.moveTo(10 + e.x*square | 0, 10 + (game.map[0].length - e.y)*square | 0);
+            this.ctx.lineTo(10 + e.x*square + e.dirX * square | 0, 10 + (game.map[0].length - e.y)*square - e.dirY * square | 0);
             this.ctx.closePath();
             this.ctx.stroke();
         });
@@ -636,12 +640,35 @@ const texHeight = 64;
 
 function initTextures() {
 
-    const texture = [];
+    const textures = [];
 
-    for(let i = 0; i < 10; i++) {
-        texture.push([]);
+    textures[0] = loadTexture(data.wall1);
+    textures[1] = loadTexture(data.wall2);
+    textures[2] = loadTexture(data.wall3);
+
+    // gris
+    textures[3] = Array(64*64*4).fill(128);
+    textures[4] = Array(64*64*4).fill(0);
+
+    return textures;
+};
+
+const textureCvs = document.createElement("canvas");
+const textureCtx = textureCvs.getContext("2d");
+function loadTexture(img) {
+    textureCvs.width = img.width;
+    textureCvs.height = img.height;
+    textureCtx.drawImage(img, 0, 0, texWidth, texHeight);
+    let texture = [];
+    const imgData = textureCtx.getImageData(0, 0, texWidth, texHeight);
+    for (let i=0; i < imgData.data.length; i++) {
+        texture[i] = imgData.data[i];
     }
+    return texture;
+}
 
+
+    /*
     //generate some textures
     for(let x = 0; x < texWidth; x++) {
         for(let y = 0; y < texHeight; y++) {
@@ -666,3 +693,4 @@ function initTextures() {
     return texture;
 
 };
+*/

@@ -2,16 +2,31 @@ import { Game } from "./game.js";
 import { Engine } from "./engine.js";
 import { Hud } from "./hud.js";
 
+import { preload } from "./preload.js";
+
+
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
-document.addEventListener("DOMContentLoaded", function() {
 
-    // Pseudo-3D engine
+document.addEventListener("DOMContentLoaded", async function() {
+
+    // Game elements 
     const canvas = document.getElementById("cvs");
-    const engine = new Engine(canvas);
-    // Game itself
     const hud = new Hud(canvas, 75);
     const game = new Game(hud);
+
+    // preloading... (async)
+    try {
+        await preload((loaded, total) => { game.setLoadingProgress(loaded, total); });
+    }
+    catch (err) {
+        console.error(err);
+        document.body.innerHTML = err;
+        return;
+    }
+
+    // 2.5D engine
+    const engine = new Engine(canvas);
     
 
     if (localStorage.getItem(STORAGE_KEY_MOUSE)) {
