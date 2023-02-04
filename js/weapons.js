@@ -42,7 +42,7 @@ WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
 const WHISKY_HEIGHT = 4200/6 | 0;
 const WHISKY_WIDTH = 1000;
 
-class Whisky extends Consumable {
+class Whisky extends Consumable{
     constructor(){
         super();
     }

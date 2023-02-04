@@ -96,6 +96,9 @@ export class Game {
                 }
                 this.hud.equipeWeapon(id);
                 break;
+            case 'KeyT':
+                this.player.drunk();
+                break;
         }
     }
     release(key) {

@@ -74,7 +74,6 @@ export default class Player {
             buildWeapon("whisky"),
             buildWeapon("tequila"),
             buildWeapon("axe"),
-
         ];
         this.currentWeapon = this.weapons[1];
         this.lighter = buildWeapon('lighter');
@@ -90,6 +89,9 @@ export default class Player {
 
         /** lighting */
         this.lighting = 20;
+
+        /** Tells if the player is drunk or not */
+        this.isDrunk = false;
     }
 
 
@@ -346,6 +348,15 @@ export default class Player {
                 this.sobriety +=10;
                 this.nbWhisky--;
                 break;
+            case 'Tequila':
+                if(this.nbTequila == 0){
+                    return;
+                }
+                this.setAnimation(WHISKY_DRINK); // To change
+                this.sobriety +=10;
+                this.nbTequila--;
+                this.isDrunk = true;
+                break;
         }
     }
 
@@ -367,5 +378,4 @@ export default class Player {
             }
         },this);
     }
-
 }

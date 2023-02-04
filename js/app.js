@@ -5,12 +5,13 @@ import { Hud } from "./hud.js";
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
 document.addEventListener("DOMContentLoaded", function() {
-
+    
     // Pseudo-3D engine
     const canvas = document.getElementById("cvs");
     const engine = new Engine(canvas);
-    // Game itself
+
     const hud = new Hud(canvas, 75);
+    // Game itself 
     const game = new Game(hud);
     
 
@@ -54,7 +55,8 @@ document.addEventListener("DOMContentLoaded", function() {
         game.update(dt);
         lastUpdate = now;
         engine.render(game);
-        
+
+        engine.render(game, game.player.isDrunk);
         if (!game.on2D) {
             game.player.render(engine.ctx);
         }
