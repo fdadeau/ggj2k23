@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // Game elements 
     const canvas = document.getElementById("cvs");
-    const hud = new Hud(canvas, 75);
-    const game = new Game(hud);
+    // Game itself 
+    const game = new Game();
 
     // preloading... (async)
     try {
@@ -69,10 +69,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         game.update(dt);
         lastUpdate = now;
         engine.render(game);
-        
-        if (!game.on2D) {
-            game.player.render(engine.ctx);
-        }
+
         if (now < framesMeasure + 1000) {
             framerate++;
         } else {
@@ -80,7 +77,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             framerate = 0;
             framesMeasure = now;
         }
-        hud.render(engine.ctx, game.player);
     }
     mainloop();
 

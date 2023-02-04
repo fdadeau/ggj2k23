@@ -106,14 +106,17 @@ const ENEMIES3 = function() {
     // static tree
     const turnip1 = buildEnemy("turnip", 4.5, 5.5, 0, 1);
     
-
     // Whisky power up
     const whisky0 = buildPowerUp("whisky", 3.5, 20.5, 0, 1);
+    const whisky1 = buildPowerUp("whisky", 3.5, 19.5, 0, 1);
+    const whisky2 = buildPowerUp("whisky", 3.5, 18.5, 0, 1);
+    const whisky3 = buildPowerUp("whisky", 3.5, 17.5, 0, 1);
+    const whisky4 = buildPowerUp("whisky", 3.5, 16.5, 0, 1);
 
     // Tequila power up
     const tequila0 = buildPowerUp("tequila", 2.5, 20.5, 0, 1);
 
-    return [tree0, tree1, whisky0, tequila0, turnip0, turnip1];
+    return [tree0, tree1, turnip1, whisky0, whisky1, whisky2, whisky3, whisky4, tequila0];
 };
 
 

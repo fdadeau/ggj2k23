@@ -1,6 +1,7 @@
 const WEAPON_WHISKY = 0;
 const WEAPON_AXE = 1;
 const WEAPON_LIGHTER = 2;
+const WEAPON_TEQUILA = 3;
 
 const NB_SLOTS = 7;
 
@@ -13,8 +14,11 @@ HEART_IMG.src = '../data/images/heart.png';
 const WHISKY_IMG = new Image();
 WHISKY_IMG.src = '../data/images/whisky.png';
 
+const TEQUILA_IMG = new Image();
+TEQUILA_IMG.src = '../data/images/tequila.png';
+
 const TIMBER_IMG = new Image();
-TIMBER_IMG.src = '../data/images/timber.jpeg';
+TIMBER_IMG.src = '../data/images/raymond.png';
 
 const BACKGROUND_IMG = new Image();
 BACKGROUND_IMG.src = '../data/wood.png';
@@ -38,12 +42,15 @@ export class Hud {
         this.height = hudHeight;
         // Number of whisky bottles
         this.nbWhisky = 0;
+        // Number of tequila bottles
+        this.nbTequila = 0;
     }
 
     render(ctx, player) {
         this.health = player.health;
         this.sobriety = player.sobriety;
         this.nbWhisky = player.nbWhisky;
+        this.nbTequila = player.nbTequila;
 
         let hudY_origin = cvs.height - this.height;
 
@@ -80,8 +87,8 @@ export class Hud {
         ctx.drawImage(TIMBER_IMG, 275, hudY_origin + 1, slot - 2, this.height);
 
         // Draw the health and sobriety bars
-        this.drawBar(ctx, 'health');
-        this.drawBar(ctx, 'sobriety');
+        this.drawBar(ctx, player, 'health');
+        this.drawBar(ctx, player, 'sobriety');
 
         // Reset the font height
         ctx.font = "6pt Verdana";
@@ -96,6 +103,10 @@ export class Hud {
                 ctx.drawImage(WHISKY_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 ctx.fillText(this.nbWhisky, 248, hudY_origin + 64);
                 break;
+            case WEAPON_TEQUILA:
+                ctx.drawImage(TEQUILA_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                ctx.fillText(this.nbTequila, 248, hudY_origin + 64);
+                break;
         }
     }
 
@@ -103,7 +114,7 @@ export class Hud {
         this.weapon = id;
     }
 
-    drawBar(ctx, type) {
+    drawBar(ctx, player, type) {
         let height = cvs.height - this.height;
         let slot = cvs.width / NB_SLOTS;
         let levelRef;
@@ -129,8 +140,14 @@ export class Hud {
         } else {
             height += 45;
             levelRef = this.sobriety;
-            barColor = 'rgb(220, 131, 58)';
-            image.src = '../data/images/whisky.png';
+            // Drunk animation (tequila)
+            if (player.isDrunk) {
+                barColor = '#dfe8e8';
+                image.src = '../data/images/tequila.png';
+            } else {
+                barColor = 'rgb(220, 131, 58)';
+                image.src = '../data/images/whisky.png';
+            }
         }
 
         // Fill the bars
@@ -189,5 +206,9 @@ export class Hud {
 
     equipeWhisky(){
         this.weapon = WEAPON_WHISKY;
+    }
+
+    equipeTequila(){
+        this.weapon = WEAPON_TEQUILA;
     }
 }

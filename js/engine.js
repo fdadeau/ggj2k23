@@ -56,7 +56,7 @@ export class Engine {
      * Main function used to render the game state
      * @param {Game} game the game state to render
      */
-    render(game) {
+    render(game, isDrunk) {
 
         if (game.state == STATES.LOADING) {
             this.ctx.fillStyle = '#000000';
@@ -80,7 +80,7 @@ export class Engine {
         this.ctx.putImageData(this.buffer, 0, 0);            
         
         // add the sprites in the visible scene
-        this.spriteCasting(game);
+        this.spriteCasting(game, isDrunk);
         
         // print framerate & debug info
         this.ctx.fillStyle = "white";
@@ -353,8 +353,7 @@ export class Engine {
         }   
     }
 
-
-    spriteCasting(game) {
+    spriteCasting(game, isDrunk) {
         const W = WIDTH;
         const H = HEIGHT;
 
@@ -366,6 +365,10 @@ export class Engine {
         const that = this;
         //after sorting the sprites, do the projection and draw them
         game.enemies.forEach(function(e) {
+
+            if (e?.taken) {
+                return;
+            }
             
             //translate sprite position to relative to camera
             let spriteX = e.x - game.player.posX;
@@ -393,6 +396,9 @@ export class Engine {
             }
 
             that.ctx.filter = `brightness(${br})`;
+            if (isDrunk) {
+                that.ctx.filter = `brightness(${br}) blur(2px) invert(100%)`;
+            }
 
             let spriteScreenX = Math.floor((W / 2) * (1 + transformX / transformY));
            

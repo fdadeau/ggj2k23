@@ -90,6 +90,12 @@ export class Game {
                 }
                 this.hud.equipeAxe();
                 break;
+            case 'Digit3':
+                if(this.player.equipeTequila() < 0){
+                    return;
+                }
+                this.hud.equipeTequila();
+                break;
             case 'Digit2':
                 if(this.player.equipeWhisky() < 0){
                     return;
@@ -102,6 +108,9 @@ export class Game {
                     return;
                 }
                 this.hud.equipeWeapon(id);
+                break;
+            case 'KeyT':
+                this.player.drunk();
                 break;
         }
     }
