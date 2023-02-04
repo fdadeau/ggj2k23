@@ -116,8 +116,8 @@ export default class Player {
         this.isAttacking = false;
 
         /** Consumable */
-        this.nbWhisky = 0;
-        this.nbTequila = 0;
+        this.nbWhisky = 3;
+        this.nbTequila = 3;
 
         /** lighting */
         this.lighting = 20;
@@ -126,6 +126,9 @@ export default class Player {
         this.isDrunk = false;
 
         this.hud = new Hud(75);
+
+        /** Time when the player is drunk */
+        this.drunkTime = 10000;
     }
 
 
@@ -238,6 +241,15 @@ export default class Player {
         }
 
         this.collectPowerUp(enemies);
+
+        // Drunk time
+        if (this.isDrunk) {
+            this.drunkTime -= dt;
+            if (this.drunkTime <= 0) {
+                this.isDrunk = false;
+                this.drunkTime = 10000;
+            }
+        }
     }
 
     isStillOnMap(map, x, y) {
