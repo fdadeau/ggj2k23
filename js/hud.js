@@ -141,7 +141,7 @@ export class Hud {
         ctx.fillStyle = barColor;
         let fillBar = (levelRef * barWidth) / 100;
         let miniMargin = 2;
-        ctx.fillRect(slot * 4 + 10 + miniMargin, height + miniMargin, (this.sobriety < miniMargin) ? fillBar : fillBar - miniMargin * 2, barHeight - miniMargin * 2);
+        ctx.fillRect(slot * 4 + 10 + miniMargin, height + miniMargin, (levelRef < miniMargin) ? fillBar : fillBar - miniMargin * 2, barHeight - miniMargin * 2);
 
         // Draw the images
         ctx.drawImage(image, slot * 6 + 50, height - 5, 30, 30);
