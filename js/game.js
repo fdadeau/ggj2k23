@@ -33,6 +33,7 @@ export class Game {
         this.enemies = levelData.enemies();
         this.player.initialize(levelData.player.posX, levelData.player.posY, levelData.player.dirX, levelData.player.dirY);
         this.map = levelData.map;
+        this.textures = levelData.textures;
     }
 
     update(dt) {
