@@ -46,6 +46,8 @@ class PowerUp {
     /** Common behavior */
     update() { }
 
+    hit() { }
+
     behavior() { }
 
     collides(x, y) {
@@ -61,6 +63,7 @@ class WhiskyItem extends PowerUp {
         this.factor = 0.25;
         this.height = WHISKY_HEIGHT;
         this.width = WHISKY_WIDTH;
+        this.points = 100;
     }
 
     update(dt) {
@@ -84,6 +87,7 @@ class TequilaItem extends PowerUp {
         this.factor = 0.25;
         this.height = TEQUILA_HEIGHT;
         this.width = TEQUILA_WIDTH;
+        this.points = 200;
     }
 
     update(dt) {
