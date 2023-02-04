@@ -20,7 +20,7 @@ const TREE_PUNCH = [12,12,13,14,15];
 
 const TREE_SPRITESHEET = new Image();
 TREE_SPRITESHEET.src = "../data/tree-spritesheet.png";
-const TREE_HEIGHT = 10400/13 | 0;
+const TREE_HEIGHT = 12800/16 | 0;
 const TREE_WIDTH = 800;
 
 
@@ -157,7 +157,7 @@ class Tree extends Enemy {
     constructor(x, y, dirX, dirY, walkAnim, idleTree) {
         super(x, y, dirX, dirY, walkAnim, idleTree, 100);
         this.setAnimation(TREE_IDLE);
-        this.factor = 1;
+        this.factor = 0.5;
         this.height = TREE_HEIGHT;
         this.width = TREE_WIDTH;
         this.vMove = 20;

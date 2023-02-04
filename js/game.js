@@ -16,7 +16,7 @@ export class Game {
 
         //this.loadLevel("tree");
         this.hud = hud;
-        this.loadLevel("test");
+        this.loadLevel("tree");
     }
 
     loadLevel(id) {

@@ -16,6 +16,9 @@ WHISKY_IMG.src = '../data/images/whisky.png';
 const TIMBER_IMG = new Image();
 TIMBER_IMG.src = '../data/images/timber.jpeg';
 
+const BACKGROUND_IMG = new Image();
+BACKGROUND_IMG.src = '../data/wood.png';
+
 export class Hud {
 
     constructor(cvs, hudHeight) {
@@ -47,6 +50,7 @@ export class Hud {
         // Draw the window
         ctx.fillStyle = '#0000a6';
         ctx.fillRect(0, hudY_origin, cvs.width, this.height);
+        ctx.drawImage(BACKGROUND_IMG, 0, hudY_origin, cvs.width, this.height);
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 2;
         ctx.strokeRect(0, hudY_origin, cvs.width, 0);
