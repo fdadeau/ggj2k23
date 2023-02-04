@@ -1,14 +1,18 @@
 import { Game } from "./game.js";
 import { Engine } from "./engine.js";
+import { Hud } from "./hud.js";
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
 document.addEventListener("DOMContentLoaded", function() {
 
     // Pseudo-3D engine
-    const engine = new Engine(document.getElementById("cvs"));
-    // Game itself 
-    const game = new Game();
+    const canvas = document.getElementById("cvs");
+    const engine = new Engine(canvas);
+    // Game itself
+    const hud = new Hud(canvas, 75);
+    const game = new Game(hud);
+    
 
     if (localStorage.getItem(STORAGE_KEY_MOUSE)) {
         game.inverted = 1*localStorage.getItem(STORAGE_KEY_MOUSE);
@@ -38,9 +42,11 @@ document.addEventListener("DOMContentLoaded", function() {
         let dY = e.movementY;
         game.mouseMove(dX, dY);
     });
-    
+
     let lastUpdate = Date.now();
-    let framerate = 0, framesMeasure = lastUpdate;
+    let framerate = 0,
+        framesMeasure = lastUpdate;
+
     function mainloop() {
         requestAnimationFrame(mainloop);
         let now = Date.now();
@@ -48,14 +54,23 @@ document.addEventListener("DOMContentLoaded", function() {
         game.update(dt);
         lastUpdate = now;
         engine.render(game);
+        if (!game.on2D) {
+            if(
+                game.player.currentWeapon.constructor.name != "Whisky" ||
+                game.player.currentWeapon.constructor.name == "Whisky" && game.player.nbWhisky > 0
+            ){
+                game.player.currentWeapon.render(engine.ctx);
+            }
+            //game.player.lighter.render(engine.ctx);
+        }
         if (now < framesMeasure + 1000) {
             framerate++;
-        }
-        else {
+        } else {
             engine.framerate = framerate;
             framerate = 0;
-            framesMeasure= now;
+            framesMeasure = now;
         }
+        hud.render(engine.ctx, game.player);
     }
     mainloop();
 

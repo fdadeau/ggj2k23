@@ -5,7 +5,7 @@ import { levels } from "./levels.js";
 
 export class Game {
 
-    constructor() {
+    constructor(hud) {
 
         this.paused = false;
         this.on2D = false;
@@ -14,7 +14,9 @@ export class Game {
         this.enemies = [];
         this.player = new Player();
 
-        this.loadLevel("test");
+        this.loadLevel("demo");
+        this.hud = hud;
+        //this.loadLevel("test");
     }
 
     loadLevel(id) {
@@ -29,6 +31,8 @@ export class Game {
             e.update(dt);   // TODO add player for detecting collisions?
         });
         this.player.update(dt, this.map, this.enemies);
+
+        //this.player.currentWeapon.update(dt);   // TODO remove (only debug)
     }
 
    
@@ -59,6 +63,29 @@ export class Game {
                 break;
             case 'Semicolon':
                 this.on2D = !this.on2D;
+                break;
+            case 'KeyI':
+                this.inverted *= -1;
+                localStorage.setItem(STORAGE_KEY_MOUSE, this.inverted);
+                break;
+            case 'KeyE':
+                this.player.attack();
+                break;
+            case 'Digit1':
+                this.player.equipeAxe();
+                this.hud.equipeAxe();
+                break;
+            case 'Digit2':
+                this.player.equipeChainsaw();
+                this.hud.equipeChainsaw();
+                break;
+            case 'Digit3':
+                this.player.equipeWhisky();
+                this.hud.equipeWhisky();
+                break;
+            case 'Space':
+                let id = this.player.switchToNextWeapon();
+                this.hud.equipeWeapon(id);
                 break;
         }
     }
