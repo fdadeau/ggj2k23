@@ -14,8 +14,9 @@ const DINO_WIDTH = 240;
 
 /** ANGRY TREE */
 
-const WALKTREERIGHT = [0,4,8];
-const IDLETREE = [0];
+const TREE_WALK = [0,4,8];
+const TREE_IDLE = [0];
+const TREE_PUNCH = [12,12,13,14,15];
 
 const TREE_SPRITESHEET = new Image();
 TREE_SPRITESHEET.src = "../data/tree-spritesheet.png";
@@ -37,7 +38,7 @@ export function buildEnemy(type,x,y,dx,dy) {
         case "dino":
             return new Dino(x,y,dx,dy,WALK,IDLE);
         case "tree":
-            return new Tree(x,y,dx,dy,WALKTREERIGHT,IDLETREE);
+            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE);
         // ... TODO ... make more enemies
     }
 }
@@ -64,7 +65,6 @@ class Enemy {
         }
         this.walkA = walkAnim;
         this.idleA = idleAnim;
-
     }
 
     /** Common behavior */
@@ -151,11 +151,15 @@ class Tree extends Enemy {
 
     constructor(x, y, dirX, dirY, walkAnim, idleTree) {
         super(x, y, dirX, dirY, walkAnim, idleTree);
-        this.setAnimation(IDLETREE);
+        this.setAnimation(TREE_IDLE);
         this.factor = 1;
         this.height = TREE_HEIGHT;
         this.width = TREE_WIDTH;
         this.vMove = 20;
+    }
+
+    punch(){
+        this.setAnimation(TREE_PUNCH);
     }
 
     update(dt) {
