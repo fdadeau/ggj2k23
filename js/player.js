@@ -342,7 +342,7 @@ export default class Player {
                 case 'WhiskyItem' :
                     if(e.distance <= 1){
                         this.nbWhisky++;
-                        delete powerup[powerup.lastIndexOf(e)];
+                        e.taken = true;
                     }
                     break;
             }

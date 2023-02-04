@@ -362,6 +362,10 @@ export class Engine {
         const that = this;
         //after sorting the sprites, do the projection and draw them
         game.enemies.forEach(function(e) {
+
+            if (e?.taken) {
+                return;
+            }
             
             //translate sprite position to relative to camera
             let spriteX = e.x - game.player.posX;
