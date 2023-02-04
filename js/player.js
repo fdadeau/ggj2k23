@@ -340,7 +340,7 @@ export default class Player {
         powerup.forEach(function(e) {
             switch(e.constructor.name) {
                 case 'WhiskyItem' :
-                    if(e.distance <= 1.5){
+                    if(e.distance <= 1){
                         this.nbWhisky++;
                         delete powerup[powerup.lastIndexOf(e)];
                     }

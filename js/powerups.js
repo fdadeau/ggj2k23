@@ -24,9 +24,9 @@ const TEQUILA_WIDTH = 500;
 export function buildPowerUp(type,x,y,dx,dy) {
     switch (type) {
         case "whisky":
-            return new WhiskyItem(x,y,dx,dy);
+            return new WhiskyItem(x, y);
         case "tequila":
-            return new TequilaItem(x,y,dx,dy);
+            return new TequilaItem(x, y);
     }
 }
 
@@ -37,27 +37,13 @@ export function buildPowerUp(type,x,y,dx,dy) {
 
 class PowerUp {
 
-    constructor(x, y, dirX, dirY) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.dirX = dirX;
-        this.dirY = dirY;
-        this.speed = 0;
-        this.angle = Math.acos(dirX / Math.sqrt(dirX*dirX+dirY*dirY)) * 180 / Math.PI;
-        if (this.dirY < 0) {
-            this.angle *= -1;
-        }
-        if (this.angle < 0) {
-            this.angle += 360;
-        }
     }
 
     /** Common behavior */
-    update(dt) { 
-        this.x += this.dirX * dt * this.speed;
-        this.y += this.dirY * dt * this.speed;
-        this.behavior(dt);
-    }
+    update() { }
 
     behavior() { }
 
@@ -74,18 +60,17 @@ class WhiskyItem extends PowerUp {
         this.factor = 0.25;
         this.height = WHISKY_HEIGHT;
         this.width = WHISKY_WIDTH;
-        this.vMove = 20;
     }
 
     update(dt) {
         super.update(dt);
     }
 
-    render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+    render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
 
-        ctx.fillStyle = '#fff';
-        ctx.fillText(`Whisky:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle}`, 10, 40);
+        //ctx.fillStyle = '#fff';
+        //ctx.fillText(`Whisky:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 40);
 
         ctx.drawImage(WHISKY_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
@@ -98,18 +83,17 @@ class TequilaItem extends PowerUp {
         this.factor = 0.25;
         this.height = TEQUILA_HEIGHT;
         this.width = TEQUILA_WIDTH;
-        this.vMove = 20;
     }
 
     update(dt) {
         super.update(dt);
     }
 
-    render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+    render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
 
-        ctx.fillStyle = '#fff';
-        ctx.fillText(`Tequila:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle}`, 10, 30);
+        //ctx.fillStyle = '#fff';
+        //ctx.fillText(`Tequila:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 30);
 
         ctx.drawImage(TEQUILA_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
