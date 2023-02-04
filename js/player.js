@@ -97,7 +97,7 @@ export default class Player {
         // Axe
         this.weapons[2].behavior = function(player, enemies) {
             enemies.forEach(function(e) {
-                if(e.distance <= player.currentWeapon.range){{
+                if(e.distance <= player.currentWeapon.range && e.hit != undefined){{
                     e.hit(player.currentWeapon.damage);
                 }}
             },this);
@@ -308,6 +308,13 @@ export default class Player {
         }
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+1)%this.weapons.length;
+
+        if(newWeapon == 0 && this.nbWhisky <= 0){
+            newWeapon = (newWeapon+1)%this.weapons.length;
+        }
+        if(newWeapon == 1 && this.nbTequila <= 0){
+            newWeapon = (newWeapon+1)%this.weapons.length;
+        }
         
         this.currentWeapon = this.weapons[newWeapon];
         this.setAnimation(this.currentWeapon.idle);
