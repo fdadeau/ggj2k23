@@ -23,7 +23,10 @@ TREE_SPRITESHEET.src = "../data/tree-spritesheet.png";
 const TREE_HEIGHT = 13600/17 | 0;
 const TREE_WIDTH = 800;
 
-/** DEAD TREE */
+const TREE_ATTACK_DAMAGE = 20;
+const TREE_HP = 100;
+const TREE_ATTACK_DELAY = 500;
+
 const TREE_HURT = [16,16,16,16,16];
 
 /** DEADLY TURNIP */
@@ -36,8 +39,10 @@ TURNIP_SPRITESHEET.src = "../data/turnip-spritesheet.png";
 const TURNIP_HEIGHT = 5852/14 | 0;
 const TURNIP_WIDTH = 419;
 
-/** DEAD TURNIP */
 const TURNIP_HURT = [14,14,14,14,14];
+const TURNIP_ATTACK_DAMAGE = 20;
+const TURNIP_HP = 100;
+const TURNIP_ATTACK_DELAY = 500;
 
 /**
  * Build an enemy of the specified type.
@@ -66,8 +71,7 @@ export function buildEnemy(type,x,y,dx,dy) {
  */
 
 class Enemy {
-
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, hp) {
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, hp, attackDamage) {
         this.x = x;
         this.y = y;
         this.dirX = dirX;
@@ -83,8 +87,9 @@ class Enemy {
         this.walkA = walkAnim;
         this.idleA = idleAnim;
         this.hurtA = hurtAnim;
-        console.log(hp)
         this.health = hp;
+
+        this.attackDamage = attackDamage;
     }
 
     /** Common behavior */
@@ -131,7 +136,7 @@ class Enemy {
 class Dino extends Enemy {
 
     constructor(x, y, dirX, dirY, walkA, idleA, hurtA) {
-        super(x, y, dirX, dirY, walkA, idleA, hurtA, 9999);
+        super(x, y, dirX, dirY, walkA, idleA, hurtA, 9999, 0);
         this.setAnimation(IDLE);
         this.factor = 2;
         this.height = DINO_HEIGHT;
@@ -178,7 +183,7 @@ class Dino extends Enemy {
 class Tree extends Enemy {
 
     constructor(x, y, dirX, dirY, walkAnim, idleTree, hurtA) {
-        super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, 100);
+        super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, TREE_HP,TREE_ATTACK_DAMAGE);
         this.setAnimation(TREE_IDLE);
         this.factor = 0.5;
         this.height = TREE_HEIGHT;
@@ -240,7 +245,7 @@ class Tree extends Enemy {
 class Turnip extends Enemy {
 
     constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim) {
-        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, 100);
+        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, TURNIP_HP,TURNIP_ATTACK_DAMAGE);
         this.setAnimation(TURNIP_IDLE);
         this.factor = 0.5;
         this.height = TURNIP_HEIGHT;

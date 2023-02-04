@@ -8,8 +8,7 @@ export const STATES = { LOADING: 0, PLAYING: 1, PAUSED: 2 };
 
 export class Game {
 
-    constructor(hud) {
-
+    constructor() {
         this.state = STATES.LOADING;
         this.loading = { loaded: 0, total: 0 }
 
@@ -19,9 +18,6 @@ export class Game {
         
         this.enemies = [];
         this.player = new Player();
-
-        this.hud = hud;
-        
     }
 
     setLoadingProgress(loaded, total) {
@@ -86,29 +82,24 @@ export class Game {
                 this.player.attack(this.enemies);
                 break;
             case 'Digit1':
-                if(this.player.equipeAxe() < 0){
-                    return;
-                }
-                this.hud.equipeAxe();
+                this.player.equipeAxe();
                 break;
             case 'Digit3':
-                if(this.player.equipeTequila() < 0){
-                    return;
+                if(this.player.nbTequila > 0){
+                    this.player.equipeTequila(); 
+                }else{
+                    this.player.equipeAxe();
                 }
-                this.hud.equipeTequila();
                 break;
             case 'Digit2':
-                if(this.player.equipeWhisky() < 0){
-                    return;
+                if(this.player.nbWhisky > 0){
+                    this.player.equipeWhisky();
+                }else{
+                    this.player.equipeAxe();
                 }
-                this.hud.equipeWhisky();
                 break;
             case 'Space':
-                let id = this.player.switchToNextWeapon();
-                if(id < 0){
-                    return;
-                }
-                this.hud.equipeWeapon(id);
+                this.player.switchToNextWeapon();
                 break;
             case 'KeyT':
                 this.player.drunk();

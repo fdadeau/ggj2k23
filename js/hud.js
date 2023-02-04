@@ -1,7 +1,8 @@
 const WEAPON_WHISKY = 0;
-const WEAPON_AXE = 1;
-const WEAPON_LIGHTER = 2;
-const WEAPON_TEQUILA = 3;
+const WEAPON_TEQUILA = 1;
+const WEAPON_AXE = 2;
+const WEAPON_LIGHTER = 4;
+
 
 const NB_SLOTS = 7;
 
