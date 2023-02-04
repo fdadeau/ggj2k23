@@ -100,10 +100,10 @@ export default class Player {
         // Axe
         this.weapons[2].behavior = function(player, enemies) {
             enemies.forEach(function(e) {
-                if(e.distance <= player.currentWeapon.range){{
+                if(e.distance <= player.currentWeapon.range){
                     e.hit(player.currentWeapon.damage);
-                    player.score += e.dropPoints;
-                }}
+                    player.score += e.dropPoints ?? 0;
+                }
             },this);
         }.bind(this.weapons[2]);
 
