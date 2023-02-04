@@ -53,7 +53,7 @@ class Whisky extends Consumable{
 }
 
 const TEQUILA_SPRITESHEET = new Image();
-TEQUILA_SPRITESHEET.src = "../data/whisky-spritesheet.png"; // to change
+TEQUILA_SPRITESHEET.src = "../data/tequila-spritesheet.png";
 const TEQUILA_HEIGHT = 4200/6 | 0;
 const TEQUILA_WIDTH = 1000;
 

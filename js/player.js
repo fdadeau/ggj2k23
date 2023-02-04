@@ -7,15 +7,19 @@ const AXE_WIDTH = 1000;
 const AXE_ATTACK = [0,1,2,3,4];
 const AXE_IDLE = [0];
 
-
-
 const WHISKY_SPRITESHEET = new Image();
 WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
 const WHISKY_HEIGHT = 4200/6 | 0;
-const WHISKY_WIDTH = 1000;
 const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const WHISKY_IDLE = [0];
 const WHISKY_EMPTY = [5];
+
+const TEQUILA_SPRITESHEET = new Image();
+TEQUILA_SPRITESHEET.src = "../data/tequila-spritesheet.png";
+const TEQUILA_HEIGHT = 4200/6 | 0;
+const TEQUILA_DRINK = [0,1,2,2,2,3,3,3,4,5];
+const TEQUILA_IDLE = [0];
+const TEQUILA_EMPTY = [5];
 
 const FRAME_DELAY = 100;
 
@@ -75,7 +79,7 @@ export default class Player {
             buildWeapon("tequila"),
             buildWeapon("axe"),
         ];
-        this.currentWeapon = this.weapons[1];
+        this.currentWeapon = this.weapons[2];
         this.lighter = buildWeapon('lighter');
         this.setAnimation(AXE_IDLE);
         this.frameDelay = FRAME_DELAY;
@@ -209,6 +213,13 @@ export default class Player {
                             this.setAnimation(WHISKY_IDLE);
                         }
                         break;
+                    case 'Tequila':
+                        if(this.nbTequila == 0){
+                            this.setAnimation(TEQUILA_EMPTY);
+                        }else{
+                            this.setAnimation(TEQUILA_IDLE);
+                        }
+                        break;
                 }
             }
         }
@@ -291,7 +302,7 @@ export default class Player {
         if (this.isAttacking) {
             return -1;
         }
-        this.setAnimation(WHISKY_IDLE); // To change
+        this.setAnimation(TEQUILA_IDLE);
         this.currentWeapon = this.weapons[1];
     }
 
@@ -321,7 +332,7 @@ export default class Player {
                 this.currentWeapon.render(ctx,((this.animation[this.frame]) * WHISKY_HEIGHT));
                 break;
             case 'Tequila':
-                this.currentWeapon.render(ctx,((this.animation[this.frame]) * WHISKY_HEIGHT)); // To change
+                this.currentWeapon.render(ctx,((this.animation[this.frame]) * TEQUILA_HEIGHT));
                 break;
         }
     }
@@ -352,7 +363,7 @@ export default class Player {
                 if(this.nbTequila == 0){
                     return;
                 }
-                this.setAnimation(WHISKY_DRINK); // To change
+                this.setAnimation(TEQUILA_DRINK);
                 this.sobriety +=10;
                 this.nbTequila--;
                 this.isDrunk = true;
