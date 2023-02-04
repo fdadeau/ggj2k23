@@ -6,7 +6,8 @@ const data = {
     "lighter-spritesheet": "../data/lighter-spritesheet.png",
     "tree-spritesheet": "../data/tree-spritesheet.png",
     "whisky-spritesheet": "../data/whisky-spritesheet.png",
-    
+    "lighter-spritesheet": "../data/lighter-spritesheet.png",
+
     // images
     "wood": "../data/wood.png",
     "axe": "../data/images/axe.png",

@@ -278,7 +278,7 @@ export class Engine {
             // Starting texture coordinate
             let texPos = (drawStart - H * game.player.altitude - game.player.pitch + lineHeight / 2) * step;
 
-            for(let y = drawStart | 0; y < drawEnd-1 | 0; y++) {
+            for(let y = drawStart | 0; y < drawEnd-2 | 0; y++) {
                 // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
                 let texY = (texPos | 0) % (texHeight);
                 texPos += step;
