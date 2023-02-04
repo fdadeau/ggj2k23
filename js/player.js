@@ -218,7 +218,7 @@ export default class Player {
             return;
         }
         this.isAttacking = true;
-        if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety < 90){
+        if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety <= 90){
             this.sobriety += 10;
         }
         //this.sobriety += 10;
