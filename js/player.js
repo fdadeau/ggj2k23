@@ -279,7 +279,7 @@ export default class Player {
         if (this.isAttacking) {
             return -1;
         }
-        this.setAnimation(WHISKY_IDLE);
+        this.setAnimation((this.nbWhisky > 0)?WHISKY_IDLE:WHISKY_EMPTY);
         this.currentWeapon = this.weapons[0];
     }
 
@@ -290,6 +290,9 @@ export default class Player {
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+1)%this.weapons.length;
         this.currentWeapon = this.weapons[newWeapon];
+        if(newWeapon == 0){
+            this.setAnimation((this.nbWhisky > 0)?WHISKY_IDLE:WHISKY_EMPTY); 
+        }
         // TODO animation
         return newWeapon;
     }
