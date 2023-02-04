@@ -65,7 +65,7 @@ export default class Player {
         this.nbWhisky = 0;
 
         /** lighting */
-        this.lighting = 2;
+        this.lighting = 20;
     }
 
 

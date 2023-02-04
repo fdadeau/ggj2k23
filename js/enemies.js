@@ -103,8 +103,8 @@ class Enemy {
 
 class Dino extends Enemy {
 
-    constructor(x, y, dirX, dirY) {
-        super(x, y, dirX, dirY);
+    constructor(x, y, dirX, dirY, walkA, idleA) {
+        super(x, y, dirX, dirY,walkA,idleA);
         this.setAnimation(IDLE);
         this.factor = 2;
         this.height = DINO_HEIGHT;

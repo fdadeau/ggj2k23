@@ -14,7 +14,7 @@ export class Game {
         this.enemies = [];
         this.player = new Player();
 
-        this.loadLevel("demo");
+        this.loadLevel("tree");
         this.hud = hud;
         //this.loadLevel("test");
     }
