@@ -26,6 +26,9 @@ export class Engine {
         this.textures = initTextures();
         /** Depth of different x walls */
         this.zBuffer = [];
+
+        // Test for raycasting middle of the screen
+        this.x = 0;
     }
 
     /**
@@ -111,6 +114,10 @@ export class Engine {
 
         let hit = 0; //was there a wall hit?
         let side; //was a NS or a EW wall hit?
+        let whichSide; // 0: top, 1: right, 2: bottom, 3: left;
+        let pt; // point that is hit on a wall
+        let pt_; // second point on next wall
+        let perpWallDist; // perpendicular distance
 
         //perform Digital Differential Analysis (DDA)
         while (hit == 0) {
@@ -119,22 +126,91 @@ export class Engine {
                 sideDistX += deltaDistX;
                 mapX += stepX;
                 side = 0;
+                whichSide = (stepX > 0) ? 3 : 1;
             }
             else {
                 sideDistY += deltaDistY;
                 mapY += stepY;
                 side = 1;
+                whichSide = (stepY > 0) ? 2 : 0;
             }
             //Check if ray has hit a wall
-            if (game.map[mapX][mapY] > 0) hit = 1;
+            let kind = game.map[mapX][mapY];
+
+            // FIRST CASE: hits a solid wall 
+            if (kind >= 1) {
+                pt = getPointOnWall(whichSide, side, sideDistX, sideDistY, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game);
+            } 
+            
+            if (kind == 1 ||
+                kind == 2 && (whichSide == 3 || whichSide == 0) || 
+                kind == 3 && (whichSide == 0 || whichSide == 1) ||
+                kind == 4 && (whichSide == 1 || whichSide == 2) ||
+                kind == 5 && (whichSide == 2 || whichSide == 3)) {
+                hit = 1;
+                //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
+                perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
+            }
+            else if (kind >= 2) {
+
+                pt_ = getPointOnWall(whichSide, side, sideDistX, sideDistY, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game);
+
+                let whichSide_, sideDistX_, sideDistY_, side_; 
+                // compute exit point 
+                if (sideDistX < sideDistY) {
+                    sideDistX_ = sideDistX + deltaDistX;
+                    side_ = 0;
+                    whichSide_ = (stepX > 0) ? 1 : 3;
+                }
+                else {
+                    sideDistY_ = sideDistY + deltaDistY;
+                    side_ = 1;
+                    whichSide_ = (stepY > 0) ? 0 : 2;
+                }
+
+                pt = getPointOnWall(whichSide_, side_, sideDistX_, sideDistY_, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game);
+                
+                if (kind == 2 && (whichSide_ == 3 || whichSide_ == 0) || 
+                    kind == 3 && (whichSide_ == 0 || whichSide_ == 1) ||
+                    kind == 4 && (whichSide_ == 1 || whichSide_ == 2) ||
+                    kind == 5 && (whichSide_ == 2 || whichSide_ == 3)) {
+                    hit=1
+
+                    // diag descendante :
+                    let diag1, diag2;
+                    if (kind == 5 || kind == 3) {
+                        diag1 = {x: mapX, y: mapY};
+                        diag2 = {x: mapX+1, y:mapY-1};
+                    }
+                    else {
+                        diag1 = {x: mapX+1, y:mapY};
+                        diag2 = {x: mapX, y:mapY-1};
+                    }
+
+                    let pt2 = intersection(pt, pt_, diag1, diag2);
+                    
+                    let dX = (pt.x - pt_.x);
+                    let dY = (pt.y - pt_.y);
+                    let dist2 = Math.sqrt(dX*dX+dY*dY);
+
+                    dX = (pt2.x - pt_.x);
+                    dY = (pt2.y - pt_.y);
+                    let dist1 = Math.sqrt(dX*dX+dY*dY);
+
+                    //console.log(dist2 > dist1);
+                    let ratio = (dist1) / dist2;
+
+                    perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
+                    let perpWallDist2 = (side_ == 0) ? (sideDistX_ - deltaDistX) : (sideDistY_ - deltaDistY);
+
+                    let d = perpWallDist2 - perpWallDist;
+                    
+                    perpWallDist = (perpWallDist + d*ratio);               
+
+                }
+            }  
         } 
-
-        return [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY];
-
-            /**
-             * Xi=[((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-Ya)/(Xb-Xa))-((Yd-Yc)/(Xd-Xc))]
-Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-Ya)/(Xb-Xa))-((Yd-Yc)/(Xd-Xc))]-Xa)+Ya
-             */
+        return [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY, whichSide, perpWallDist, pt, pt_];
     }
 
 
@@ -147,10 +223,7 @@ Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-
 
         for(let x = 0; x < W; x++) {
 
-            let [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY] = this.castRay(x, game);
-
-            //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
-            let perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
+            let [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY, whichSide, perpWallDist, pt] = this.castRay(x, game);
 
             // add to zBuffer index 
             this.zBuffer[x] = perpWallDist;
@@ -457,14 +530,38 @@ Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-
         this.ctx.beginPath();
         let posY = game.map[0].length - game.player.posY;
         this.ctx.arc(10 + game.player.posX*square, 10 + posY*square, 0.2 * square, 0, 2*Math.PI);
-        this.ctx.fill();
+        this.ctx.fill();        
         this.ctx.beginPath();
         this.ctx.moveTo(10 + game.player.posX*square, 10 + posY*square);
         this.ctx.lineTo(10 + game.player.posX*square + game.player.dirX * square, 10 + posY*square - game.player.dirY * square);
         this.ctx.closePath();
         this.ctx.stroke();
 
-        this.ctx.fillText(game.player.getInfos(), game.map.length * square, 10);
+        this.ctx.fillText(game.player.getInfos(), game.map.length * square + 20, 20);
+        [0, WIDTH/2, WIDTH-1].forEach((x,i) => {
+            let [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY, whichSide, perpWallDist, pt, pt_] = this.castRay(x, game);
+            this.ctx.fillText(`sideDistX=${sideDistX.toFixed(2)}, sideDistY=${sideDistY.toFixed(2)}`, game.map.length * square + 20, 50*(i+1));
+            this.ctx.fillText(`deltaDistX=${deltaDistX.toFixed(2)}, deltaDistY=${deltaDistY.toFixed(2)}`, game.map.length * square + 20, 50*(i+1)+10);
+            this.ctx.fillText(`mapX=${mapX}, mapY=${mapY}, whichSide=${whichSide}`, game.map.length * square + 20, 50*(i+1)+20);
+            this.ctx.fillText(`ptX=${pt.x}, ptY=${pt.y}`, game.map.length * square + 20, 50*(i+1)+30);
+            this.ctx.beginPath();
+            this.ctx.arc(10 + pt.x * square, 10 + (game.map[0].length-1-pt.y) * square, 2, 0, Math.PI*2);
+            this.ctx.fill();
+            if (pt_) {
+                this.ctx.fillStyle = "#FF66FF";
+                this.ctx.beginPath();
+                this.ctx.arc(10 + pt_.x * square, 10 + (game.map[0].length-1-pt_.y) * square, 2, 0, Math.PI*2);
+                this.ctx.fill();
+                this.ctx.fillStyle = "#0000FF";
+            }
+        });
+
+        /*
+        this.ctx.fillStyle = "#FFFF00";
+        this.ctx.beginPath();
+        this.ctx.arc(10 + getCorners(game.player.posX|0,game.player.posY|0)[2].x * square, 10 + (game.map[0].length-1-getCorners(game.player.posX|0,game.player.posY|0)[2].y) * square, 2, 0, Math.PI*2);
+        this.ctx.fill();        
+        */
 
         this.ctx.fillStyle = "#FF0000";
         this.ctx.strokeStyle = "#FF0000";
@@ -487,7 +584,54 @@ Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-
 }
 
 
+function getPointOnWall(whichSide, side, sideDistX, sideDistY, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game) {
 
+    //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
+    let perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
+
+    //Offset on the side of the wall
+    let wallX = (side == 0) ? game.player.posY + perpWallDist * rayDirY : game.player.posX + perpWallDist * rayDirX;
+    wallX -= wallX | 0;
+
+    let ptX, ptY;
+
+    // Coordinates of the intersection point depending on the side and wall offset
+    switch (whichSide) {
+        case 0: 
+            ptY = mapY;
+            ptX = mapX + wallX; 
+            break;
+        case 1:
+            ptX = mapX+1;
+            ptY = mapY - 1 + wallX;
+            break;
+        case 2: 
+            ptY = mapY-1
+            ptX = mapX + wallX;
+            break;
+        case 3:
+            ptX = mapX;
+            ptY = mapY - 1 + wallX
+            break;
+    }
+    return { x: ptX, y: ptY };
+}
+
+function intersection(p0, p1, p2, p3) {
+    let s1_x = p1.x - p0.x
+    let s1_y = p1.y - p0.y
+    let s2_x = p3.x - p2.x
+    let s2_y = p3.y - p2.y
+  
+    let s = (-s1_y * (p0.x - p2.x) + s1_x * (p0.y - p2.y)) / (-s2_x * s1_y + s1_x * s2_y)
+    let t = ( s2_x * (p0.y - p2.y) - s2_y * (p0.x - p2.x)) / (-s2_x * s1_y + s1_x * s2_y)
+  
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) { 
+        return {x: p0.x + (t * s1_x), y: p0.y + (t * s1_y)}
+    }
+  
+    return null;
+}
 
 /** Textures from the tutorial */
 

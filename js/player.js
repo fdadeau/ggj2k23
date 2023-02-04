@@ -37,7 +37,7 @@ export default class Player {
         this.plane = { x: 0, y: 0.66 };
 
         /** lighting */
-        this.lighting = 2;
+        this.lighting = 5;
     }
 
 
@@ -64,7 +64,7 @@ export default class Player {
     }
 
     getInfos() {
-        return `Player: dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`;
+        return `Player: posX=${this.posX.toFixed(2)}, posY=${this.posY.toFixed(2)}, dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`;
     }
 
     /**
