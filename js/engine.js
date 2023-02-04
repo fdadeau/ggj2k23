@@ -551,9 +551,9 @@ export class Engine {
         this.ctx.fillText(game.player.getInfos(), game.map.length * square + 20, 20);
         [0, WIDTH/2, WIDTH-1].forEach((x,i) => {
             let [side, sideDistX, deltaDistX, sideDistY, deltaDistY, mapX, mapY, rayDirX, rayDirY, whichSide, perpWallDist, pt, pt_] = this.castRay(x, game);
-            this.ctx.fillText(`sideDistX=${sideDistX.toFixed(2)}, sideDistY=${sideDistY.toFixed(2)}`, game.map.length * square + 20, 50*(i+1));
-            this.ctx.fillText(`deltaDistX=${deltaDistX.toFixed(2)}, deltaDistY=${deltaDistY.toFixed(2)}`, game.map.length * square + 20, 50*(i+1)+10);
-            this.ctx.fillText(`mapX=${mapX}, mapY=${mapY}, whichSide=${whichSide}`, game.map.length * square + 20, 50*(i+1)+20);
+            //this.ctx.fillText(`sideDistX=${sideDistX.toFixed(2)}, sideDistY=${sideDistY.toFixed(2)}`, game.map.length * square + 20, 50*(i+1));
+            //this.ctx.fillText(`deltaDistX=${deltaDistX.toFixed(2)}, deltaDistY=${deltaDistY.toFixed(2)}`, game.map.length * square + 20, 50*(i+1)+10);
+            //this.ctx.fillText(`mapX=${mapX}, mapY=${mapY}, whichSide=${whichSide}`, game.map.length * square + 20, 50*(i+1)+20);
             this.ctx.fillText(`ptX=${pt.x}, ptY=${pt.y}`, game.map.length * square + 20, 50*(i+1)+30);
             this.ctx.beginPath();
             this.ctx.arc(10 + pt.x * square | 0, 10 + (game.map[0].length-1-pt.y) * square | 0, 2, 0, Math.PI*2);
@@ -581,6 +581,9 @@ export class Engine {
             this.ctx.arc(10 + e.x*square | 0, 10 + (game.map[0].length - e.y)*square | 0, 0.2 * square | 0, 0, 2*Math.PI);
             this.ctx.fill();
             this.ctx.closePath();
+            if (e.dirX === undefined) {
+                return;
+            }
             this.ctx.beginPath();
             this.ctx.moveTo(10 + e.x*square | 0, 10 + (game.map[0].length - e.y)*square | 0);
             this.ctx.lineTo(10 + e.x*square + e.dirX * square | 0, 10 + (game.map[0].length - e.y)*square - e.dirY * square | 0);
