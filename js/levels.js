@@ -1,6 +1,8 @@
 
 import { buildEnemy } from "./enemies.js";
 
+import { buildPowerUp } from "./powerups.js";
+
 const MAP0 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,7,0,0,0,0,0,0,1],
@@ -85,7 +87,13 @@ const ENEMIES3 = function() {
     // static tree
     const tree1 = buildEnemy("tree", 3.5, 10.5, 0, 1);
 
-    return [tree0, tree1];
+    // Whisky power up
+    const whisky0 = buildPowerUp("whisky", 3.5, 20.5, 0, 1);
+
+    // Tequila power up
+    const tequila0 = buildPowerUp("tequila", 2.5, 20.5, 0, 1);
+
+    return [tree0, tree1, whisky0, tequila0];
 };
 
 
