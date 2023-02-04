@@ -26,6 +26,7 @@ const TREE_WIDTH = 800;
 const TREE_ATTACK_DAMAGE = 20;
 const TREE_HP = 100;
 const TREE_ATTACK_DELAY = 500;
+const TREE_POINTS_DROP = 50;
 
 const TREE_HURT = [16,16,16,16,16];
 
@@ -43,6 +44,7 @@ const TURNIP_HURT = [14,14,14,14,14];
 const TURNIP_ATTACK_DAMAGE = 20;
 const TURNIP_HP = 100;
 const TURNIP_ATTACK_DELAY = 500;
+const TURNIP_POINTS_DROP = 100;
 
 /**
  * Build an enemy of the specified type.
@@ -58,9 +60,9 @@ export function buildEnemy(type,x,y,dx,dy) {
         case "dino":
             return new Dino(x,y,dx,dy,WALK,IDLE);
         case "tree":
-            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE,TREE_HURT);
+            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE,TREE_HURT, TREE_POINTS_DROP);
         case "turnip":
-            return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE,TURNIP_HURT);
+            return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE,TURNIP_HURT, TURNIP_POINTS_DROP);
         // ... TODO ... make more enemies
     }
 }
@@ -182,13 +184,14 @@ class Dino extends Enemy {
 
 class Tree extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleTree, hurtA) {
+    constructor(x, y, dirX, dirY, walkAnim, idleTree, hurtA, dropPoints) {
         super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, TREE_HP,TREE_ATTACK_DAMAGE);
         this.setAnimation(TREE_IDLE);
         this.factor = 0.5;
         this.height = TREE_HEIGHT;
         this.width = TREE_WIDTH;
         this.vMove = 20;
+        this.dropPoints = dropPoints;
     }
 
     punch(){
@@ -244,13 +247,14 @@ class Tree extends Enemy {
 
 class Turnip extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim) {
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, dropPoints) {
         super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, TURNIP_HP,TURNIP_ATTACK_DAMAGE);
         this.setAnimation(TURNIP_IDLE);
         this.factor = 0.5;
         this.height = TURNIP_HEIGHT;
         this.width = TURNIP_WIDTH;
         this.vMove = 20;
+        this.dropPoints = dropPoints;
     }
 
     bite(){

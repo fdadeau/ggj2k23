@@ -48,6 +48,9 @@ export default class Player {
         /** projection plane (screen) distance */
         this.plane = { x: 0, y: 0.66 };
 
+        /** Score of the player */
+        this.score = 0;
+
         /** player's health */
         this.health = 100;
 
@@ -294,24 +297,24 @@ export default class Player {
         switch(this.currentWeapon.constructor.name){
             case 'Axe':
                 enemies.forEach(function(e) {
-                    if(e.distance <= this.currentWeapon.range){{
+                    if(e.distance <= this.currentWeapon.range){
                         e.hit(this.currentWeapon.damage);
-                    }}
+                        this.score += e.dropPoints;
+                    }
                 },this);
                 break;
             case 'Whisky':
                 if(this.nbWhisky == 0){
                     return;
                 }
-
-                this.sobriety += 10;
+                this.sobriety += this.currentWeapon.addSobriety;
                 this.nbWhisky--;
                 break;
             case 'Tequila':
                 if(this.nbTequila == 0){
                     return;
                 }
-                this.sobriety += 20;
+                this.sobriety += this.currentWeapon.addSobriety;
                 this.nbTequila--;
                 this.isDrunk = true;
                 break;
@@ -325,12 +328,14 @@ export default class Player {
                     if(e.distance <= 1 && ! e.taken){
                         this.nbWhisky++;
                         e.taken = true;
+                        this.score += e.points;
                     }
                     break;
                 case 'TequilaItem' :
                     if(e.distance <= 1 && ! e.taken){
                         this.nbTequila++;
                         e.taken = true;
+                        this.score += e.points;
                     }
                     break;
             }

@@ -50,6 +50,7 @@ export class Hud {
         this.sobriety = player.sobriety;
         this.nbWhisky = player.nbWhisky;
         this.nbTequila = player.nbTequila;
+        this.score = player.score;
 
         let hudY_origin = cvs.height - this.height;
 

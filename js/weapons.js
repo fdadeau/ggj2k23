@@ -72,6 +72,7 @@ class Whisky extends Consumable{
         super();
         this.idle = WHISKY_IDLE;
         this.use = WHISKY_DRINK;
+        this.addSobriety = 10;
     }
 
     render(ctx, frame){
@@ -84,6 +85,7 @@ class Tequila extends Consumable {
         super();
         this.idle = TEQUILA_IDLE;
         this.use = TEQUILA_DRINK;
+        this.addSobriety = 20;
     }
 
     render(ctx, frame){
