@@ -65,14 +65,14 @@ export class Hud {
         ctx.drawImage(skinImg, 275, hudY_origin + 1, slot - 2, this.height);
 
         // Draw the health and sobriety bars
-        this.drawBar(ctx, 'health');
-        this.drawBar(ctx, 'sobriety');
+        this.drawBar(ctx, player, 'health');
+        this.drawBar(ctx, player, 'sobriety');
 
         // Reset the font height
         ctx.font = "6pt Verdana";
     }
 
-    drawBar(ctx, type) {
+    drawBar(ctx, player, type) {
         let height = cvs.height - this.height;
         let slot = cvs.width / NB_SLOTS;
         let levelRef;
@@ -98,8 +98,14 @@ export class Hud {
         } else {
             height += 45;
             levelRef = this.sobriety;
-            barColor = 'rgb(220, 131, 58)';
-            image.src = '../data/images/whisky.png';
+            // Drunk animation (tequila)
+            if (player.isDrunk) {
+                barColor = '#dfe8e8';
+                image.src = '../data/images/tequila.png';
+            } else {
+                barColor = 'rgb(220, 131, 58)';
+                image.src = '../data/images/whisky.png';
+            }
         }
 
         // Fill the bars

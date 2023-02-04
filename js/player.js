@@ -51,12 +51,15 @@ export default class Player {
 
         /** weapon management */
         this.weapons = [
-            buildWeapon("whisky")
+            buildWeapon("whisky"),
+            buildWeapon("tequila")
         ];
         this.currentWeapon = this.weapons[0];
 
         /** Tells if the player can attack or not */
         this.isAttacking = false;
+        /** Tells if the player is drunk or not */
+        this.isDrunk = false;
     }
 
 
@@ -225,6 +228,23 @@ export default class Player {
         var counter = 0;
         var anim = setInterval(function(player){
             player.isAttacking = player.currentWeapon.update();
+            counter++;
+            if(counter >= 3){
+                clearInterval(anim);
+            }
+        
+        }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
+    }
+
+    drunk() {
+        if (this.isDrunk) {
+            return;
+        }
+        this.isDrunk = true;
+        this.isAttacking = true;
+        //this.sobriety += 10;
+        var counter = 0;
+        var anim = setInterval(function(){
             counter++;
             if(counter >= 3){
                 clearInterval(anim);

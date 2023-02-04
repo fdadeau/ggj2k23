@@ -78,6 +78,9 @@ export class Game {
             case 'KeyE':
                 this.player.attack();
                 break;
+            case 'KeyT':
+                this.player.drunk();
+                break;
         }
     }
     release(key) {

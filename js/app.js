@@ -4,11 +4,12 @@ import { Hud } from "./hud.js";
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    // Game itself 
+    const game = new Game();
+    
     // Pseudo-3D engine
     const canvas = document.getElementById("cvs");
     const engine = new Engine(canvas);
-    // Game itself 
-    const game = new Game();
     const hud = new Hud(canvas, 75);
 
     // Event listener for keyboards events
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let dt = now - lastUpdate;
         game.update(dt);
         lastUpdate = now;
-        engine.render(game);
+        engine.render(game, game.player.isDrunk);
         if (!game.on2D) {
             game.player.currentWeapon.render(engine.ctx);
         }
