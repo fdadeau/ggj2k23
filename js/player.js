@@ -1,5 +1,25 @@
 import { buildWeapon } from "./weapons.js";
 
+const AXE_SPRITESHEET = new Image();
+AXE_SPRITESHEET.src = "../data/axe-spritesheet.png";
+const AXE_HEIGHT = 5000/5 | 0;
+const AXE_WIDTH = 1000;
+const AXE_ATTACK = [0,1,2,3,4];
+const AXE_IDLE = [0];
+
+
+
+const WHISKY_SPRITESHEET = new Image();
+WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
+const WHISKY_HEIGHT = 4200/6 | 0;
+const WHISKY_WIDTH = 1000;
+const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
+const WHISKY_IDLE = [0];
+const WHISKY_EMPTY = [5];
+
+const FRAME_DELAY = 100;
+
+
 /***
  * Class describing the main character of the game.
  */
@@ -10,7 +30,7 @@ const PLAYER_ROTATION_SPEED = 0.002;
 
 const PLAYER_OFFSET_SPEED = 0.05;
 
-const MAX_PITCH = 200;
+const MAX_PITCH = 2000;
 
 
 export default class Player {
@@ -53,16 +73,18 @@ export default class Player {
         this.weapons = [
             buildWeapon("whisky"),
             buildWeapon("axe"),
-            buildWeapon("chainsaw"),
+
         ];
         this.currentWeapon = this.weapons[1];
         this.lighter = buildWeapon('lighter');
+        this.setAnimation(AXE_IDLE);
+        this.frameDelay = FRAME_DELAY;
 
         /** Tells if the player can attack or not */
         this.isAttacking = false;
 
         /** Consumable */
-        this.nbWhisky = 0;
+        this.nbWhisky = 2;
 
         /** lighting */
         this.lighting = 20;
@@ -164,6 +186,27 @@ export default class Player {
             if (this.isStillOnMap(map, this.posX, newY) && !enemies.some(e => e.collides(this.posX, newY))) {
                 this.posY = newY;
             }
+        } 
+
+        this.frameDelay -= dt;
+        if (this.frameDelay <= 0) {
+            this.frameDelay = FRAME_DELAY;
+            this.frame = (this.frame + 1) % this.animation.length;
+            if(this.frame == 0){
+                this.isAttacking = false;
+                switch(this.currentWeapon.constructor.name){
+                    case 'Axe':
+                        this.setAnimation(AXE_IDLE);
+                        break;
+                    case 'Whisky':
+                        if(this.nbWhisky == 0){
+                            this.setAnimation(WHISKY_EMPTY);
+                        }else{
+                            this.setAnimation(WHISKY_IDLE);
+                        }
+                        break;
+                }
+            }
         }
     }
 
@@ -223,42 +266,72 @@ export default class Player {
     }
 
     equipeAxe(){
+        if (this.isAttacking) {
+            return -1;
+        }
+        this.setAnimation(AXE_IDLE);
         this.currentWeapon = this.weapons[1];
     }
 
-    equipeChainsaw(){
-        this.currentWeapon = this.weapons[2];
-    }
-
     equipeWhisky(){
+        if (this.isAttacking) {
+            return -1;
+        }
+        this.setAnimation(WHISKY_IDLE);
         this.currentWeapon = this.weapons[0];
     }
 
     switchToNextWeapon(){
+        if (this.isAttacking) {
+            return -1;
+        }
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+1)%this.weapons.length;
         this.currentWeapon = this.weapons[newWeapon];
+        // TODO animation
         return newWeapon;
     }
 
-    attack() {
+    setAnimation(anim) {
+        this.animation = anim;
+        this.frameDelay = FRAME_DELAY;
+        this.frame = 0;
+    }
+
+    render(ctx){
+        switch(this.currentWeapon.constructor.name){
+            case 'Axe':
+                this.currentWeapon.render(ctx,((this.animation[this.frame]) * AXE_HEIGHT));
+                break;
+            case 'Whisky':
+                this.currentWeapon.render(ctx,((this.animation[this.frame]) * WHISKY_HEIGHT));
+                break;
+        }
+    }
+
+    attack(enemies) {
         if (this.isAttacking) {
             return;
         }
         this.isAttacking = true;
-        if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety <= 90 && this.nbWhisky > 0){
-            this.sobriety += 10;
+        switch(this.currentWeapon.constructor.name){
+            case 'Axe':
+                this.setAnimation(AXE_ATTACK);
+                enemies.forEach(function(e) {
+                    if(e.distance <= this.currentWeapon.range){{
+                        e.hit(this.currentWeapon.damage);
+                    }}
+                },this);
+                break;
+            case 'Whisky':
+                if(this.nbWhisky == 0){
+                    return;
+                }
+                this.setAnimation(WHISKY_DRINK);
+                this.sobriety +=10;
+                this.nbWhisky--;
+                break;
         }
-        //this.sobriety += 10;
-        var counter = 0;
-        var anim = setInterval(function(player){
-            player.isAttacking = player.currentWeapon.update();
-            counter++;
-            if(counter >= 3){
-                clearInterval(anim);
-            }
-        
-        }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
     }
 
 }

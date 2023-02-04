@@ -351,7 +351,6 @@ export class Engine {
 
 
     spriteCasting(game) {
-        
         const W = WIDTH;
         const H = HEIGHT;
 

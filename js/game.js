@@ -69,22 +69,25 @@ export class Game {
                 localStorage.setItem(STORAGE_KEY_MOUSE, this.inverted);
                 break;
             case 'KeyE':
-                this.player.attack();
+                this.player.attack(this.enemies);
                 break;
             case 'Digit1':
-                this.player.equipeAxe();
+                if(this.player.equipeAxe() < 0){
+                    return;
+                }
                 this.hud.equipeAxe();
                 break;
             case 'Digit2':
-                this.player.equipeChainsaw();
-                this.hud.equipeChainsaw();
-                break;
-            case 'Digit3':
-                this.player.equipeWhisky();
+                if(this.player.equipeWhisky() < 0){
+                    return;
+                }
                 this.hud.equipeWhisky();
                 break;
             case 'Space':
                 let id = this.player.switchToNextWeapon();
+                if(id < 0){
+                    return;
+                }
                 this.hud.equipeWeapon(id);
                 break;
         }

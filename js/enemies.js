@@ -50,7 +50,7 @@ export function buildEnemy(type,x,y,dx,dy) {
 
 class Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim) {
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hp) {
         this.x = x;
         this.y = y;
         this.dirX = dirX;
@@ -65,6 +65,7 @@ class Enemy {
         }
         this.walkA = walkAnim;
         this.idleA = idleAnim;
+        this.health = hp;
     }
 
     /** Common behavior */
@@ -97,14 +98,17 @@ class Enemy {
         this.speed = 0;
         this.setAnimation(this.idleA);
     }
-    
 
+    hit(amount){
+        this.health -= amount;
+        // TODO : kill when 0
+    }
 }
 
 class Dino extends Enemy {
 
     constructor(x, y, dirX, dirY, walkA, idleA) {
-        super(x, y, dirX, dirY,walkA,idleA);
+        super(x, y, dirX, dirY, walkA, idleA,9999);
         this.setAnimation(IDLE);
         this.factor = 2;
         this.height = DINO_HEIGHT;
@@ -141,7 +145,7 @@ class Dino extends Enemy {
             dec = angle > 90 && angle < 270 ? 10 : 0; 
         }
         ctx.fillStyle = '#fff';
-        ctx.fillText(`Dino:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle}`, 10, 30);
+        ctx.fillText(`Dino:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
 
         ctx.drawImage(DINO_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     }
@@ -151,7 +155,7 @@ class Dino extends Enemy {
 class Tree extends Enemy {
 
     constructor(x, y, dirX, dirY, walkAnim, idleTree) {
-        super(x, y, dirX, dirY, walkAnim, idleTree);
+        super(x, y, dirX, dirY, walkAnim, idleTree, 100);
         this.setAnimation(TREE_IDLE);
         this.factor = 1;
         this.height = TREE_HEIGHT;
@@ -187,7 +191,7 @@ class Tree extends Enemy {
             dec = 0;
         }
         
-        ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle}`, 10, 30);
+        ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(TREE_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     
     }
