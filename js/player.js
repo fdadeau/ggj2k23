@@ -1,21 +1,14 @@
 import { buildWeapon } from "./weapons.js";
 
-const AXE_SPRITESHEET = new Image();
-AXE_SPRITESHEET.src = "../data/axe-spritesheet.png";
 const AXE_HEIGHT = 5000/5 | 0;
-const AXE_WIDTH = 1000;
 const AXE_ATTACK = [0,1,2,3,4];
 const AXE_IDLE = [0];
 
-const WHISKY_SPRITESHEET = new Image();
-WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
 const WHISKY_HEIGHT = 4200/6 | 0;
 const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const WHISKY_IDLE = [0];
 const WHISKY_EMPTY = [5];
 
-const TEQUILA_SPRITESHEET = new Image();
-TEQUILA_SPRITESHEET.src = "../data/tequila-spritesheet.png";
 const TEQUILA_HEIGHT = 4200/6 | 0;
 const TEQUILA_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const TEQUILA_IDLE = [0];
@@ -359,7 +352,7 @@ export default class Player {
                     return;
                 }
                 this.setAnimation(WHISKY_DRINK);
-                this.sobriety +=10;
+                this.sobriety += 10;
                 this.nbWhisky--;
                 break;
             case 'Tequila':
@@ -367,7 +360,7 @@ export default class Player {
                     return;
                 }
                 this.setAnimation(TEQUILA_DRINK);
-                this.sobriety +=10;
+                this.sobriety += 20;
                 this.nbTequila--;
                 this.isDrunk = true;
                 break;
