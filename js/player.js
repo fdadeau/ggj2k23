@@ -15,6 +15,7 @@ const WHISKY_HEIGHT = 4200/6 | 0;
 const WHISKY_WIDTH = 1000;
 const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const WHISKY_IDLE = [0];
+const WHISKY_EMPTY = [5];
 
 const FRAME_DELAY = 100;
 
@@ -72,7 +73,7 @@ export default class Player {
         this.weapons = [
             buildWeapon("whisky"),
             buildWeapon("axe"),
-            buildWeapon("chainsaw"),
+
         ];
         this.currentWeapon = this.weapons[1];
         this.lighter = buildWeapon('lighter');
@@ -186,16 +187,27 @@ export default class Player {
                 this.posY = newY;
             }
         } 
-        //console.log(this.frameDelay)
+
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
+            if(this.frame == 0){
+                this.isAttacking = false;
+                switch(this.currentWeapon.constructor.name){
+                    case 'Axe':
+                        this.setAnimation(AXE_IDLE);
+                        break;
+                    case 'Whisky':
+                        if(this.nbWhisky == 0){
+                            this.setAnimation(WHISKY_EMPTY);
+                        }else{
+                            this.setAnimation(WHISKY_IDLE);
+                        }
+                        break;
+                }
+            }
         }
-        /*if(this.frame == 0){
-            this.isAttacking = false;
-            this.setAnimation(AXE_IDLE);
-        }*/
     }
 
     isStillOnMap(map, x, y) {
@@ -261,13 +273,6 @@ export default class Player {
         this.currentWeapon = this.weapons[1];
     }
 
-    equipeChainsaw(){
-        if (this.isAttacking) {
-            return -1;
-        }
-        this.currentWeapon = this.weapons[2];
-    }
-
     equipeWhisky(){
         if (this.isAttacking) {
             return -1;
@@ -294,7 +299,14 @@ export default class Player {
     }
 
     render(ctx){
-        this.currentWeapon.render(ctx,((this.animation[this.frame]) * AXE_HEIGHT));
+        switch(this.currentWeapon.constructor.name){
+            case 'Axe':
+                this.currentWeapon.render(ctx,((this.animation[this.frame]) * AXE_HEIGHT));
+                break;
+            case 'Whisky':
+                this.currentWeapon.render(ctx,((this.animation[this.frame]) * WHISKY_HEIGHT));
+                break;
+        }
     }
 
     attack(enemies) {
@@ -302,38 +314,24 @@ export default class Player {
             return;
         }
         this.isAttacking = true;
-        console.log("attak")
-        this.setAnimation(AXE_ATTACK);
-        /*
-        var counter = 0;
-        if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety <= 90 && this.nbWhisky > 0){
-            this.sobriety += 10;
-            var anim = setInterval(function(player){
-                player.isAttacking = player.currentWeapon.update();
-                counter++;
-                if(counter >= player.currentWeapon.nbFrames){
-                    clearInterval(anim);
-                    player.nbWhisky--;
+        switch(this.currentWeapon.constructor.name){
+            case 'Axe':
+                this.setAnimation(AXE_ATTACK);
+                enemies.forEach(function(e) {
+                    if(e.distance <= this.currentWeapon.range){{
+                        e.hit(this.currentWeapon.damage);
+                    }}
+                },this);
+                break;
+            case 'Whisky':
+                if(this.nbWhisky == 0){
+                    return;
                 }
-            
-            }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
-        }else{
-            var anim = setInterval(function(player){
-                player.isAttacking = player.currentWeapon.update();
-                counter++;
-                if(counter >= player.currentWeapon.nbFrames){
-                    clearInterval(anim);
-                }
-            
-            }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
-            
-            enemies.forEach(function(e) {
-                if(e.distance <= this.currentWeapon.range){{
-                    e.hit(this.currentWeapon.damage);
-                }}
-            },this);
+                this.setAnimation(WHISKY_DRINK);
+                this.sobriety +=10;
+                this.nbWhisky--;
+                break;
         }
-        */
     }
 
 }

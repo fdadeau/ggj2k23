@@ -1,15 +1,11 @@
 const WEAPON_WHISKY = 0;
 const WEAPON_AXE = 1;
-const WEAPON_CHAINSAW = 2;
-const WEAPON_LIGHTER = 3;
+const WEAPON_LIGHTER = 2;
 
 const NB_SLOTS = 7;
 
 const AXE_IMG = new Image();
 AXE_IMG.src = '../data/images/axe.png';
-
-const CHAINSAW_IMG = new Image();
-CHAINSAW_IMG.src = '../data/images/chainsaw.png';
 
 const HEART_IMG = new Image();
 HEART_IMG.src = '../data/images/heart.png';
@@ -91,9 +87,6 @@ export class Hud {
         switch(id){
             case WEAPON_AXE:
                 ctx.drawImage(AXE_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
-                break;
-            case WEAPON_CHAINSAW:
-                ctx.drawImage(CHAINSAW_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 break;
             case WEAPON_WHISKY:
                 ctx.drawImage(WHISKY_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
@@ -188,10 +181,6 @@ export class Hud {
 
     equipeAxe(){
         this.weapon = WEAPON_AXE;
-    }
-
-    equipeChainsaw(){
-        this.weapon = WEAPON_CHAINSAW;
     }
 
     equipeWhisky(){

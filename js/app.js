@@ -56,13 +56,6 @@ document.addEventListener("DOMContentLoaded", function() {
         engine.render(game);
         
         if (!game.on2D) {
-            /*if(
-                game.player.currentWeapon.constructor.name != "Whisky" ||
-                (game.player.currentWeapon.constructor.name == "Whisky" && game.player.nbWhisky > 0)
-            ){
-                game.player.currentWeapon.render(engine.ctx);
-            }*/
-            //game.player.lighter.render(engine.ctx);
             game.player.render(engine.ctx);
         }
         if (now < framesMeasure + 1000) {

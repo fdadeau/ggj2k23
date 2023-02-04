@@ -78,12 +78,6 @@ export class Game {
                 this.hud.equipeAxe();
                 break;
             case 'Digit2':
-                if(this.player.equipeChainsaw() < 0){
-                    return;
-                }
-                this.hud.equipeChainsaw();
-                break;
-            case 'Digit3':
                 if(this.player.equipeWhisky() < 0){
                     return;
                 }
