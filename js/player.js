@@ -61,6 +61,48 @@ export default class Player {
             buildWeapon("axe"),
         ];
 
+        // Whisky
+        this.weapons[0].behavior = function(player) {
+            if(player.nbWhisky == 0){
+                return;
+            }
+
+            player.sobriety += 10;
+            player.nbWhisky--;
+            player.equipeAxe();
+        }.bind(this.weapons[0]);
+
+        this.weapons[0].afterAnimation = function(player) {
+            if(player.nbWhisky == 0){
+                player.equipeAxe();
+            }
+        }.bind(this.weapons[0]);
+
+        // Tequila
+        this.weapons[1].behavior = function(player) {
+            if(player.nbTequila == 0){
+                return;
+            }
+
+            player.sobriety += 10;
+            player.nbTequila--;
+        }.bind(this.weapons[1]);
+
+        this.weapons[1].afterAnimation = function(player) {
+            if(player.nbTequila == 0){
+                player.equipeAxe();
+            }
+        }.bind(this.weapons[0]);
+
+        // Axe
+        this.weapons[2].behavior = function(player, enemies) {
+            enemies.forEach(function(e) {
+                if(e.distance <= player.currentWeapon.range){{
+                    e.hit(player.currentWeapon.damage);
+                }}
+            },this);
+        }.bind(this.weapons[2]);
+
         this.currentWeapon = this.weapons[2];
         this.lighter = buildWeapon('lighter');
         this.setAnimation(this.currentWeapon.idle);
@@ -184,9 +226,10 @@ export default class Player {
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
-            if(this.frame == 0){
+            if(this.frame == 0 && this.isAttacking){
                 this.isAttacking = false;
                 this.setAnimation(this.currentWeapon.idle);
+                this.currentWeapon.afterAnimation(this);
             }
         }
 
@@ -238,6 +281,7 @@ export default class Player {
         }
         this.currentWeapon = this.weapons[2];
         this.setAnimation(this.currentWeapon.idle);
+        this.hud.equipeAxe();
     }
 
     equipeWhisky(){
@@ -259,11 +303,12 @@ export default class Player {
     }
 
     switchToNextWeapon(){
-        if (this.isAttacking) {
+        if(this.isAttacking) {
             return -1;
         }
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+1)%this.weapons.length;
+        
         this.currentWeapon = this.weapons[newWeapon];
         this.setAnimation(this.currentWeapon.idle);
         this.hud.changeWeapon(newWeapon);
@@ -286,36 +331,7 @@ export default class Player {
         }
         this.isAttacking = true;
         this.setAnimation(this.currentWeapon.use);
-        enemies.forEach(function(e) {
-            if(e.distance <= this.currentWeapon.range){{
-                e.hit(this.currentWeapon.damage);
-            }}
-        },this);
-        switch(this.currentWeapon.constructor.name){
-            case 'Axe':
-                enemies.forEach(function(e) {
-                    if(e.distance <= this.currentWeapon.range){{
-                        e.hit(this.currentWeapon.damage);
-                    }}
-                },this);
-                break;
-            case 'Whisky':
-                if(this.nbWhisky == 0){
-                    return;
-                }
-
-                this.sobriety += 10;
-                this.nbWhisky--;
-                break;
-            case 'Tequila':
-                if(this.nbTequila == 0){
-                    return;
-                }
-                this.sobriety += 20;
-                this.nbTequila--;
-                this.isDrunk = true;
-                break;
-        }
+        this.currentWeapon.behavior(this,enemies);
     }
 
     collectPowerUp(powerup) {

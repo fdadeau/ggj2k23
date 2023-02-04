@@ -59,6 +59,8 @@ class Weapon{
     }
 
     behavior() { }
+
+    afterAnimation() { }
 }
 
 class Consumable extends Weapon{
