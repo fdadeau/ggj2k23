@@ -44,6 +44,22 @@ const TURNIP_ATTACK_DAMAGE = 20;
 const TURNIP_HP = 100;
 const TURNIP_ATTACK_DELAY = 500;
 
+
+/** DANDELION LA MENACE  */
+const DANDELION_WALK = [0,2,4,6];
+const DANDELION_IDLE = [0];
+const DANDELION_YEET = [8,9,10,11];
+
+const DANDELION_SPRITESHEET = new Image();
+DANDELION_SPRITESHEET.src = "../data/dandelion-spritesheet.png";
+const DANDELION_HEIGHT = 6000/12 | 0;
+const DANDELION_WIDTH = 500;
+
+const DANDELION_HURT = [0];
+const DANDELION_ATTACK_DAMAGE = 20;
+const DANDELION_HP = 100;
+const DANDELION_ATTACK_DELAY = 500;
+
 /**
  * Build an enemy of the specified type.
  * @param {string} type Enemy type
@@ -61,6 +77,8 @@ export function buildEnemy(type,x,y,dx,dy) {
             return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE,TREE_HURT);
         case "turnip":
             return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE,TURNIP_HURT);
+        case "dandelion":
+            return new Dandelion(x,y,dx,dy,DANDELION_WALK,DANDELION_IDLE,DANDELION_HURT);
         // ... TODO ... make more enemies
     }
 }
@@ -298,6 +316,65 @@ class Turnip extends Enemy {
         
         ctx.fillText(`Turnip:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(TURNIP_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
+    
+    }
+}
+
+
+class Dandelion extends Enemy {
+
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim) {
+        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, DANDELION_HP,DANDELION_ATTACK_DAMAGE);
+        this.setAnimation(DANDELION_IDLE);
+        this.factor = 0.5;
+        this.height = DANDELION_HEIGHT;
+        this.width = DANDELION_WIDTH;
+        this.vMove = 20;
+    }
+
+    yeet(){
+        this.setAnimation(DANDELION_YEET);
+    }
+
+    update(dt) {
+        super.update(dt);
+        this.frameDelay -= dt;
+        if (this.frameDelay <= 0) {
+            this.frameDelay = FRAME_DELAY;
+            this.frame = (this.frame + 1) % this.animation.length;
+            if(this.animation == DANDELION_HURT && this.frame == this.animation.length -1){
+                if(this.animationBeforeHit == DANDELION_WALK){
+                    this.walk();
+                }else{
+                    this.stop();
+                }
+            }
+        }
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+        if(this.health <= 0){
+            return;
+        }
+
+        let sourceX = minX / sizeX * this.width | 0;
+        let width = (maxX - minX) / sizeX * this.width | 0;
+
+        let dec = 0;
+        
+        if (angle >= 45 && angle < 135) {
+            dec = 1;
+        }
+        else if (angle >= 135 && angle < 225) {
+            dec = 0;
+        }
+        else if (angle >= 225 && angle < 315) {
+            dec = 0;
+        }
+       
+        
+        ctx.fillText(`Dandelion:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
+        ctx.drawImage(DANDELION_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     
     }
 }
