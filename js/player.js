@@ -51,7 +51,7 @@ export default class Player {
 
         /** weapon management */
         this.weapons = [
-            buildWeapon("axe")
+            buildWeapon("whisky")
         ];
         this.currentWeapon = this.weapons[0];
 
@@ -218,18 +218,19 @@ export default class Player {
             return;
         }
         this.isAttacking = true;
-        if (this.sobriety < 100) {
-            this.drink(10); // à changer askip
-            var counter = 0;
-            var anim = setInterval(function(player) {
-                player.isAttacking = player.currentWeapon.update();
-                counter++;
-                if (counter >= 3) {
-                    clearInterval(anim);
-                }
-
-            }, this.currentWeapon.delay / this.currentWeapon.nbFrames, this);
+        if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety < 90){
+            this.sobriety += 10;
         }
+        //this.sobriety += 10;
+        var counter = 0;
+        var anim = setInterval(function(player){
+            player.isAttacking = player.currentWeapon.update();
+            counter++;
+            if(counter >= 3){
+                clearInterval(anim);
+            }
+        
+        }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
     }
 
 }
