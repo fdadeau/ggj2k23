@@ -1,8 +1,24 @@
-const WEAPON_AXE = 1; // Hache
-const WEAPON_CHAINSAW = 2; // Tronçonneuse
-const WEAPON_LIGHTER = 3; // Briquet
+const WEAPON_WHISKY = 0;
+const WEAPON_AXE = 1;
+const WEAPON_CHAINSAW = 2;
+const WEAPON_LIGHTER = 3;
 
 const NB_SLOTS = 7;
+
+const AXE_IMG = new Image();
+AXE_IMG.src = '../data/images/axe.png';
+
+const CHAINSAW_IMG = new Image();
+CHAINSAW_IMG.src = '../data/images/chainsaw.png';
+
+const HEART_IMG = new Image();
+HEART_IMG.src = '../data/images/heart.png';
+
+const WHISKY_IMG = new Image();
+WHISKY_IMG.src = '../data/images/whisky.png';
+
+const TIMBER_IMG = new Image();
+TIMBER_IMG.src = '../data/images/timber.jpeg';
 
 export class Hud {
 
@@ -21,11 +37,14 @@ export class Hud {
         this.cvs = cvs;
         // Hud Height
         this.height = hudHeight;
+        // Number of whisky bottles
+        this.nbWhisky = 0;
     }
 
     render(ctx, player) {
         this.health = player.health;
         this.sobriety = player.sobriety;
+        this.nbWhisky = player.nbWhisky;
 
         let hudY_origin = cvs.height - this.height;
 
@@ -55,14 +74,10 @@ export class Hud {
         ctx.fillText(this.score, 100, hudY_origin + 55);
 
         // Weapon slot
-        let axeImg = new Image();
-        axeImg.src = '../data/images/axe.png';
-        ctx.drawImage(axeImg, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+        this.drawWeapon(ctx, hudY_origin, this.weapon);
 
         // Skin slot
-        let skinImg = new Image();
-        skinImg.src = '../data/images/timber.jpeg';
-        ctx.drawImage(skinImg, 275, hudY_origin + 1, slot - 2, this.height);
+        ctx.drawImage(TIMBER_IMG, 275, hudY_origin + 1, slot - 2, this.height);
 
         // Draw the health and sobriety bars
         this.drawBar(ctx, 'health');
@@ -70,6 +85,25 @@ export class Hud {
 
         // Reset the font height
         ctx.font = "6pt Verdana";
+    }
+
+    drawWeapon(ctx, hudY_origin, id){
+        switch(id){
+            case WEAPON_AXE:
+                ctx.drawImage(AXE_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                break;
+            case WEAPON_CHAINSAW:
+                ctx.drawImage(CHAINSAW_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                break;
+            case WEAPON_WHISKY:
+                ctx.drawImage(WHISKY_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                ctx.fillText(this.nbWhisky, 248, hudY_origin + 64);
+                break;
+        }
+    }
+
+    equipeWeapon(id){
+        this.weapon = id;
     }
 
     drawBar(ctx, type) {
@@ -150,5 +184,17 @@ export class Hud {
 
     changeWeapon(weapon) {
         this.weapon = weapon;
+    }
+
+    equipeAxe(){
+        this.weapon = WEAPON_AXE;
+    }
+
+    equipeChainsaw(){
+        this.weapon = WEAPON_CHAINSAW;
+    }
+
+    equipeWhisky(){
+        this.weapon = WEAPON_WHISKY;
     }
 }

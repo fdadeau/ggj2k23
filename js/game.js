@@ -10,7 +10,7 @@ const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
 export class Game {
 
-    constructor() {
+    constructor(hud) {
 
         this.paused = false;
         this.on2D = false;
@@ -25,6 +25,7 @@ export class Game {
         this.player = new Player();
 
         this.loadLevel("demo");
+        this.hud = hud;
     }
 
     loadLevel(id) {
@@ -77,6 +78,22 @@ export class Game {
                 break;
             case 'KeyE':
                 this.player.attack();
+                break;
+            case 'Digit1':
+                this.player.equipeAxe();
+                this.hud.equipeAxe();
+                break;
+            case 'Digit2':
+                this.player.equipeChainsaw();
+                this.hud.equipeChainsaw();
+                break;
+            case 'Digit3':
+                this.player.equipeWhisky();
+                this.hud.equipeWhisky();
+                break;
+            case 'Space':
+                let id = this.player.switchToNextWeapon();
+                this.hud.equipeWeapon(id);
                 break;
         }
     }

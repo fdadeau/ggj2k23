@@ -51,12 +51,18 @@ export default class Player {
 
         /** weapon management */
         this.weapons = [
-            buildWeapon("whisky")
+            buildWeapon("whisky"),
+            buildWeapon("axe"),
+            buildWeapon("chainsaw"),
         ];
-        this.currentWeapon = this.weapons[0];
+        this.currentWeapon = this.weapons[1];
+        this.lighter = buildWeapon('lighter');
 
         /** Tells if the player can attack or not */
         this.isAttacking = false;
+
+        /** Consumable */
+        this.nbWhisky = 0;
     }
 
 
@@ -213,12 +219,31 @@ export default class Player {
         this.sobriety -= amout;
     }
 
+    equipeAxe(){
+        this.currentWeapon = this.weapons[1];
+    }
+
+    equipeChainsaw(){
+        this.currentWeapon = this.weapons[2];
+    }
+
+    equipeWhisky(){
+        this.currentWeapon = this.weapons[0];
+    }
+
+    switchToNextWeapon(){
+        let id = this.weapons.lastIndexOf(this.currentWeapon);
+        let newWeapon = (id+1)%this.weapons.length;
+        this.currentWeapon = this.weapons[newWeapon];
+        return newWeapon;
+    }
+
     attack() {
         if (this.isAttacking) {
             return;
         }
         this.isAttacking = true;
-        if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety <= 90){
+        if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety <= 90 && this.nbWhisky > 0){
             this.sobriety += 10;
         }
         //this.sobriety += 10;

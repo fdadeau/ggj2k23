@@ -7,9 +7,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // Pseudo-3D engine
     const canvas = document.getElementById("cvs");
     const engine = new Engine(canvas);
-    // Game itself 
-    const game = new Game();
+    // Game itself
     const hud = new Hud(canvas, 75);
+    const game = new Game(hud);
+    
 
     // Event listener for keyboards events
     document.addEventListener("keydown", function(e) {
@@ -43,7 +44,13 @@ document.addEventListener("DOMContentLoaded", function() {
         lastUpdate = now;
         engine.render(game);
         if (!game.on2D) {
-            game.player.currentWeapon.render(engine.ctx);
+            if(
+                game.player.currentWeapon.constructor.name != "Whisky" ||
+                game.player.currentWeapon.constructor.name == "Whisky" && game.player.nbWhisky > 0
+            ){
+                game.player.currentWeapon.render(engine.ctx);
+            }
+            //game.player.lighter.render(engine.ctx);
         }
         if (now < framesMeasure + 1000) {
             framerate++;
