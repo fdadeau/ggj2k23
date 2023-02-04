@@ -127,19 +127,19 @@ export const levels = {
     "demo": {
         player: { posX: 3.5, posY: 12.5, dirX: 0, dirY: 1 },
         map: invert(MAP0),
-        textures: mkTextures(MAP0),
+        textures: mkTextures(invert(MAP0)),
         enemies: ENEMIES2
     },
     "tree": {
         player: { posX: 3.5, posY: 12.5, dirX: 0, dirY: 1 },
         map: invert(MAP0),
-        textures: mkTextures(MAP0),
+        textures: mkTextures(invert(MAP0)),
         enemies: ENEMIES3
     },
     "test": {
         player: { posX: 2.5, posY: 2.5, dirX: 1, dirY: 0 },
         map: invert(MAP1),
-        textures: mkTextures(MAP0),
+        textures: mkTextures(invert(MAP0)),
         enemies: () => []
     }
 
@@ -166,7 +166,7 @@ function mkTextures(m) {
     for (let i=0; i < m.length; i++) {
         r[i] = [];
         for (let j=0; j < m[i].length; j++) {
-            r[i][j] = [Math.random() * 3 | 0, Math.random() * 3 | 0, Math.random() * 3 | 0, Math.random() * 3 | 0, Math.random() * 3 | 0];
+            r[i][j] = [Math.random() * 3 | 0, Math.random() * 3 | 0, Math.random() * 3 | 0, Math.random() * 3 | 0];
         }
     } 
     return r;

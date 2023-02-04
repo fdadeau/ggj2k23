@@ -224,6 +224,7 @@ export class Engine {
                     
                     perpWallDist = (perpWallDist + d*ratio);               
 
+                    whichSide = 4;
                 }
             }  
         } 
@@ -261,14 +262,14 @@ export class Engine {
             /*** TEXTURES ON THE WALLS ***/
 
             //texturing calculations
-            let texNum = 1//game.map[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
+            let texNum = 2//game.textures[mapX][mapY][whichSide]; //1 subtracted from it so that texture 0 can be used!
 
             //calculate value of wallX (where exactly the wall was hit)
             let wallX = (side == 0) ? game.player.posY + perpWallDist * rayDirY : game.player.posX + perpWallDist * rayDirX;
             wallX -= (wallX | 0);
             
             //x coordinate on the texture
-            let texX = (wallX * texWidth) | 0;
+            let texX = (wallX * (whichSide == 4 ? diagTextWidth : texWidth)) | 0;
             if(side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
             if(side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
                     
@@ -343,13 +344,13 @@ export class Engine {
                 floorY += floorStepY;
     
                 // choose texture and draw the pixel
-                let floorTexture = is_floor ? 3 : 4;     
+                let floorTexture = is_floor ? 5 : 4;     
                 
                 let i = (y * W + x) * 4;
 
-                this.buffer.data[i+0] = b * this.textures[floorTexture][texWidth * ty + tx] | 0;
-                this.buffer.data[i+1] = b * this.textures[floorTexture][texWidth * ty + tx] | 0;
-                this.buffer.data[i+2] = b * this.textures[floorTexture][texWidth * ty + tx] | 0;
+                this.buffer.data[i+0] = b * this.textures[floorTexture][(texWidth * ty + tx)*4] | 0;
+                this.buffer.data[i+1] = b * this.textures[floorTexture][(texWidth * ty + tx)*4+1] | 0;
+                this.buffer.data[i+2] = b * this.textures[floorTexture][(texWidth * ty + tx)*4+2] | 0;
                 this.buffer.data[i+3] = 255;
                 
             }
@@ -585,13 +586,8 @@ export class Engine {
             this.ctx.closePath();
             this.ctx.stroke();
         });
-        
-        
-
     }
-
 }
-
 
 function getPointOnWall(whichSide, side, sideDistX, sideDistY, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game) {
 
@@ -646,6 +642,7 @@ function intersection(p0, p1, p2, p3) {
 
 const texWidth = 64;
 const texHeight = 64;
+const diagTextWidth = 90;
 
 function initTextures() {
 
@@ -654,16 +651,18 @@ function initTextures() {
     textures[0] = loadTexture(data.wall1);
     textures[1] = loadTexture(data.wall2);
     textures[2] = loadTexture(data.wall3);
+    textures[3] = loadTexture(data.wall_diagonal);
 
-    // gris
-    textures[3] = Array(64*64*4).fill(128);
+    //  black ceiling
     textures[4] = Array(64*64*4).fill(0);
+    textures[5] = loadTexture(data.floor);
 
     return textures;
 };
 
 const textureCvs = document.createElement("canvas");
 const textureCtx = textureCvs.getContext("2d");
+//document.body.appendChild(textureCvs)
 function loadTexture(img) {
     textureCvs.width = img.width;
     textureCvs.height = img.height;

@@ -11,7 +11,7 @@ export class Game {
     constructor(hud) {
 
         this.state = STATES.LOADING;
-        this.loading = { }
+        this.loading = { loaded: 0, total: 0 }
 
         this.paused = false;
         this.on2D = false;
