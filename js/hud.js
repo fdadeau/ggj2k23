@@ -18,7 +18,7 @@ const TEQUILA_IMG = new Image();
 TEQUILA_IMG.src = '../data/images/tequila.png';
 
 const TIMBER_IMG = new Image();
-TIMBER_IMG.src = '../data/images/timber.jpeg';
+TIMBER_IMG.src = '../data/images/raymond.png';
 
 const BACKGROUND_IMG = new Image();
 BACKGROUND_IMG.src = '../data/wood.png';
