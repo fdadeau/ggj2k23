@@ -281,7 +281,6 @@ Yi=((Yb-Ya)/(Xb-Xa))*([((Yb-Ya)/(Xb-Xa))*Xa+Ya-((Yd-Yc)/(Xd-Xc))*Xc-Yc] / [((Yb-
 
 
     spriteCasting(game) {
-        
         const W = WIDTH;
         const H = HEIGHT;
 

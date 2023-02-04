@@ -26,10 +26,10 @@ class Weapon{
      * @param delay Delay between each attack (in ms)
      * @param scope Weapon's scope
      */
-    constructor(damage, nbFrames, delay, scope){
+    constructor(damage, nbFrames, delay, range){
         this.damage = damage;
         this.delay = delay;
-        this.scope = scope; // Todo : think about units
+        this.range = range;
         this.nbFrames = nbFrames;
     }
 }
@@ -42,13 +42,13 @@ class Consumable extends Weapon{
 
 const WHISKY_SPRITESHEET = new Image();
 WHISKY_SPRITESHEET.src = "../data/whisky-spritesheet.png";
-const WHISKY_HEIGHT = 724/3 | 0;
-const WHISKY_DRINK = [0,1,2];
-const WHISKY_WIDTH = 240;
+const WHISKY_HEIGHT = 4200/6 | 0;
+const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
+const WHISKY_WIDTH = 1000;
 
 class Whisky extends Consumable{ // TODO : make it consommable
     constructor(){
-        super(3,600); // TODO : optimize
+        super(10,1400); // TODO : optimize
         this.setAnimation(WHISKY_DRINK);
     }
 
@@ -68,19 +68,19 @@ class Whisky extends Consumable{ // TODO : make it consommable
     }
 
     render(ctx){
-        ctx.drawImage(WHISKY_SPRITESHEET, 0, ((this.animation[this.frame]) * WHISKY_HEIGHT), WHISKY_WIDTH, 236, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
+        ctx.drawImage(WHISKY_SPRITESHEET, 0, ((this.animation[this.frame]) * WHISKY_HEIGHT), WHISKY_WIDTH, WHISKY_HEIGHT, 350, 325-170, 200, 170); // TODO : make it clean (temporary, wait final textures)
     }
 }
 
 const AXE_SPRITESHEET = new Image();
-AXE_SPRITESHEET.src = "../data/dino-spritesheet.png";
-const AXE_HEIGHT = 5664/24 | 0;
-const AXE_WIDTH = 240;
-const AXE_ATTACK = [0,1,2];
+AXE_SPRITESHEET.src = "../data/axe-spritesheet.png";
+const AXE_HEIGHT = 5000/5 | 0;
+const AXE_WIDTH = 1000;
+const AXE_ATTACK = [0,1,2,3,4];
 
 class Axe extends Weapon{
     constructor(){
-        super(25,3,600,0); // TODO : optimize
+        super(25,5,800,2.5); // TODO : optimize
         this.setAnimation(AXE_ATTACK);
     }
 
@@ -100,7 +100,7 @@ class Axe extends Weapon{
     }
 
     render(ctx){
-        ctx.drawImage(AXE_SPRITESHEET, 0, ((this.animation[this.frame]) * AXE_HEIGHT), AXE_WIDTH, 236, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
+        ctx.drawImage(AXE_SPRITESHEET, 0, ((this.animation[this.frame]) * AXE_HEIGHT), AXE_WIDTH, AXE_HEIGHT, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
     }
 }
 
@@ -122,7 +122,7 @@ const CHAINSAW_ATTACK = [3,4,5];
 
 class Chainsaw extends Weapon{
     constructor(){
-        super(25,3,300,0); // TODO : optimize
+        super(25,3,300,2); // TODO : optimize
         this.setAnimation(CHAINSAW_ATTACK);
     }
 
@@ -142,6 +142,6 @@ class Chainsaw extends Weapon{
     }
 
     render(ctx){
-        ctx.drawImage(CHAINSAW_SPRITESHEET, 0, ((this.animation[this.frame]) * CHAINSAW_HEIGHT), CHAINSAW_WIDTH, 236, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
+        ctx.drawImage(CHAINSAW_SPRITESHEET, 0, ((this.animation[this.frame]) * CHAINSAW_HEIGHT), CHAINSAW_WIDTH, CHAINSAW_HEIGHT, 400, 325-150, 170, 150); // TODO : make it clean (temporary, wait final textures)
     }
 }

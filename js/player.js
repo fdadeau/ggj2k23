@@ -62,7 +62,7 @@ export default class Player {
         this.isAttacking = false;
 
         /** Consumable */
-        this.nbWhisky = 0;
+        this.nbWhisky = 2;
 
         /** lighting */
         this.lighting = 20;
@@ -223,42 +223,69 @@ export default class Player {
     }
 
     equipeAxe(){
+        if (this.isAttacking) {
+            return -1;
+        }
         this.currentWeapon = this.weapons[1];
     }
 
     equipeChainsaw(){
+        if (this.isAttacking) {
+            return -1;
+        }
         this.currentWeapon = this.weapons[2];
     }
 
     equipeWhisky(){
+        if (this.isAttacking) {
+            return -1;
+        }
         this.currentWeapon = this.weapons[0];
     }
 
     switchToNextWeapon(){
+        if (this.isAttacking) {
+            return -1;
+        }
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+1)%this.weapons.length;
         this.currentWeapon = this.weapons[newWeapon];
         return newWeapon;
     }
 
-    attack() {
+    attack(enemies) {
         if (this.isAttacking) {
             return;
         }
         this.isAttacking = true;
+        var counter = 0;
         if(this.currentWeapon.constructor.name == "Whisky" && this.sobriety <= 90 && this.nbWhisky > 0){
             this.sobriety += 10;
+            var anim = setInterval(function(player){
+                player.isAttacking = player.currentWeapon.update();
+                counter++;
+                if(counter >= player.currentWeapon.nbFrames){
+                    clearInterval(anim);
+                    player.nbWhisky--;
+                }
+            
+            }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
+        }else{
+            var anim = setInterval(function(player){
+                player.isAttacking = player.currentWeapon.update();
+                counter++;
+                if(counter >= player.currentWeapon.nbFrames){
+                    clearInterval(anim);
+                }
+            
+            }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
+            
+            enemies.forEach(function(e) {
+                if(e.distance <= this.currentWeapon.range){{
+                    e.hit(this.currentWeapon.damage);
+                }}
+            },this);
         }
-        //this.sobriety += 10;
-        var counter = 0;
-        var anim = setInterval(function(player){
-            player.isAttacking = player.currentWeapon.update();
-            counter++;
-            if(counter >= 3){
-                clearInterval(anim);
-            }
-        
-        }, this.currentWeapon.delay/this.currentWeapon.nbFrames,this);
     }
 
 }

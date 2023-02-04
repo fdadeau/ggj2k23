@@ -54,10 +54,11 @@ document.addEventListener("DOMContentLoaded", function() {
         game.update(dt);
         lastUpdate = now;
         engine.render(game);
+        
         if (!game.on2D) {
             if(
                 game.player.currentWeapon.constructor.name != "Whisky" ||
-                game.player.currentWeapon.constructor.name == "Whisky" && game.player.nbWhisky > 0
+                (game.player.currentWeapon.constructor.name == "Whisky" && game.player.nbWhisky > 0)
             ){
                 game.player.currentWeapon.render(engine.ctx);
             }
