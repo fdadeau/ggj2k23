@@ -26,9 +26,6 @@ export class Engine {
         this.textures = initTextures();
         /** Depth of different x walls */
         this.zBuffer = [];
-
-        // Test for raycasting middle of the screen
-        this.x = 0;
     }
 
     /**
