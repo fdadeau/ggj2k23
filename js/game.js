@@ -101,9 +101,6 @@ export class Game {
             case 'Space':
                 this.player.switchToNextWeapon();
                 break;
-            case 'KeyT':
-                this.player.drunk();
-                break;
         }
     }
     release(key) {

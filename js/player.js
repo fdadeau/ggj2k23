@@ -86,7 +86,7 @@ export default class Player {
             if(player.nbTequila == 0){
                 return;
             }
-
+            player.isDrunk = true;
             player.sobriety += 10;
             player.nbTequila--;
         }.bind(this.weapons[1]);
@@ -100,7 +100,7 @@ export default class Player {
         // Axe
         this.weapons[2].behavior = function(player, enemies) {
             enemies.forEach(function(e) {
-                if(e.distance <= player.currentWeapon.range && e.hit != undefined){{
+                if(e.distance <= player.currentWeapon.range){{
                     e.hit(player.currentWeapon.damage);
                     player.score += e.dropPoints;
                 }}
