@@ -56,7 +56,7 @@ export class Engine {
      * Main function used to render the game state
      * @param {Game} game the game state to render
      */
-    render(game, isDrunk) {
+    render(game) {
 
         if (game.state == STATES.LOADING) {
             this.ctx.fillStyle = '#000000';
@@ -80,8 +80,11 @@ export class Engine {
         this.ctx.putImageData(this.buffer, 0, 0);            
         
         // add the sprites in the visible scene
-        this.spriteCasting(game, isDrunk);
+        this.spriteCasting(game);
         
+        // 
+        game.player.render(this.ctx);
+
         // print framerate & debug info
         this.ctx.fillStyle = "white";
         this.ctx.fillText(this.framerate, 10, 10);
@@ -353,7 +356,7 @@ export class Engine {
         }   
     }
 
-    spriteCasting(game, isDrunk) {
+    spriteCasting(game) {
         const W = WIDTH;
         const H = HEIGHT;
 
@@ -396,7 +399,7 @@ export class Engine {
             }
 
             that.ctx.filter = `brightness(${br})`;
-            if (isDrunk) {
+            if (game.player.isDrunk) {
                 that.ctx.filter = `brightness(${br}) blur(2px) invert(100%)`;
             }
 

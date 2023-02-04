@@ -1,5 +1,7 @@
 import { buildWeapon } from "./weapons.js";
 
+import { Hud } from "./hud.js";
+
 const AXE_HEIGHT = 5000/5 | 0;
 const AXE_ATTACK = [0,1,2,3,4];
 const AXE_IDLE = [0];
@@ -89,6 +91,9 @@ export default class Player {
 
         /** Tells if the player is drunk or not */
         this.isDrunk = false;
+
+        this.hud = new Hud(75);
+    
     }
 
 
@@ -320,6 +325,8 @@ export default class Player {
     }
 
     render(ctx){
+        this.hud.render(ctx, this);
+
         switch(this.currentWeapon.constructor.name){
             case 'Axe':
                 this.currentWeapon.render(ctx,((this.animation[this.frame]) * AXE_HEIGHT));

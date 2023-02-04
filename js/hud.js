@@ -25,7 +25,7 @@ BACKGROUND_IMG.src = '../data/wood.png';
 
 export class Hud {
 
-    constructor(cvs, hudHeight) {
+    constructor(hudHeight) {
         // Score
         this.score = 0;
         // Level
@@ -36,8 +36,6 @@ export class Hud {
         this.sobriety = 0;
         // Weapon id
         this.weapon = WEAPON_AXE;
-        // Canvas
-        this.cvs = cvs;
         // Hud Height
         this.height = hudHeight;
         // Number of whisky bottles
