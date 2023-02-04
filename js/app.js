@@ -45,6 +45,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     document.addEventListener("keyup", function(e) {
         game.release(e.code);
     });
+    document.addEventListener("click", function(e) {
+        if (document.pointerLockElement) {
+            game.press("KeyE");
+        }
+    });
     // Double click --> switch to full screen + mouse pointer lock
     document.addEventListener("dblclick", async function(e) {
         await document.getElementById("cvs").requestFullscreen();

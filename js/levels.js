@@ -166,7 +166,7 @@ function mkTextures(m) {
     for (let i=0; i < m.length; i++) {
         r[i] = [];
         for (let j=0; j < m[i].length; j++) {
-            r[i][j] = [Math.random() * 3 | 0, Math.random() * 3 | 0, Math.random() * 3 | 0, Math.random() * 3 | 0];
+            r[i][j] = [Math.random() * 4 | 0, Math.random() * 4 | 0, Math.random() * 4 | 0, Math.random() * 4 | 0];
         }
     } 
     return r;

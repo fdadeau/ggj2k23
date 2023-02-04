@@ -262,14 +262,15 @@ export class Engine {
             /*** TEXTURES ON THE WALLS ***/
 
             //texturing calculations
-            let texNum = 2//game.textures[mapX][mapY][whichSide]; //1 subtracted from it so that texture 0 can be used!
+            let texNum = whichSide < 4 ? game.textures[mapX][mapY][whichSide] : 9; //1 subtracted from it so that texture 0 can be used!
 
             //calculate value of wallX (where exactly the wall was hit)
             let wallX = (side == 0) ? game.player.posY + perpWallDist * rayDirY : game.player.posX + perpWallDist * rayDirX;
             wallX -= (wallX | 0);
             
             //x coordinate on the texture
-            let texX = (wallX * (whichSide == 4 ? diagTextWidth : texWidth)) | 0;
+            let texWidth_ = texWidth; //(whichSide == 4) ? diagTextWidth : texWidth;
+            let texX = (wallX * texWidth_) | 0;
             if(side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
             if(side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
                     
@@ -283,7 +284,7 @@ export class Engine {
                 let texY = (texPos | 0) % (texHeight);
                 texPos += step;
                 
-                let colorIdx = (texHeight * texY + texX) * 4;
+                let colorIdx = (texWidth_ * texY + texX) * 4;
                 //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
                 let i = (y * WIDTH + x) * 4;
                 this.buffer.data[i+0] = b * this.textures[texNum][colorIdx+0] | 0;
@@ -344,7 +345,7 @@ export class Engine {
                 floorY += floorStepY;
     
                 // choose texture and draw the pixel
-                let floorTexture = is_floor ? 5 : 4;     
+                let floorTexture = is_floor ? 11 : 10;     
                 
                 let i = (y * W + x) * 4;
 
@@ -370,7 +371,7 @@ export class Engine {
         //after sorting the sprites, do the projection and draw them
         game.enemies.forEach(function(e) {
 
-            if (e?.taken) {
+            if (e.taken) {
                 return;
             }
             
@@ -651,11 +652,14 @@ function initTextures() {
     textures[0] = loadTexture(data.wall1);
     textures[1] = loadTexture(data.wall2);
     textures[2] = loadTexture(data.wall3);
-    textures[3] = loadTexture(data.wall_diagonal);
-
+    textures[3] = loadTexture(data.wall4);
+    
+    textures[9] = loadTexture(data.wall_diagonal);
+    
     //  black ceiling
-    textures[4] = Array(64*64*4).fill(0);
-    textures[5] = loadTexture(data.floor);
+    textures[10] = Array(64*64*4).fill(0);
+    //  floor
+    textures[11] = loadTexture(data.floor);
 
     return textures;
 };

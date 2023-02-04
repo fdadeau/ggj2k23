@@ -20,6 +20,7 @@ const data = {
     "wall1": "../data/textures/wall1.png",
     "wall2": "../data/textures/wall2.png",
     "wall3": "../data/textures/wall3.png",
+    "wall4": "../data/textures/wall4.png",
     "wall_diagonal": "../data/textures/wall_diagonal.png",
     "floor": "../data/textures/floor.png"
 }
