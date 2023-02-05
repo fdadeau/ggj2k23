@@ -24,7 +24,7 @@ export class Game {
         this.player;
 
         this.gui = new GUI(this.loading);
-        this.currentLevel = 'test';
+        this.currentLevel = 'tree';
     }
 
     setLoadingProgress(loaded, total) {

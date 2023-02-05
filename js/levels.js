@@ -1,4 +1,3 @@
-
 import { buildEnemy } from "./enemies.js";
 
 import { buildPowerUp } from "./powerups.js";
@@ -104,6 +103,54 @@ const ENEMIES2 = function() {
 };
 
 const ENEMIES4 = function() {
+    //from left to right, top to bottom
+    //ENEMIES
+    //turnips
+    const turnip0 = buildEnemy("turnip", 27.5, 28.5, 0, 1);
+    const turnip1 = buildEnemy("turnip", 7.5, 22.5, 0, 1);
+    const turnip2 = buildEnemy("turnip", 24.5, 21.5, 0, 1);
+
+    //trees
+    const tree0 = buildEnemy("tree", 1.5, 18.5, 0, 1);
+    const tree1 = buildEnemy("tree", 27.5, 13.5, 0, 1);
+    const tree2 = buildEnemy("tree", 12.5, 9.5, 0, 1);
+    const tree3 = buildEnemy("tree", 13.5, 4.5, 0, 1);
+    
+    //dandelion
+    const dandelion0 = buildEnemy("dandelion", 9.5, 27.5, 0, 1);
+    const dandelion1 = buildEnemy("dandelion", 15.5, 22.5, 0, 1);
+    const dandelion2 = buildEnemy("dandelion", 28.5, 11.5, 0, 1);
+    const dandelion3 = buildEnemy("dandelion", 1.5, 9.5, 0, 1);
+    const dandelion4 = buildEnemy("dandelion", 16.5, 6.5, 0, 1);
+    const dandelion5 = buildEnemy("dandelion", 2.5, 2.5, 0, 1);
+
+    //rabbit
+    //const rabbit = buildEnemy("rabbit", 25.5, 1.5, 0, 1);
+
+    //POWER UP
+    //const carrot = buildPowerUp("carrot", 27.5, 1.5);
+
+    //tequila
+    const tequila0 = buildPowerUp("tequila", 20.5, 28.5);
+    const tequila1 = buildPowerUp("tequila", 18.5, 17.5);
+
+    //whisky
+    const whisky0 = buildPowerUp("whisky", 18.5, 24.5);
+    const whisky1 = buildPowerUp("whisky", 24.5, 24.5);
+    const whisky2 = buildPowerUp("whisky", 28.5, 23.5);
+    const whisky3 = buildPowerUp("whisky", 9.5, 15.5);
+    const whisky4 = buildPowerUp("whisky", 15.5, 9.5);
+
+    
+    // Uique rabbit and dialog
+    //const rabbit = buildPowerUp("rabbit", 10.5, 20.5);
+    //const dialog = buildPowerUp("dialog", 25.5, 1.5); // same position as rabit
+
+    return [turnip0,turnip1,turnip2,tree0,tree1,tree2,tree3,dandelion0,dandelion1,dandelion2,dandelion3,dandelion4,dandelion5,
+        tequila0,tequila1,whisky0,whisky1,whisky2,whisky3,whisky4]//, turnip1, turnip2, whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, dialog];
+};
+
+const ENEMIES3 = function() {
 
     // tree running around
     const tree0 = buildEnemy("dandelion", 3.5, 5.5, 0, 1);
@@ -162,73 +209,7 @@ const ENEMIES4 = function() {
     return [tree0, tree1, /*turnip1,*/ whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, dialog];
 };
 
-const ENEMIES3 = function() {
 
-    // tree running around
-    const tree0 = buildEnemy("dandelion", 3.5, 5.5, 0, 1);
-    /*stree0.behavior = function() {
-        if (!this.xTarget || !this.yTarget) {
-            this.xTarget = 3.5;
-            this.yTarget = 7.5;
-            this.walk();
-        }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
-            this.dirY = -this.dirY;
-            this.yTarget += this.dirY * 4;
-            this.angle = (this.angle + 180) % 360;
-        }
-    }.bind(tree0);*/
-
-    // static tree
-    const tree1 = buildEnemy("dandelion", 3.5, 10.5, 0, 1);
-
-    // tree running around
-    const turnip0 = buildEnemy("tree", 6.5, 16.5, 0, 1);
-    
-
-    // static tree
-    const turnip1 = buildEnemy("tree", 4.5, 14.5, 0, 1);
-    turnip1.behavior = function() {
-        if (!this.xTarget || !this.yTarget) {
-            this.xTarget = 4.5;
-            this.yTarget = 14.5;
-            this.walk();
-        }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
-            this.dirY = -this.dirY;
-            this.yTarget += this.dirY * 4;
-            this.angle = (this.angle + 180) % 360;
-        }
-    }.bind(turnip1);
-    
-    // Whisky power up
-    const whisky0 = buildPowerUp("whisky", 3.5, 20.5);
-    const whisky1 = buildPowerUp("whisky", 3.5, 19.5);
-    const whisky2 = buildPowerUp("whisky", 3.5, 18.5);
-    const whisky3 = buildPowerUp("whisky", 3.5, 17.5);
-    const whisky4 = buildEnemy("tree", 3.5, 15.5,0,0);
-
-    // Tequila power upm
-    const tequila0 = buildPowerUp("tequila", 2.5, 20.5);
-
-    // Uique carrot
-    const carrot = buildPowerUp("carrot", 6.5, 20.5);
-
-    // Uique rabbit and dialog
-    const rabbit = buildEnemy("rabbit", 12.5, 25.5, 0, 0);
-
-    // Uique rope (level end)
-    const rope = buildPowerUp("rope", 5.5, 14.5);
-
-    return [tree0, tree1, /*turnip1,*/ whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, rope];
-};
-
-const ENEMIES_TEST = function() {
-    // static dino
-    const tree = buildEnemy("tree", 3.5, 2.5, 1, 0);
-
-    return [tree];
-};
 
 
 export const levels = {
@@ -249,7 +230,7 @@ export const levels = {
         player: { posX: 2.5, posY: 2.5, dirX: 1, dirY: 0 },
         map: invert(MAP1),
         textures: mkTextures(invert(MAP0)),
-        enemies: ENEMIES_TEST
+        enemies: () => []
     }
 
 }
