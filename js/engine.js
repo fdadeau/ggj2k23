@@ -51,6 +51,16 @@ export class Engine {
             return;
         }
 
+        if (game.state == STATES.TITLE) {
+            game.gui.showTitleScreen(this.ctx);
+            return;
+        }
+
+        if (game.state == STATES.PLAYING_INTRO) {
+            game.gui.playIntro(this.ctx);
+            return;
+        }
+
         if (game.state == STATES.WAITING_TO_START) {
             game.gui.waitingToStart(this.ctx);
             return;
