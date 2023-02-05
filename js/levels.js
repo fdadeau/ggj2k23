@@ -128,7 +128,7 @@ const ENEMIES4 = function() {
     const rabbit = buildEnemy("rabbit", 25.5, 1.5, 0, 1);
 
     //POWER UP
-    const carrot = buildPowerUp("carrot", 27.5, 1.5);
+    const carrot = buildPowerUp("carrot", 21.5, 13.5);
 
     //tequila
     const tequila0 = buildPowerUp("tequila", 20.5, 28.5);
