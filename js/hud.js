@@ -18,6 +18,9 @@ WHISKY_IMG.src = '../data/images/whisky.png';
 const TEQUILA_IMG = new Image();
 TEQUILA_IMG.src = '../data/images/tequila.png';
 
+const CARROT_IMG = new Image();
+CARROT_IMG.src = '../data/images/carrot.png';
+
 const TIMBER_IMG = new Image();
 TIMBER_IMG.src = '../data/images/raymond.png';
 
@@ -43,6 +46,8 @@ export class Hud {
         this.nbWhisky = 0;
         // Number of tequila bottles
         this.nbTequila = 0;
+        // Tells if the carrot is present
+        this.haveCarrot = false;
     }
 
     render(ctx, player) {
@@ -51,6 +56,7 @@ export class Hud {
         this.nbWhisky = player.nbWhisky;
         this.nbTequila = player.nbTequila;
         this.score = player.score;
+        this.haveCarrot = player.haveCarrot;
 
         let hudY_origin = cvs.height - this.height;
 
@@ -90,6 +96,11 @@ export class Hud {
         this.drawBar(ctx, player, 'health');
         this.drawBar(ctx, player, 'sobriety');
 
+        // DRaw the carrot if the player have it
+        if (this.haveCarrot) {
+            ctx.drawImage(CARROT_IMG, cvs.width - slot / 2, 10, 30, 30);
+        }
+        
         // Reset the font height
         ctx.font = "6pt Verdana";
     }

@@ -129,6 +129,11 @@ export default class Player {
 
         /** Time when the player is drunk */
         this.drunkTime = 10000;
+
+        /** Tells if the player have found the carrot */
+        this.haveCarrot = false;
+        /** Tells if the rabbit have received the carrot */
+        this.giveCarrot = false;
     }
 
 
@@ -359,21 +364,35 @@ export default class Player {
 
     collectPowerUp(powerup) {
         powerup.forEach(function(e) {
-            switch(e.constructor.name) {
-                case 'WhiskyItem' :
-                    if(e.distance <= 1 && ! e.taken){
+            if(e.distance <= 1 && ! e.taken){
+                switch(e.constructor.name) {
+                    case 'WhiskyItem' :
                         this.nbWhisky++;
                         e.taken = true;
                         this.score += e.points;
-                    }
-                    break;
-                case 'TequilaItem' :
-                    if(e.distance <= 1 && ! e.taken){
+                        break;
+                    case 'TequilaItem' :
                         this.nbTequila++;
                         e.taken = true;
                         this.score += e.points;
-                    }
-                    break;
+                        break;
+                    case 'CarrotItem' :
+                        this.haveCarrot = true;
+                        e.taken = true;
+                        break;
+                    case 'Rabbit' :
+                        if (this.haveCarrot) {
+                            this.haveCarrot = false;
+                            this.giveCarrot = true;
+                            // Deleting the bull dialog
+                            powerup.forEach(function(e2) {
+                                if (e2.constructor.name == "Dialog") {
+                                    e2.taken = true;
+                                }
+                            });
+                        }
+                        break;
+                }
             }
         },this);
     }
