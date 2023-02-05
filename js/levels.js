@@ -71,7 +71,7 @@ const ENEMIES3 = function() {
 
     // tree running around
     const tree0 = buildEnemy("dandelion", 3.5, 5.5, 0, 1);
-    tree0.behavior = function() {
+    /*stree0.behavior = function() {
         if (!this.xTarget || !this.yTarget) {
             this.xTarget = 3.5;
             this.yTarget = 7.5;
@@ -82,7 +82,7 @@ const ENEMIES3 = function() {
             this.yTarget += this.dirY * 4;
             this.angle = (this.angle + 180) % 360;
         }
-    }.bind(tree0);
+    }.bind(tree0);*/
 
     // static tree
     const tree1 = buildEnemy("dandelion", 3.5, 10.5, 0, 1);
