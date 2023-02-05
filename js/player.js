@@ -268,6 +268,8 @@ export default class Player {
             }
         }
 
+        this.currentWeapon.update(dt,this,enemies);
+
         this.lighter.update(dt);
 
         this.collectPowerUp(enemies);
@@ -394,13 +396,13 @@ export default class Player {
         this.hud.render(ctx, this);
     }
 
-    attack(enemies) {
+    attack() {
         if (this.isAttacking) {
             return;
         }
         this.isAttacking = true;
         this.setAnimation(this.currentWeapon.use);
-        this.currentWeapon.behavior(this,enemies);
+        this.currentWeapon.setDelay();
     }
 
     hit(damage){

@@ -27,10 +27,12 @@ const WHISKY_WIDTH = 1000;
 
 const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const WHISKY_IDLE = [0];
+const CONSUME_DELAY = 300;
 
 /** AXE */
 const AXE_HEIGHT = 5000/5 | 0;
 const AXE_WIDTH = 1000;
+const AXE_DELAY = 375;
 
 const AXE_ATTACK = [0,1,2,3,3,4];
 const AXE_IDLE = [0];
@@ -47,16 +49,19 @@ class Weapon{
     /**
      * 
      * @param damage Weapon's damages
-     * @param delay Delay between each attack (in ms)
-     * @param scope Weapon's scope
+     * @param scope Weapon's range
      */
-    constructor(damage, delay, range){
+    constructor(damage, range){
         this.damage = damage;
-        this.delay = delay; // TODO : not used 
+        this.delay = undefined;
         this.range = range;
     }
 
     behavior() { }
+
+    update(dt){
+        this.delay -= dt;
+    }
 
     afterAnimation() { }
 
@@ -67,7 +72,19 @@ class Weapon{
 
 class Consumable extends Weapon{
     constructor(){
-        super(0,1200,0);
+        super(0,0);
+    }
+
+    setDelay(){
+        this.delay = CONSUME_DELAY;
+    }
+
+    update(dt, player, enemies){
+        super.update(dt);
+        if(this.delay != undefined && this.delay <= 0) {
+            this.delay = undefined;
+            this.behavior(player);
+        }
     }
 }
 
@@ -99,9 +116,21 @@ class Tequila extends Consumable {
 
 class Axe extends Weapon{
     constructor(){
-        super(25,800,2.5);
+        super(25,2.5);
         this.idle = AXE_IDLE;
         this.use = AXE_ATTACK;
+    }
+
+    setDelay(){
+        this.delay = AXE_DELAY;
+    }
+
+    update(dt, player, enemies){
+        super.update(dt);
+        if(this.delay != undefined && this.delay <= 0) {
+            this.delay = undefined;
+            this.behavior(player,enemies);
+        }
     }
     
     render(ctx, frame){

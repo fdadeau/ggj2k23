@@ -98,7 +98,7 @@ export class Game {
                 localStorage.setItem(STORAGE_KEY_MOUSE, this.inverted);
                 break;
             case 'KeyE':
-                this.player.attack(this.enemies);
+                this.player.attack();
                 break;
             case 'KeyF':
                 this.player.lighter.startBlowing();
