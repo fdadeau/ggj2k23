@@ -66,9 +66,6 @@ export class Hud {
         this.haveCarrot = player.haveCarrot;
 
         let hudY_origin = cvs.height - this.height;
-
-        // Weapon slot
-        this.drawWeapon(ctx, hudY_origin, this.weapon);
        
         // Draw the window
         ctx.fillStyle = '#0000a6';
@@ -102,6 +99,9 @@ export class Hud {
         // Skin slot
         ctx.drawImage(TIMBER_IMG, 275, hudY_origin + 1, slot - 2, this.height);
 
+        // Weapon slot
+        this.drawWeapon(ctx, hudY_origin, this.weapon);
+
         // Draw the health and sobriety bars
         this.drawBar(ctx, player, 'health');
         this.drawBar(ctx, player, 'sobriety');
@@ -129,12 +129,6 @@ export class Hud {
                 ctx.fillText(this.nbTequila, 248, hudY_origin + 64);
                 break;
         }
-    }
-
-
-    equipeWeapon(id){ // TODO : remettre ça
-        console.log("hello")
-        this.weapon = id;
     }
 
     drawBar(ctx, player, type) {
