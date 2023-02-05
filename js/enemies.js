@@ -32,7 +32,7 @@ const TURNIP_BURNT = [16];
 
 const TURNIP_SPRITESHEET = new Image();
 TURNIP_SPRITESHEET.src = "../data/turnip-spritesheet.png";
-const TURNIP_HEIGHT = 13794/17 | 0;
+const TURNIP_HEIGHT = 7106/17 | 0;
 const TURNIP_WIDTH = 419;
 
 
