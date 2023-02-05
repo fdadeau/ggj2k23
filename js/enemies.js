@@ -133,6 +133,16 @@ class Enemy {
         }
 
         player.invisibilityFrame -= dt;
+        player.lighter.shots.forEach(function(s) {
+            let dX = s.x - this.x;
+            let dY = s.y - this.y;
+            if (dX*dX+dY*dY < 0.4) {
+                this.hit(5);
+                if (this.health <= 0) {
+                    this.burn();
+                }
+            }
+        }.bind(this));
 
         if(this.distance < this.range && player.invisibilityFrame <=0 && this.health > 0){
             this.attack();

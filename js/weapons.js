@@ -144,7 +144,7 @@ class Axe extends Weapon{
  * LIGHTER
  */
 
-const FIRE_SPEED = 0.01;
+const FIRE_SPEED = 0.001;
 
 const LIGHTER_OFF = 0, LIGHTER_ON = 1, LIGHTER_BLOW = 2;
 
