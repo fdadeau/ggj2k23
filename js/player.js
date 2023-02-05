@@ -434,19 +434,7 @@ export default class Player {
                         this.haveCarrot = true;
                         e.taken = true;
                         break;
-                    case 'Rabbit' :
-                        if (this.haveCarrot) {
-                            this.haveCarrot = false;
-                            this.giveCarrot = true;
-                            e.nibble = true;
-                            // Deleting the bull dialog
-                            powerup.forEach(function(e2) {
-                                if (e2.constructor.name == "Dialog") {
-                                    e2.taken = true;
-                                }
-                            });
-                        }
-                        break;
+                   
                     case 'Rope' :
                         this.arrived = true;
                         break;

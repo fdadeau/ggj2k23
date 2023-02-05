@@ -17,14 +17,6 @@ CARROT_SPRITESHEET.src = "../data/images/carrot.png";
 const CARROT_HEIGHT = 454 | 0;
 const CARROT_WIDTH = 454;
 
-const RABBIT_SPRITESHEET = new Image();
-RABBIT_SPRITESHEET.src = "../data/images/rabbit.png";
-const KILLER_RABBIT_SPRITESHEET = new Image();
-KILLER_RABBIT_SPRITESHEET.src = "../data/images/killer-rabbit.png";
-const NIBBLE_RABBIT_SPRITESHEET = new Image();
-NIBBLE_RABBIT_SPRITESHEET.src = "../data/images/nibble-rabbit.png";
-const RABBIT_HEIGHT = 454 | 0;
-const RABBIT_WIDTH = 454;
 
 const DIALOG_SPRITESHEET = new Image();
 DIALOG_SPRITESHEET.src = "../data/images/dialog.png";

@@ -72,11 +72,13 @@ document.addEventListener("DOMContentLoaded", async function() {
             engine.initialize();
             micro.start();
             game.start();
+            
         } 
         await document.getElementById("cvs").requestFullscreen();
         if (!document.pointerLockElement) {
-            await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
+            //await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
         }
+        game.press("SemiColon")
     });
 
     document.addEventListener("wheel", function(e) {
