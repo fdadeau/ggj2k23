@@ -6,6 +6,7 @@ const HEIGHT = WIDTH * 10 / 16;
 export class GUI {
     constructor(loading) {
         this.gameLoading = loading;
+        this.gameDead = false;
     }
 
     /** Loading screen */
@@ -28,10 +29,19 @@ export class GUI {
 
     /** Dead screen */
     dead(ctx) {
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = "23px pixel-bit-advanced";
-        ctx.fillText("T mor lol", WIDTH / 2 - 200, HEIGHT/2 - 9);
+        if (this.gameDead == false) {
+            this.gameDead = true;
+            ctx.globalAlpha = 0.25;
+            ctx.fillStyle = '#f00';
+            ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            ctx.globalAlpha = 1;
+            ctx.font = "35px pixel-bit-advanced";
+            ctx.fillText("You've been", WIDTH / 2 - 150, HEIGHT/2 - 50);
+            ctx.font = "45px pixel-bit-advanced";
+            ctx.fillText("DANDELIONED", WIDTH / 2 - 200, HEIGHT/2);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = "23px pixel-bit-advanced";
+            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2 - 290, HEIGHT/2 + 75);
+        }
     }
 }
