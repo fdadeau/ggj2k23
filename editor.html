@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+    textarea {
+        width: 400px;
+        height: 100vh;
+        position: absolute; 
+        top: 0;
+        right: -280px;
+    }
+    textarea.show {
+        right: 0px;
+        width: 800px;
+    }
+    canvas {
+        width: 100vh;
+        height: 100vh;
+        cursor: pointer;
+    }
+    canvas {
+        border: solid 1px #000;
+    }
+    p[data-x]::before {
+        content: 'X=' attr(data-x) ' Y=' attr(data-y);
+    }
+</style>
+    <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const SQUARE = 20;
+
+    document.querySelector("textarea").addEventListener("dblclick", function() {
+        this.classList.toggle("show");
+    });
+
+    let mouseX, mouseY;
+    document.querySelector("canvas").addEventListener("mousemove", function(e) {
+        
+        var rect = this.getBoundingClientRect();
+        let [x,y] = getCoords((e.clientX - rect.left) * WIDTH / rect.width, (e.clientY - rect.top) * HEIGHT / rect.height);
+
+        mouseX = x;
+        mouseY = y;
+
+        document.querySelector("p").dataset.x = mouseX;
+        document.querySelector("p").dataset.y = mouseY;
+    });
+    document.querySelector("canvas").addEventListener("click", function(e) {
+        if (!level[mouseY]) {
+            level[mouseY] = [];
+        }
+        if (!level[mouseY][mouseX]) {
+            level[mouseY][mouseX] = 0;
+        }
+        level[mouseY][mouseX] = (level[mouseY][mouseX] + 1) % 6;
+        updateCode();
+    }); 
+
+
+    function updateCode() {
+
+        let maxC = 0;
+        let maxL = 0;
+        for (let l=0; l < level.length; l++) {
+            if (l > maxL) {
+                maxL = l;
+            }
+            if (!level[l]) {
+                level[l]=[0];
+            }
+            for (let c=0; c < level[l].length; c++) {
+                if (c > maxC) {
+                    maxC = c;
+                }
+                if (level[l][c] == null) {
+                    level[l][c] = 0;
+                }
+            }
+        }
+
+        let code = "[";
+        for (let l=0; l < level.length | 0; l++) {
+            if (l > 0) {
+                code += ","
+            }
+            code += "\n  [";
+            if (level[l]) {
+                code += level[l].map(e => e.null ? 0 : e).join(",");
+            }
+            if (level[l] == null || level[l].length < maxC) {
+                for (let i=level[l].length-1; i < maxC; i++) {
+                   code += ",0";
+                }
+            }
+            code += "]"
+        }
+        code += "\n]";
+        document.querySelector("textarea").value = code;
+    }
+
+    document.querySelector("textarea").addEventListener("change", function() {
+        try {
+            level = JSON.parse(this.value); //.replace("\\r","").replace("\\n","").replace("\\t",""));
+        }
+        catch (err) {
+            console.error(err);
+           
+        }
+    })
+
+    function getCoords(x,y) {
+        return [ x / SQUARE | 0, y / SQUARE | 0];
+    }
+
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    const WIDTH = 600; 
+    const HEIGHT = 600;
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "#888888";
+
+    let level = [];
+
+    function draw() {
+        requestAnimationFrame(draw);
+        ctx.clearRect(0, 0, WIDTH, HEIGHT)
+        for (let l=0; l < HEIGHT/SQUARE | 0; l++) {
+            for (let c=0; c < WIDTH/SQUARE | 0; c++) {
+                if (mouseX == c && mouseY == l) {
+                    ctx.strokeRect(c*SQUARE, l*SQUARE, SQUARE, SQUARE);
+                }
+                if (level[l] && level[l][c] > 0) {
+                    switch (level[l][c]) {
+                        case 1:
+                            ctx.fillRect(c*SQUARE, l*SQUARE, SQUARE, SQUARE);
+                            break;
+                        case 2:
+                            ctx.beginPath();
+                            ctx.moveTo(c*SQUARE, l*SQUARE, SQUARE, SQUARE);
+                            ctx.lineTo((c+1)*SQUARE, (l)*SQUARE);
+                            ctx.lineTo((c)*SQUARE, (l+1)*SQUARE);
+                            ctx.lineTo((c)*SQUARE, (l)*SQUARE);
+                            ctx.closePath();
+                            ctx.fill();
+                            break;
+                        case 3: 
+                            ctx.beginPath();
+                            ctx.moveTo(c*SQUARE, l*SQUARE, SQUARE, SQUARE);
+                            ctx.lineTo((c+1)*SQUARE, (l)*SQUARE);
+                            ctx.lineTo((c+1)*SQUARE, (l+1)*SQUARE);
+                            ctx.lineTo((c)*SQUARE, (l)*SQUARE);
+                            ctx.closePath();
+                            ctx.fill();
+                            break;
+                        case 4:
+                            ctx.beginPath();
+                            ctx.moveTo((c+1)*SQUARE, (l)*SQUARE);
+                            ctx.lineTo((c+1)*SQUARE, (l+1)*SQUARE);
+                            ctx.lineTo((c)*SQUARE, (l+1)*SQUARE);
+                            ctx.lineTo((c+1)*SQUARE, (l)*SQUARE);
+                            ctx.closePath();
+                            ctx.fill();
+                            break;
+                        case 5: 
+                            ctx.beginPath();
+                            ctx.moveTo(c*SQUARE, l*SQUARE, SQUARE, SQUARE);
+                            ctx.lineTo((c+1)*SQUARE, (l+1)*SQUARE);
+                            ctx.lineTo((c)*SQUARE, (l+1)*SQUARE);
+                            ctx.lineTo((c)*SQUARE, (l)*SQUARE);
+                            ctx.closePath();
+                            ctx.fill();
+                            break;
+                        
+                    }
+                }
+            }
+        }
+    }   
+    draw();
+
+
+});
+
+
+    </script>
+
+</head>
+<body>
+
+<p id="coords" data-x="0" data-y="0"></p>
+
+<canvas id="cvs" width="600" height="600">
+    
+</canvas>
+
+<textarea id="code"></textarea>
+
+</body>
+</html>
