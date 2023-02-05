@@ -3,8 +3,10 @@ const WEAPON_TEQUILA = 1;
 const WEAPON_AXE = 2;
 const WEAPON_LIGHTER = 4;
 
-
 const NB_SLOTS = 7;
+
+import { data } from "./preload.js";
+
 
 const AXE_IMG = new Image();
 AXE_IMG.src = '../data/images/axe.png';
@@ -24,6 +26,7 @@ TIMBER_IMG.src = '../data/images/raymond.png';
 const BACKGROUND_IMG = new Image();
 BACKGROUND_IMG.src = '../data/wood.png';
 
+
 export class Hud {
 
     constructor(hudHeight) {
@@ -37,6 +40,8 @@ export class Hud {
         this.sobriety = 0;
         // Weapon id
         this.weapon = WEAPON_AXE;
+        // lighter
+        this.lighter = 0;
         // Hud Height
         this.height = hudHeight;
         // Number of whisky bottles
@@ -54,6 +59,9 @@ export class Hud {
 
         let hudY_origin = cvs.height - this.height;
 
+        // Weapon slot
+        this.drawWeapon(ctx, hudY_origin, this.weapon);
+       
         // Draw the window
         ctx.fillStyle = '#0000a6';
         ctx.fillRect(0, hudY_origin, cvs.width, this.height);
@@ -79,9 +87,6 @@ export class Hud {
         // Score slot
         ctx.fillText("SCORE", 100, hudY_origin + 25);
         ctx.fillText(this.score, 100, hudY_origin + 55);
-
-        // Weapon slot
-        this.drawWeapon(ctx, hudY_origin, this.weapon);
 
         // Skin slot
         ctx.drawImage(TIMBER_IMG, 275, hudY_origin + 1, slot - 2, this.height);
@@ -109,6 +114,11 @@ export class Hud {
                 break;
         }
     }
+
+    drawLighter(ctx) {
+
+    }
+
 
     equipeWeapon(id){
         this.weapon = id;
@@ -212,3 +222,4 @@ export class Hud {
         this.weapon = WEAPON_TEQUILA;
     }
 }
+

@@ -1,6 +1,6 @@
 import { Game } from "./game.js";
 import { Engine } from "./engine.js";
-import { Hud } from "./hud.js";
+import { MicrophoneController } from "./microphone-controller.js";
 
 import { preload } from "./preload.js";
 
@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", async function() {
     const canvas = document.getElementById("cvs");
     // Game itself 
     const game = new Game();
+
+    const micro = new MicrophoneController();
 
     // preloading... (async)
     try {
@@ -46,16 +48,36 @@ document.addEventListener("DOMContentLoaded", async function() {
         game.release(e.code);
     });
     document.addEventListener("click", function(e) {
-        if (document.pointerLockElement) {
+        if (document.pointerLockElement && e.button == 0) {
             game.press("KeyE");
         }
     });
+    document.addEventListener("mousedown", function(e) {
+        if (e.button == 2) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            game.press("KeyL");
+            return false;
+        }
+    })
+    document.addEventListener("mouseup", function(e) {
+        if (e.button == 2) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            game.release("KeyL");
+            return false;
+        }
+    })
     // Double click --> switch to full screen + mouse pointer lock
     document.addEventListener("dblclick", async function(e) {
         await document.getElementById("cvs").requestFullscreen();
+        micro.start();
         if (!document.pointerLockElement) {
             await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
         }
+
     });
     document.addEventListener("mousemove", function(e) {
         let dX = e.movementX;
@@ -71,6 +93,8 @@ document.addEventListener("DOMContentLoaded", async function() {
         requestAnimationFrame(mainloop);
         let now = Date.now();
         let dt = now - lastUpdate;
+        
+        micro.update(game);
         game.update(dt);
         lastUpdate = now;
         engine.render(game);

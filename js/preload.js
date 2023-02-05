@@ -6,7 +6,6 @@ const data = {
     "lighter-spritesheet": "../data/lighter-spritesheet.png",
     "tree-spritesheet": "../data/tree-spritesheet.png",
     "whisky-spritesheet": "../data/whisky-spritesheet.png",
-    "lighter-spritesheet": "../data/lighter-spritesheet.png",
 
     // images
     "wood": "../data/wood.png",
@@ -16,13 +15,26 @@ const data = {
     "timber": "../data/images/timber.jpeg",
     "whisky": "../data/images/whisky.png",
 
+    // lighter
+    "lighter1": "../data/lighter-spritesheet.png",
+    "lighter2": "../data/blow-spritesheet.png",
+
+    "fire1": "../data/images/fire1.png",
+    "fire2": "../data/images/fire2.png",
+    "fire3": "../data/images/fire3.png",
+
     // textures 
     "wall1": "../data/textures/wall1.png",
     "wall2": "../data/textures/wall2.png",
     "wall3": "../data/textures/wall3.png",
     "wall4": "../data/textures/wall4.png",
     "wall_diagonal": "../data/textures/wall_diagonal.png",
-    "floor": "../data/textures/floor.png"
+    "floor": "../data/textures/floor.png",
+
+    // musics
+    "ingame1": "../data/sounds/Musique_Calme_V3.mp3",
+    "ingame2": "../data/sounds/Musique_dynamique_V3.mp3"
+
 }
 
 /***

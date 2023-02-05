@@ -3,6 +3,8 @@ import Player from "./player.js";
 
 import { levels } from "./levels.js";
 
+import { data } from "./preload.js";
+
 /** Game states */
 export const STATES = { LOADING: 0, PLAYING: 1, PAUSED: 2 };
 
@@ -17,7 +19,7 @@ export class Game {
         this.inverted = 1;
         
         this.enemies = [];
-        this.player = new Player();
+        this.player;
     }
 
     setLoadingProgress(loaded, total) {
@@ -31,9 +33,14 @@ export class Game {
     loadLevel(id) {
         let levelData = levels[id];
         this.enemies = levelData.enemies();
+        this.player =  new Player();
         this.player.initialize(levelData.player.posX, levelData.player.posY, levelData.player.dirX, levelData.player.dirY);
         this.map = levelData.map;
         this.textures = levelData.textures;
+
+        this.audio = data.ingame1;
+        this.audio.loop = 1;
+        this.audio.play();
     }
 
     update(dt) {
@@ -66,7 +73,10 @@ export class Game {
                 this.player.strafe(1);
                 break;
             case 'KeyB':
-                this.player.lighting = (this.player.lighting == 2) ? 5 : 2;
+                this.player.lighter.toggle();
+                break;
+            case 'KeyL':
+                this.player.lighter.blow(true);
                 break;
             case 'KeyP':
                 this.paused = !this.paused;
@@ -80,6 +90,9 @@ export class Game {
                 break;
             case 'KeyE':
                 this.player.attack(this.enemies);
+                break;
+            case 'KeyF':
+                this.player.lighter.startBlowing();
                 break;
             case 'Digit1':
                 this.player.equipeAxe();
@@ -120,7 +133,12 @@ export class Game {
             case 'ArrowRight':
                 this.player.stop2()
                 break;
-            
+            case 'KeyL':
+                this.player.lighter.blow(false);
+                break;  
+            case 'KeyF':
+                this.player.lighter.stopBlowing();
+                break;  
         }
     }
     mouseMove(dx, dy) {
