@@ -45,8 +45,6 @@ export function buildPowerUp(type,x,y) {
             return new TequilaItem(x, y);
         case "carrot":
             return new Carrot(x, y);
-        case "rabbit":
-            return new Rabbit(x, y);
         case "dialog":
             return new Dialog(x, y);
         case "rope":
