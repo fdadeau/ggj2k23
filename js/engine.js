@@ -61,6 +61,11 @@ export class Engine {
             return;
         }
 
+        if (game.state == STATES.ARRIVED) {
+            game.gui.arrived(this.ctx);
+            return;
+        }
+
         if (game.state != STATES.PLAYING) {
             return;
         }

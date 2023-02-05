@@ -7,6 +7,7 @@ export class GUI {
     constructor(loading) {
         this.gameLoading = loading;
         this.gameDead = false;
+        this.gameArrived = false;
     }
 
     /** Loading screen */
@@ -42,6 +43,23 @@ export class GUI {
             ctx.fillStyle = '#FFFFFF';
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2 - 290, HEIGHT/2 + 75);
+        }
+    }
+    
+    arrived(ctx) {
+        if (this.gameArrived == false) {
+            this.gameArrived = true;
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#fff';
+            ctx.font = "35px pixel-bit-advanced";
+            ctx.fillText("You've reached", WIDTH / 2 - 170, HEIGHT/2 - 50);
+            ctx.font = "45px pixel-bit-advanced";
+            ctx.fillText("the surface !", WIDTH / 2 - 200, HEIGHT/2);
+            ctx.font = "23px pixel-bit-advanced";
+            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2 - 300, HEIGHT/2 + 75);
         }
     }
 }
