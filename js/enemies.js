@@ -27,6 +27,7 @@ const TREE_ATTACK_DAMAGE = 20;
 const TREE_HP = 100;
 const TREE_ATTACK_DELAY = 500;
 const TREE_POINTS_DROP = 50;
+const TREE_RANGE = 1;
 
 const TREE_HURT = [16,16,16,16,16];
 
@@ -45,6 +46,7 @@ const TURNIP_ATTACK_DAMAGE = 20;
 const TURNIP_HP = 100;
 const TURNIP_ATTACK_DELAY = 500;
 const TURNIP_POINTS_DROP = 100;
+const TURNIP_RANGE = 1;
 
 
 /** DANDELION LA MENACE  */
@@ -57,11 +59,11 @@ DANDELION_SPRITESHEET.src = "../data/dandelion-spritesheet.png";
 const DANDELION_HEIGHT = 6000/12 | 0;
 const DANDELION_WIDTH = 500;
 
-const DANDELION_HURT = [0];
 const DANDELION_ATTACK_DAMAGE = 20;
-const DANDELION_HP = 100;
+const DANDELION_HP = 1000;
 const DANDELION_ATTACK_DELAY = 500;
 const DANDELION_POINTS_DROP = 200;
+const DANDELION_RANGE = 1;
 
 /**
  * Build an enemy of the specified type.
@@ -77,11 +79,11 @@ export function buildEnemy(type,x,y,dx,dy) {
         case "dino":
             return new Dino(x,y,dx,dy,WALK,IDLE);
         case "tree":
-            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE,TREE_HURT, TREE_POINTS_DROP);
+            return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE,TREE_HURT, TREE_PUNCH, TREE_POINTS_DROP);
         case "turnip":
-            return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE,TURNIP_HURT, TURNIP_POINTS_DROP);
+            return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE,TURNIP_HURT, TURNIP_BITE, TURNIP_POINTS_DROP);
         case "dandelion":
-            return new Dandelion(x,y,dx,dy,DANDELION_WALK,DANDELION_IDLE,DANDELION_HURT, DANDELION_POINTS_DROP);
+            return new Dandelion(x,y,dx,dy,DANDELION_WALK, DANDELION_IDLE, DANDELION_IDLE, DANDELION_YEET, DANDELION_POINTS_DROP);
         // ... TODO ... make more enemies
     }
 }
@@ -92,7 +94,7 @@ export function buildEnemy(type,x,y,dx,dy) {
  */
 
 class Enemy {
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, hp, attackDamage) {
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, attakAnim, hp, attackDamage, range) {
         this.x = x;
         this.y = y;
         this.dirX = dirX;
@@ -108,16 +110,39 @@ class Enemy {
         this.walkA = walkAnim;
         this.idleA = idleAnim;
         this.hurtA = hurtAnim;
+        this.attackA = attakAnim;
         this.health = hp;
 
         this.attackDamage = attackDamage;
+        this.range = range;
     }
 
     /** Common behavior */
-    update(dt) { 
+    update(dt, player) { 
         this.x += this.dirX * dt * this.speed;
         this.y += this.dirY * dt * this.speed;
         this.behavior(dt);
+
+        this.frameDelay -= dt;
+        if (this.frameDelay <= 0) {
+            this.frameDelay = FRAME_DELAY;
+            this.frame = (this.frame + 1) % this.animation.length;
+            if((this.animation == this.attackA || this.animation == this.hurtA) && this.frame == this.animation.length -1){
+                if(this.animationBeforeHit == this.walkA){
+                    this.walk();
+                }else{
+                    this.stop();
+                }
+            }
+        }
+
+        player.invisibilityFrame -= dt;
+
+        if(this.distance < this.range && player.invisibilityFrame <=0){
+            this.attack();
+            player.hit(this.attackDamage)
+            player.setInvinsibilityFrame();
+        }
     }
 
     behavior() { }
@@ -138,13 +163,24 @@ class Enemy {
         this.setAnimation(this.walkA);
     }
 
+    attack(){
+        console.log(this.animationBeforeHit)
+        if(this.animationBeforeHit == undefined){
+            this.animationBeforeHit = this.animation; // TODO : il récupère trop vite ici du coup ça surcharge
+        }
+        
+        this.setAnimation(this.attackA);
+    }
+
     stop() {
         this.speed = 0;
         this.setAnimation(this.idleA);
     }
 
     hit(amount){
-        this.animationBeforeHit = this.animation;
+        if(this.animationBeforeHit == undefined){
+            this.animationBeforeHit = this.animation; // TODO : le pb est la, ça prend le frappe
+        }
         this.stop();
         this.health -= amount;
         this.setAnimation(this.hurtA);
@@ -165,8 +201,8 @@ class Dino extends Enemy {
         this.vMove = 20;
     }
 
-    update(dt) {
-        super.update(dt);
+    update(dt, player) {
+        super.update(dt, player);
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
@@ -203,8 +239,8 @@ class Dino extends Enemy {
 
 class Tree extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleTree, hurtA, dropPoints) {
-        super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, TREE_HP,TREE_ATTACK_DAMAGE);
+    constructor(x, y, dirX, dirY, walkAnim, idleTree, hurtA, attackA, dropPoints) {
+        super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, attackA, TREE_HP, TREE_ATTACK_DAMAGE, TREE_RANGE);
         this.setAnimation(TREE_IDLE);
         this.factor = 0.5;
         this.height = TREE_HEIGHT;
@@ -213,24 +249,8 @@ class Tree extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    punch(){
-        this.setAnimation(TREE_PUNCH);
-    }
-
-    update(dt) {
-        super.update(dt);
-        this.frameDelay -= dt;
-        if (this.frameDelay <= 0) {
-            this.frameDelay = FRAME_DELAY;
-            this.frame = (this.frame + 1) % this.animation.length;
-            if(this.animation == TREE_HURT && this.frame == this.animation.length -1){
-                if(this.animationBeforeHit == TREE_WALK){
-                    this.walk();
-                }else{
-                    this.stop();
-                }
-            }
-        }
+    update(dt,player) {
+        super.update(dt,player);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
@@ -240,9 +260,14 @@ class Tree extends Enemy {
         
         let sourceX = minX / sizeX * this.width | 0;
         let width = (maxX - minX) / sizeX * this.width | 0;
-        let dec = 3;
+
+        let dec = 0;
         
-        if(this.animation != TREE_HURT){
+        
+        if(this.animation != TREE_HURT && this.animation != TREE_PUNCH){
+
+            dec = 3;
+            
             if (angle >= 45 && angle < 135) {
                 dec = 1;
             }
@@ -252,8 +277,6 @@ class Tree extends Enemy {
             else if (angle >= 225 && angle < 315) {
                 dec = 0;
             } 
-        }else{
-            dec = 0;
         }
         
         ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
@@ -266,8 +289,8 @@ class Tree extends Enemy {
 
 class Turnip extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, dropPoints) {
-        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, TURNIP_HP,TURNIP_ATTACK_DAMAGE);
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, attackA, dropPoints) {
+        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, attackA, TURNIP_HP,TURNIP_ATTACK_DAMAGE, TURNIP_RANGE);
         this.setAnimation(TURNIP_IDLE);
         this.factor = 0.5;
         this.height = TURNIP_HEIGHT;
@@ -276,24 +299,8 @@ class Turnip extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    bite(){
-        this.setAnimation(TURNIP_BITE);
-    }
-
-    update(dt) {
-        super.update(dt);
-        this.frameDelay -= dt;
-        if (this.frameDelay <= 0) {
-            this.frameDelay = FRAME_DELAY;
-            this.frame = (this.frame + 1) % this.animation.length;
-            if(this.animation == TURNIP_HURT && this.frame == this.animation.length -1){
-                if(this.animationBeforeHit == TURNIP_WALK){
-                    this.walk();
-                }else{
-                    this.stop();
-                }
-            }
-        }
+    update(dt, player) {
+        super.update(dt, player);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
@@ -303,9 +310,10 @@ class Turnip extends Enemy {
 
         let sourceX = minX / sizeX * this.width | 0;
         let width = (maxX - minX) / sizeX * this.width | 0;
-        let dec = 3;
+        let dec = 0;
         
-        if(this.animation != TURNIP_HURT){
+        if(this.animation != TURNIP_HURT && this.animation != TURNIP_BITE){
+            dec = 3;
             if (angle >= 45 && angle < 135) {
                 dec = 2;
             }
@@ -325,11 +333,10 @@ class Turnip extends Enemy {
     }
 }
 
-
 class Dandelion extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, dropPoints) {
-        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, DANDELION_HP,DANDELION_ATTACK_DAMAGE);
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtA, attackA, dropPoints) {
+        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtA, attackA, DANDELION_HP,DANDELION_ATTACK_DAMAGE,DANDELION_RANGE);
         this.setAnimation(DANDELION_IDLE);
         this.factor = 0.5;
         this.height = DANDELION_HEIGHT;
@@ -338,24 +345,8 @@ class Dandelion extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    yeet(){
-        this.setAnimation(DANDELION_YEET);
-    }
-
-    update(dt) {
-        super.update(dt);
-        this.frameDelay -= dt;
-        if (this.frameDelay <= 0) {
-            this.frameDelay = FRAME_DELAY;
-            this.frame = (this.frame + 1) % this.animation.length;
-            if(this.animation == DANDELION_HURT && this.frame == this.animation.length -1){
-                if(this.animationBeforeHit == DANDELION_WALK){
-                    this.walk();
-                }else{
-                    this.stop();
-                }
-            }
-        }
+    update(dt, player) {
+        super.update(dt, player);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {

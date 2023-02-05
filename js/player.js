@@ -21,6 +21,7 @@ const PLAYER_OFFSET_SPEED = 0.05;
 
 const MAX_PITCH = 2000;
 
+const INVISIVILTY_FRAME = 2000;
 
 export default class Player {
 
@@ -128,6 +129,10 @@ export default class Player {
 
         this.hud = new Hud(75);
 
+
+        /** Invisibilty frame */
+        this.invisibilityFrame = INVISIVILTY_FRAME;
+
         /** Time when the player is drunk */
         this.drunkTime = 10000;
 
@@ -136,6 +141,11 @@ export default class Player {
         /** Tells if the rabbit have received the carrot */
         this.giveCarrot = false;
     }
+    
+    setInvinsibilityFrame(){
+        this.invisibilityFrame = INVISIVILTY_FRAME;
+    }
+
 
 
     initialize(posX, posY, dirX, dirY) {
@@ -364,6 +374,14 @@ export default class Player {
         this.isAttacking = true;
         this.setAnimation(this.currentWeapon.use);
         this.currentWeapon.behavior(this,enemies);
+    }
+
+    hit(damage){
+        if(this.health <= 0){
+            return;
+        }
+        this.health -= damage;
+        // TODO : end game
     }
 
     collectPowerUp(powerup) {

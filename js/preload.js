@@ -9,6 +9,7 @@ const data = {
 
     // images
     "wood": "../data/wood.png",
+    "hud-roots": "../data/hud-roots.png",
     "axe": "../data/images/axe.png",
     "heart": "../data/images/heart.png",
     "tequila": "../data/images/tequila.png",

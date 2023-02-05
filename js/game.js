@@ -44,8 +44,8 @@ export class Game {
     }
 
     update(dt) {
-        this.enemies.forEach(e => {
-            e.update(dt);   // TODO add player for detecting collisions?
+        this.enemies.forEach((e,player) => {
+            e.update(dt,this.player);   // TODO add player for detecting collisions?
         });
         this.player.update(dt, this.map, this.enemies);
 

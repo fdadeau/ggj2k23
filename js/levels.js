@@ -71,7 +71,7 @@ const ENEMIES3 = function() {
 
     // tree running around
     const tree0 = buildEnemy("dandelion", 3.5, 5.5, 0, 1);
-    tree0.behavior = function() {
+    /*stree0.behavior = function() {
         if (!this.xTarget || !this.yTarget) {
             this.xTarget = 3.5;
             this.yTarget = 7.5;
@@ -82,17 +82,21 @@ const ENEMIES3 = function() {
             this.yTarget += this.dirY * 4;
             this.angle = (this.angle + 180) % 360;
         }
-    }.bind(tree0);
+    }.bind(tree0);*/
 
     // static tree
     const tree1 = buildEnemy("dandelion", 3.5, 10.5, 0, 1);
 
     // tree running around
-    const turnip0 = buildEnemy("dandelion", 6.5, 7.5, 0, 1);
-    turnip0.behavior = function() {
+    const turnip0 = buildEnemy("tree", 6.5, 16.5, 0, 1);
+    
+
+    // static tree
+    const turnip1 = buildEnemy("tree", 4.5, 14.5, 0, 1);
+    turnip1.behavior = function() {
         if (!this.xTarget || !this.yTarget) {
-            this.xTarget = 3.5;
-            this.yTarget = 7.5;
+            this.xTarget = 4.5;
+            this.yTarget = 14.5;
             this.walk();
         }
         if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
@@ -100,11 +104,7 @@ const ENEMIES3 = function() {
             this.yTarget += this.dirY * 4;
             this.angle = (this.angle + 180) % 360;
         }
-    }.bind(turnip0);
-    
-
-    // static tree
-    const turnip1 = buildEnemy("dandelion", 4.5, 5.5, 0, 1);
+    }.bind(turnip1);
     
     // Whisky power up
     const whisky0 = buildPowerUp("whisky", 3.5, 20.5);
