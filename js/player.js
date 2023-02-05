@@ -103,8 +103,23 @@ export default class Player {
         this.weapons[2].behavior = function(player, enemies) {
             enemies.forEach(function(e) {
                 if(e.distance <= player.currentWeapon.range){
-                    e.hit(player.currentWeapon.damage);
-                    player.score += e.dropPoints ?? 0;
+                    let u = {
+                        x:player.posX-e.x,
+                        y:player.posY-e.y
+                    };
+
+                    let v = {
+                        x:player.dirX,
+                        y:player.dirY
+                    };
+
+                    let x = u.x*v.x + u.y*v.y
+                    
+                    if(x < 0 && e.health > 0){
+                        e.hit(player.currentWeapon.damage);
+                        player.score += e.dropPoints ?? 0;
+                        //angle = Math.acos(-x/(1));
+                    }
                 }
             },this);
         }.bind(this.weapons[2]);
