@@ -24,6 +24,9 @@ TIMBER_IMG.src = '../data/images/raymond.png';
 const BACKGROUND_IMG = new Image();
 BACKGROUND_IMG.src = '../data/wood.png';
 
+const ROOT_IMG = new Image();
+ROOT_IMG.src = '../data/hud-roots.png';
+
 export class Hud {
 
     constructor(hudHeight) {
@@ -60,15 +63,18 @@ export class Hud {
         ctx.drawImage(BACKGROUND_IMG, 0, hudY_origin, cvs.width, this.height);
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 2;
-        ctx.strokeRect(0, hudY_origin, cvs.width, 0);
+        //ctx.strokeRect(0, hudY_origin, cvs.width, 0);
 
         // Draw the separators
         let slot = cvs.width / NB_SLOTS;
-        ctx.strokeRect(slot, hudY_origin + 10, 0, this.height - 20);
-        ctx.strokeRect(slot * 2, hudY_origin + 10, 0, this.height - 20);
-        ctx.strokeRect(slot * 3, hudY_origin, 0, this.height);
-        ctx.strokeRect(slot * 4, hudY_origin, 0, this.height);
-
+        //ctx.strokeRect(slot, hudY_origin + 10, 0, this.height - 20);
+        //ctx.strokeRect(slot * 2, hudY_origin + 10, 0, this.height - 20);
+        //ctx.strokeRect(slot * 3, hudY_origin, 0, this.height);
+        //ctx.strokeRect(slot * 4, hudY_origin, 0, this.height);
+        ctx.drawImage(ROOT_IMG, slot-3, hudY_origin + 10,6,60);
+        ctx.drawImage(ROOT_IMG, slot*2-3, hudY_origin + 10,6,60);
+        ctx.drawImage(ROOT_IMG, slot*3-3, hudY_origin + 10,6,60);
+        ctx.drawImage(ROOT_IMG, slot*4-3, hudY_origin + 10,6,60);
         ctx.fillStyle = '#fff';
         ctx.font = "12pt ka1";
 

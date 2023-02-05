@@ -27,6 +27,7 @@ const TREE_ATTACK_DAMAGE = 20;
 const TREE_HP = 100;
 const TREE_ATTACK_DELAY = 500;
 const TREE_POINTS_DROP = 50;
+const TREE_RANGE = 1;
 
 const TREE_HURT = [16,16,16,16,16];
 
@@ -45,6 +46,7 @@ const TURNIP_ATTACK_DAMAGE = 20;
 const TURNIP_HP = 100;
 const TURNIP_ATTACK_DELAY = 500;
 const TURNIP_POINTS_DROP = 100;
+const TURNIP_RANGE = 1;
 
 
 /** DANDELION LA MENACE  */
@@ -57,11 +59,11 @@ DANDELION_SPRITESHEET.src = "../data/dandelion-spritesheet.png";
 const DANDELION_HEIGHT = 6000/12 | 0;
 const DANDELION_WIDTH = 500;
 
-const DANDELION_HURT = [0];
 const DANDELION_ATTACK_DAMAGE = 20;
-const DANDELION_HP = 100;
+const DANDELION_HP = 1000;
 const DANDELION_ATTACK_DELAY = 500;
 const DANDELION_POINTS_DROP = 200;
+const DANDELION_RANGE = 1;
 
 /**
  * Build an enemy of the specified type.
@@ -81,7 +83,7 @@ export function buildEnemy(type,x,y,dx,dy) {
         case "turnip":
             return new Turnip(x,y,dx,dy,TURNIP_WALK,TURNIP_IDLE,TURNIP_HURT, TURNIP_POINTS_DROP);
         case "dandelion":
-            return new Dandelion(x,y,dx,dy,DANDELION_WALK,DANDELION_IDLE,DANDELION_HURT, DANDELION_POINTS_DROP);
+            return new Dandelion(x,y,dx,dy,DANDELION_WALK,DANDELION_IDLE, DANDELION_POINTS_DROP);
         // ... TODO ... make more enemies
     }
 }
@@ -92,7 +94,7 @@ export function buildEnemy(type,x,y,dx,dy) {
  */
 
 class Enemy {
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, hp, attackDamage) {
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, hp, attackDamage, range) {
         this.x = x;
         this.y = y;
         this.dirX = dirX;
@@ -111,10 +113,11 @@ class Enemy {
         this.health = hp;
 
         this.attackDamage = attackDamage;
+        this.range = range;
     }
 
     /** Common behavior */
-    update(dt) { 
+    update(dt, player) { 
         this.x += this.dirX * dt * this.speed;
         this.y += this.dirY * dt * this.speed;
         this.behavior(dt);
@@ -204,7 +207,7 @@ class Dino extends Enemy {
 class Tree extends Enemy {
 
     constructor(x, y, dirX, dirY, walkAnim, idleTree, hurtA, dropPoints) {
-        super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, TREE_HP,TREE_ATTACK_DAMAGE);
+        super(x, y, dirX, dirY, walkAnim, idleTree, hurtA, TREE_HP, TREE_ATTACK_DAMAGE, TREE_RANGE);
         this.setAnimation(TREE_IDLE);
         this.factor = 0.5;
         this.height = TREE_HEIGHT;
@@ -213,23 +216,32 @@ class Tree extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    punch(){
+    attack(){
         this.setAnimation(TREE_PUNCH);
     }
 
-    update(dt) {
+    update(dt,player) {
         super.update(dt);
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
-            if(this.animation == TREE_HURT && this.frame == this.animation.length -1){
+            console.log(this.animation[this.frame])
+            /*if(this.animation == TREE_HURT && this.frame == this.animation.length -1){
                 if(this.animationBeforeHit == TREE_WALK){
                     this.walk();
                 }else{
                     this.stop();
                 }
-            }
+            }*/
+        }
+
+        player.invisibilityFrame -= dt;
+
+        if(this.distance < this.range && player.invisibilityFrame <=0){
+            this.attack();
+            player.hit(this.attackDamage)
+            player.setInvinsibilityFrame();
         }
     }
 
@@ -267,7 +279,7 @@ class Tree extends Enemy {
 class Turnip extends Enemy {
 
     constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, dropPoints) {
-        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, TURNIP_HP,TURNIP_ATTACK_DAMAGE);
+        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, TURNIP_HP,TURNIP_ATTACK_DAMAGE, TURNIP_RANGE);
         this.setAnimation(TURNIP_IDLE);
         this.factor = 0.5;
         this.height = TURNIP_HEIGHT;
@@ -280,7 +292,7 @@ class Turnip extends Enemy {
         this.setAnimation(TURNIP_BITE);
     }
 
-    update(dt) {
+    update(dt, player) {
         super.update(dt);
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
@@ -293,6 +305,13 @@ class Turnip extends Enemy {
                     this.stop();
                 }
             }
+        }
+
+        player.invisibilityFrame -= dt;
+
+        if(this.distance < this.range && player.invisibilityFrame <=0){
+            player.hit(this.attackDamage)
+            player.setInvinsibilityFrame();
         }
     }
 
@@ -325,11 +344,10 @@ class Turnip extends Enemy {
     }
 }
 
-
 class Dandelion extends Enemy {
 
-    constructor(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, dropPoints) {
-        super(x, y, dirX, dirY, walkAnim, idleAnim, hurtAnim, DANDELION_HP,DANDELION_ATTACK_DAMAGE);
+    constructor(x, y, dirX, dirY, walkAnim, idleAnim, dropPoints) {
+        super(x, y, dirX, dirY, walkAnim, idleAnim, idleAnim, DANDELION_HP,DANDELION_ATTACK_DAMAGE,DANDELION_RANGE);
         this.setAnimation(DANDELION_IDLE);
         this.factor = 0.5;
         this.height = DANDELION_HEIGHT;
@@ -338,23 +356,32 @@ class Dandelion extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    yeet(){
+    attak(){
         this.setAnimation(DANDELION_YEET);
     }
 
-    update(dt) {
+    update(dt, player) {
         super.update(dt);
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
-            if(this.animation == DANDELION_HURT && this.frame == this.animation.length -1){
+            /*if(this.frame == this.animation.length -1){
                 if(this.animationBeforeHit == DANDELION_WALK){
                     this.walk();
                 }else{
                     this.stop();
                 }
-            }
+            }*/
+        }
+
+        // Bloc à ranger correctement
+        player.invisibilityFrame -= dt;
+
+        if(this.distance < this.range && player.invisibilityFrame <=0){
+            this.attak();
+            player.hit(this.attackDamage);
+            player.setInvinsibilityFrame();
         }
     }
 

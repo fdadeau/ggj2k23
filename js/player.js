@@ -17,6 +17,7 @@ const PLAYER_OFFSET_SPEED = 0.05;
 
 const MAX_PITCH = 2000;
 
+const INVISIVILTY_FRAME = 2000;
 
 export default class Player {
 
@@ -126,6 +127,13 @@ export default class Player {
         this.isDrunk = false;
 
         this.hud = new Hud(75);
+
+        /** Invisibilty frame */
+        this.invisibilityFrame = INVISIVILTY_FRAME;
+    }
+
+    setInvinsibilityFrame(){
+        this.invisibilityFrame = INVISIVILTY_FRAME;
     }
 
 
@@ -343,6 +351,14 @@ export default class Player {
         this.isAttacking = true;
         this.setAnimation(this.currentWeapon.use);
         this.currentWeapon.behavior(this,enemies);
+    }
+
+    hit(damage){
+        if(this.health <= 0){
+            return;
+        }
+        this.health -= damage;
+        // TODO : end game
     }
 
     collectPowerUp(powerup) {
