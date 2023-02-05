@@ -16,7 +16,6 @@ const CARROT_SPRITESHEET = new Image();
 CARROT_SPRITESHEET.src = "../data/images/carrot.png";
 const CARROT_HEIGHT = 454 | 0;
 const CARROT_WIDTH = 454;
-let carrotInstance = 0;
 
 const RABBIT_SPRITESHEET = new Image();
 RABBIT_SPRITESHEET.src = "../data/images/rabbit.png";
@@ -26,13 +25,16 @@ const NIBBLE_RABBIT_SPRITESHEET = new Image();
 NIBBLE_RABBIT_SPRITESHEET.src = "../data/images/nibble-rabbit.png";
 const RABBIT_HEIGHT = 454 | 0;
 const RABBIT_WIDTH = 454;
-let rabbitInstance = 0;
 
 const DIALOG_SPRITESHEET = new Image();
 DIALOG_SPRITESHEET.src = "../data/images/dialog.png";
 const DIALOG_HEIGHT = 663 | 0;
 const DIALOG_WIDTH = 663;
-let dialogInstance = 0;
+
+const ROPE_SPRITESHEET = new Image();
+ROPE_SPRITESHEET.src = "../data/images/rope.png";
+const ROPE_HEIGHT = 400 | 0;
+const ROPE_WIDTH = 50;
 
 /**
  * Build a power up of the specified type.
@@ -50,11 +52,13 @@ export function buildPowerUp(type,x,y) {
         case "tequila":
             return new TequilaItem(x, y);
         case "carrot":
-            return new CarrotItem(x, y);
+            return new Carrot(x, y);
         case "rabbit":
             return new Rabbit(x, y);
         case "dialog":
             return new Dialog(x, y);
+        case "rope":
+            return new Rope(x, y);
     }
 }
 
@@ -124,7 +128,7 @@ class TequilaItem extends PowerUp {
     }
 }
 
-class CarrotItem extends PowerUp {
+class Carrot extends PowerUp {
 
     constructor(x, y) {
         super(x, y);
@@ -199,5 +203,29 @@ class Dialog extends PowerUp {
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
         ctx.drawImage(DIALOG_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
+    }
+}
+
+class Rope extends PowerUp {
+
+    constructor(x, y) {
+        super(x, y);
+        this.factor = 1;
+        this.height = ROPE_HEIGHT
+        this.width = ROPE_WIDTH;
+        this.points = 0;
+    }
+
+    update(dt) {
+        super.update(dt);
+    }
+
+    hit() {
+        this.taken = true;
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y) {
+        let sourceX = minX / sizeX * this.width | 0;
+        ctx.drawImage(ROPE_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }

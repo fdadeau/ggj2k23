@@ -3,10 +3,17 @@ const WIDTH = 640;
 /** Screen height */
 const HEIGHT = WIDTH * 10 / 16;
 
+const OUTRO_IMG = new Image();
+OUTRO_IMG.src = "../data/some-outro.png"; // To change
+const OUTRO_HEIGHT = 15200/19 | 0;
+const OUTRO_WIDTH = 800;
+
 export class GUI {
     constructor(loading) {
         this.gameLoading = loading;
         this.gameDead = false;
+        this.gameArrived = false;
+        this.showOutro = false;
     }
 
     /** Loading screen */
@@ -42,6 +49,31 @@ export class GUI {
             ctx.fillStyle = '#FFFFFF';
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2 - 290, HEIGHT/2 + 75);
+        }
+    }
+    
+    arrived(ctx) {
+        if (this.gameArrived == false) {
+            this.gameArrived = true;
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#fff';
+            ctx.font = "35px pixel-bit-advanced";
+            ctx.fillText("You've reached", WIDTH / 2 - 170, HEIGHT/2 - 50);
+            ctx.font = "45px pixel-bit-advanced";
+            ctx.fillText("the surface !", WIDTH / 2 - 200, HEIGHT/2);
+            ctx.font = "23px pixel-bit-advanced";
+            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2 - 300, HEIGHT/2 + 75);
+        }
+    }
+
+    playOutro(ctx) {
+        if (this.showOutro == false) {
+            this.showOutro = true;
+            ctx.drawImage(OUTRO_IMG, 0, 0, OUTRO_WIDTH, OUTRO_HEIGHT);
+            // TODO ?
         }
     }
 }
