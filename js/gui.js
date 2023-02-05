@@ -3,6 +3,8 @@ const WIDTH = 640;
 /** Screen height */
 const HEIGHT = WIDTH * 10 / 16;
 
+
+
 const OUTRO_IMG = new Image();
 OUTRO_IMG.src = "../data/some-outro.png"; // To change
 const OUTRO_HEIGHT = 15200/19 | 0;
@@ -13,6 +15,7 @@ export class GUI {
         this.gameLoading = loading;
         this.gameDead = false;
         this.gameArrived = false;
+        this.showIntro = false;
         this.showOutro = false;
     }
 
@@ -52,6 +55,7 @@ export class GUI {
         }
     }
     
+    /** Winning screen */
     arrived(ctx) {
         if (this.gameArrived == false) {
             this.gameArrived = true;
@@ -69,6 +73,15 @@ export class GUI {
         }
     }
 
+    /** Intro animation */
+    playIntro(ctx) {
+        if (this.showIntro == false) {
+            this.showIntro = true;
+            //ctx.drawImage(OUTRO_IMG, 0, 0, OUTRO_WIDTH, OUTRO_HEIGHT);
+        }
+    }
+
+    /** Outro animation */
     playOutro(ctx) {
         if (this.showOutro == false) {
             this.showOutro = true;

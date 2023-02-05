@@ -30,7 +30,7 @@ export class Game {
     setLoadingProgress(loaded, total) {
         this.loading = { loaded, total };
         if (loaded == total) {
-            this.state = STATES.WAITING_TO_START;
+            this.state = STATES.PLAYING_INTRO; // To change
         }
     }
 
