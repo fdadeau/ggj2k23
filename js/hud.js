@@ -7,37 +7,9 @@ const NB_SLOTS = 7;
 import { data } from "./preload.js";
 
 
-const AXE_IMG = new Image();
-AXE_IMG.src = './data/images/axe.png';
-
-const HEART_IMG = new Image();
-HEART_IMG.src = './data/images/heart.png';
-
-const WHISKY_IMG = new Image();
-WHISKY_IMG.src = './data/images/whisky.png';
-
-const TEQUILA_IMG = new Image();
-TEQUILA_IMG.src = './data/images/tequila.png';
-
-const CARROT_IMG = new Image();
-CARROT_IMG.src = './data/images/carrot.png';
-
-const TIMBER_IMG = new Image();
-TIMBER_IMG.src = './data/images/raymond.png';
-
-const BACKGROUND_IMG = new Image();
-BACKGROUND_IMG.src = './data/textures/wood.png';
-
-const ROOT_IMG = new Image();
-ROOT_IMG.src = './data/hud-roots.png';
-
-const FILTER_SPRITESHEET = new Image();
-FILTER_SPRITESHEET.src = './data/raymon-scar-spritesheet.png';
 const FILTER_HEIGHT = 150/2;
 const FILTER_WIDTH = 75;
 
-const TIMBER_SPRITESHEET = new Image();
-TIMBER_SPRITESHEET.src = "./data/raymond-spritesheet.png"
 const TIMBER_HEIGHT = 375/5;
 const TIMBER_WIDTH = 75;
 const TIMBER_HIT = [0,1,2,1,0];
@@ -61,8 +33,6 @@ export class Hud {
         this.sobriety = 0;
         // Weapon id
         this.weapon = WEAPON_AXE;
-        // lighter
-        this.lighter = 0;
         // Hud Height
         this.height = hudHeight;
         // Number of whisky bottles
@@ -128,17 +98,17 @@ export class Hud {
         ctx.textAlign = "left";
         ctx.fillStyle = '#0000a6';
         ctx.fillRect(0, hudY_origin, cvs.width, this.height);
-        ctx.drawImage(BACKGROUND_IMG, 0, hudY_origin, cvs.width, this.height);
+        ctx.drawImage(data["woodTexture"], 0, hudY_origin, cvs.width, this.height);
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 2;
         //ctx.strokeRect(0, hudY_origin, cvs.width, 0);
 
         // Draw the separators
         let slot = cvs.width / NB_SLOTS;
-        ctx.drawImage(ROOT_IMG, slot-3, hudY_origin + 10,6,60);
-        ctx.drawImage(ROOT_IMG, slot*2-3, hudY_origin + 10,6,60);
-        ctx.drawImage(ROOT_IMG, slot*3-3, hudY_origin + 10,6,60);
-        ctx.drawImage(ROOT_IMG, slot*4-3, hudY_origin + 10,6,60);
+        ctx.drawImage(data["hud-roots"], slot-3, hudY_origin + 10,6,60);
+        ctx.drawImage(data["hud-roots"], slot*2-3, hudY_origin + 10,6,60);
+        ctx.drawImage(data["hud-roots"], slot*3-3, hudY_origin + 10,6,60);
+        ctx.drawImage(data["hud-roots"], slot*4-3, hudY_origin + 10,6,60);
         ctx.fillStyle = '#fff';
         ctx.font = "12pt pixel-bit-advanced";
 
@@ -151,16 +121,16 @@ export class Hud {
         ctx.fillText(this.score, 100, hudY_origin + 55);
 
         // Skin slot
-        ctx.drawImage(TIMBER_SPRITESHEET, 0, ((this.animation[this.frame]) * TIMBER_HEIGHT), TIMBER_WIDTH, TIMBER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
+        ctx.drawImage(data["raymond-spritesheet"], 0, ((this.animation[this.frame]) * TIMBER_HEIGHT), TIMBER_WIDTH, TIMBER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
         
         if(this.health <= 50){
             if(this.health == 0){
                 if(this.animation != TIMBER_DED){
                     this.ded();
                 }
-                ctx.drawImage(FILTER_SPRITESHEET, 0, FILTER_HEIGHT, FILTER_WIDTH, FILTER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
+                ctx.drawImage(data["filter-spritesheet"], 0, FILTER_HEIGHT, FILTER_WIDTH, FILTER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
             }else{
-                ctx.drawImage(FILTER_SPRITESHEET, 0, 0, FILTER_WIDTH, FILTER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
+                ctx.drawImage(data["filter-spritesheet"], 0, 0, FILTER_WIDTH, FILTER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
             }
         }
         
@@ -173,7 +143,7 @@ export class Hud {
 
         // DRaw the carrot if the player have it
         if (this.haveCarrot) {
-            ctx.drawImage(CARROT_IMG, cvs.width - slot / 2, 10, 30, 30);
+            ctx.drawImage(data.carrot, cvs.width - slot / 2, 10, 30, 30);
         }
         
         // Reset the font height
@@ -192,11 +162,11 @@ export class Hud {
                 ctx.drawImage(data.axe, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 break;
             case WEAPON_WHISKY:
-                ctx.drawImage(WHISKY_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                ctx.drawImage(data.whisky, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 ctx.fillText(this.nbWhisky, 248, hudY_origin + 64);
                 break;
             case WEAPON_TEQUILA:
-                ctx.drawImage(TEQUILA_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                ctx.drawImage(data.tequila, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 ctx.fillText(this.nbTequila, 248, hudY_origin + 64);
                 break;
         }
@@ -207,7 +177,7 @@ export class Hud {
         let slot = cvs.width / NB_SLOTS;
         let levelRef;
         let barColor;
-        let image = new Image();
+        let image;
 
         if (type == 'health') {
             height += 10;
@@ -223,17 +193,17 @@ export class Hud {
                 green = 255;
             }
             barColor = 'rgb(' + red + ', ' + green + ', 0)';
-            image.src = './data/images/heart.png';
+            image = data.heart;
         } else {
             height += 45;
             levelRef = this.sobriety;
             // Drunk animation (tequila)
             if (player.isDrunk) {
                 barColor = '#dfe8e8';
-                image.src = './data/images/tequila.png';
+                image = data.tequila;
             } else {
                 barColor = 'rgb(220, 131, 58)';
-                image.src = './data/images/whisky.png';
+                image = data.whisky;
             }
         }
 
@@ -251,10 +221,10 @@ export class Hud {
         ctx.drawImage(image, slot * 6 + 50, height - 5, 30, 30);
     }
 
+
     /**
      * SETTERS
      */
-
     incrementScore(amount) {
         this.score += amount;
     }

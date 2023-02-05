@@ -5,7 +5,6 @@ const SPEED = 0.001;
 const FRAME_DELAY = 100;
 
 
-
 /**
  * Build an enemy of the specified type.
  * @param {string} type Enemy type

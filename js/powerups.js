@@ -1,30 +1,20 @@
-/** CUTE WHISKY */
 
-const WHISKY_SPRITESHEET = new Image();
-WHISKY_SPRITESHEET.src = "./data/images/whisky.png";
+import { data } from "./preload.js";
+
+/** CUTE WHISKY */
 const WHISKY_HEIGHT = 500 | 0;
 const WHISKY_WIDTH = 500;
 
 /** NOT CUTE TEQUILA */
-
-const TEQUILA_SPRITESHEET = new Image();
-TEQUILA_SPRITESHEET.src = "./data/images/tequila.png";
 const TEQUILA_HEIGHT = 500 | 0;
 const TEQUILA_WIDTH = 500;
 
-const CARROT_SPRITESHEET = new Image();
-CARROT_SPRITESHEET.src = "./data/images/carrot.png";
 const CARROT_HEIGHT = 454 | 0;
 const CARROT_WIDTH = 454;
 
-
-const DIALOG_SPRITESHEET = new Image();
-DIALOG_SPRITESHEET.src = "./data/images/dialog.png";
 const DIALOG_HEIGHT = 663 | 0;
 const DIALOG_WIDTH = 663;
 
-const ROPE_SPRITESHEET = new Image();
-ROPE_SPRITESHEET.src = "./data/images/rope.png";
 const ROPE_HEIGHT = 400 | 0;
 const ROPE_WIDTH = 50;
 
@@ -94,7 +84,7 @@ class WhiskyItem extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-        ctx.drawImage(WHISKY_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
+        ctx.drawImage(data["whisky"], sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
 
@@ -114,7 +104,7 @@ class TequilaItem extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-        ctx.drawImage(TEQUILA_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
+        ctx.drawImage(data["tequila"], sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
 
@@ -134,42 +124,10 @@ class Carrot extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-        ctx.drawImage(CARROT_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
+        ctx.drawImage(data["carrot"], sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
 
-class Rabbit extends PowerUp {
-
-    constructor(x, y) {
-        super(x, y);
-        this.factor = 0.25;
-        this.decalage = 800;
-        this.height = RABBIT_HEIGHT + this.decalage;
-        this.width = RABBIT_WIDTH;
-        this.points = 0;
-        this.killer = false;
-        this.nibble = false;
-    }
-
-    update(dt) {
-        super.update(dt);
-    }
-
-    hit() {
-        this.killer = true;
-    }
-
-    render(ctx, minX, maxX, sizeX, sizeY, x, y) {
-        let sourceX = minX / sizeX * this.width | 0;
-        if (this.killer) {
-            ctx.drawImage(KILLER_RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
-        } else if (this.nibble) {
-            ctx.drawImage(NIBBLE_RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
-        } else {
-            ctx.drawImage(RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
-        }
-    }
-}
 
 class Dialog extends PowerUp {
 
@@ -216,6 +174,6 @@ class Rope extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-        ctx.drawImage(ROPE_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
+        ctx.drawImage(data["rope"], sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }

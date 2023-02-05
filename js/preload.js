@@ -10,6 +10,8 @@ const data = {
     "turnip-spritesheet": "./data/turnip-spritesheet.png",
     "dandelion-spritesheet": "./data/dandelion-spritesheet.png",
     "rabbit-spritesheet": "./data/rabbit-spritesheet.png",
+    "filter-spritesheet": "./data/raymon-scar-spritesheet.png",
+    "raymond-spritesheet": "./data/raymond-spritesheet.png",
 
     // images
     "wood": "./data/textures/wood.png",
@@ -17,8 +19,10 @@ const data = {
     "axe": "./data/images/axe.png",
     "heart": "./data/images/heart.png",
     "tequila": "./data/images/tequila.png",
-    "timber": "./data/images/timber.jpeg",
+    "timber": "./data/images/raymond.png",
     "whisky": "./data/images/whisky.png",
+    "carrot": "./data/images/carrot.png",
+    "rope": "./data/images/rope.png",
 
     // lighter
     "lighter1": "./data/lighter-spritesheet.png",

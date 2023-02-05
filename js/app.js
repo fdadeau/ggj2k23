@@ -78,6 +78,9 @@ document.addEventListener("DOMContentLoaded", async function() {
             micro.start();
         } 
         await document.getElementById("cvs").requestFullscreen();
+        if (game.state == STATES.PLAYING && !document.pointerLockElement) {
+            document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
+        }
     });
 
     document.addEventListener("wheel", function(e) {
