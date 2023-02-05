@@ -90,7 +90,7 @@ export default class Player {
             if(player.nbTequila == 0){
                 return;
             }
-
+            player.isDrunk = true;
             player.sobriety += 10;
             player.nbTequila--;
         }.bind(this.weapons[1]);
@@ -104,10 +104,10 @@ export default class Player {
         // Axe
         this.weapons[2].behavior = function(player, enemies) {
             enemies.forEach(function(e) {
-                if(e.distance <= player.currentWeapon.range && e.hit != undefined){{
+                if(e.distance <= player.currentWeapon.range){
                     e.hit(player.currentWeapon.damage);
-                    player.score += e.dropPoints;
-                }}
+                    player.score += e.dropPoints ?? 0;
+                }
             },this);
         }.bind(this.weapons[2]);
 
@@ -120,13 +120,16 @@ export default class Player {
         this.isAttacking = false;
 
         /** Consumable */
-        this.nbWhisky = 0;
-        this.nbTequila = 0;
+        this.nbWhisky = 3;
+        this.nbTequila = 3;
 
         /** Tells if the player is drunk or not */
         this.isDrunk = false;
 
         this.hud = new Hud(75);
+
+        /** Time when the player is drunk */
+        this.drunkTime = 10000;
     }
 
 
@@ -241,6 +244,15 @@ export default class Player {
         this.lighter.update(dt);
 
         this.collectPowerUp(enemies);
+
+        // Drunk time
+        if (this.isDrunk) {
+            this.drunkTime -= dt;
+            if (this.drunkTime <= 0) {
+                this.isDrunk = false;
+                this.drunkTime = 10000;
+            }
+        }
     }
 
     isStillOnMap(map, x, y) {
