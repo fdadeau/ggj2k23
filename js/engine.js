@@ -1,5 +1,5 @@
 /**
- *  3D-rendering engine based on raycasting solution.
+ *  2.5D-rendering engine based on raycasting solution.
  *  Built using Lode's tutorial on raycasting (https://lodev.org/cgtutor/raycasting.html, parts 1, 2, 3, 4)
  *  and F. Permadi seminal tutorial (http://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/)
  */
@@ -10,6 +10,8 @@
 const WIDTH = 640;
 /** Screen height */
 const HEIGHT = WIDTH * 10 / 16;
+
+const DEBUG = false;
 
 import { STATES } from "./game.js";
 
@@ -105,8 +107,9 @@ export class Engine {
 
         // print framerate & debug info
         this.ctx.fillStyle = "white";
-        //this.ctx.fillText(this.framerate, 10, 10);
-        //this.ctx.fillText(game.player.getInfos(), 10, 20);
+
+        DEBUG && this.ctx.fillText(this.framerate, 10, 10);
+        DEBUG && this.ctx.fillText(game.player.getInfos(), 10, 20);
     }
 
 

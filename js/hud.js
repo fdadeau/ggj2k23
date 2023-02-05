@@ -125,6 +125,7 @@ export class Hud {
         let hudY_origin = cvs.height - this.height;
        
         // Draw the window
+        ctx.textAlign = "left";
         ctx.fillStyle = '#0000a6';
         ctx.fillRect(0, hudY_origin, cvs.width, this.height);
         ctx.drawImage(BACKGROUND_IMG, 0, hudY_origin, cvs.width, this.height);

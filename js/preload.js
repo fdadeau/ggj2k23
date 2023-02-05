@@ -20,7 +20,6 @@ const data = {
     // lighter
     "lighter1": "./data/lighter-spritesheet.png",
     "lighter2": "./data/blow-spritesheet.png",
-
     "fire1": "./data/images/fire1.png",
     "fire2": "./data/images/fire2.png",
     "fire3": "./data/images/fire3.png",
@@ -39,6 +38,21 @@ const data = {
     // musics
     "ingame1": "./data/sounds/Musique_Calme_V3.mp3",
     "ingame2": "./data/sounds/Musique_dynamique_V3.mp3",
+    
+    // Titles, buttons and cinematics
+    "titleScreen": "./data/title-screen.png",
+    "woodTexture" : "./data/textures/wood.png",
+    // 
+    "logoGGJ": "./data/logoGGJ.png",
+    "intro1": "./data/cinematics/intro-1.png",
+    "intro2": "./data/cinematics/intro-2.png",
+    "intro3": "./data/cinematics/intro-3.png",
+    "intro4": "./data/cinematics/intro-4.png",
+    "intro5": "./data/cinematics/intro-5.png",
+    "intro6": "./data/cinematics/intro-6.png",
+    "intro7": "./data/cinematics/intro-7.png",
+    // outro
+    // TO COME
 
     // Sounds
     "axeSound": "./data/sounds/axe.mp3",

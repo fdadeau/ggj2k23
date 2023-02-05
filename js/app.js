@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     document.addEventListener("click", function(e) {
         e.preventDefault();
         if (game.state == STATES.TITLE) {
-            var rect = document.querySelector("canvas").getBoundingClientRect();
+            var rect = canvas.getBoundingClientRect();
             let clicX = (e.clientX - rect.left) * 640 / rect.width;
             let clicY = (e.clientY - rect.top) * 400 / rect.height;
             game.gui.clickButton(clicX, clicY);
