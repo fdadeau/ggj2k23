@@ -78,6 +78,16 @@ document.addEventListener("DOMContentLoaded", async function() {
             await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
         }
     });
+
+    document.addEventListener("wheel", function(e) {
+        if (e.deltaY > 0) {
+            game.player.switchToNextWeapon(-1);
+        }
+        else if (e.deltaY < 0) {
+            game.player.switchToNextWeapon(1);
+        }
+    });
+
     document.addEventListener("mousemove", function(e) {
         let dX = e.movementX;
         let dY = e.movementY;
