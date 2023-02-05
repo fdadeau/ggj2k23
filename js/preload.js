@@ -6,6 +6,7 @@ const data = {
     "lighter-spritesheet": "../data/lighter-spritesheet.png",
     "tree-spritesheet": "../data/tree-spritesheet.png",
     "whisky-spritesheet": "../data/whisky-spritesheet.png",
+    "tequila-spritesheet": "../data/tequila-spritesheet.png",
 
     // images
     "wood": "../data/wood.png",
@@ -29,6 +30,9 @@ const data = {
     "wall2": "../data/textures/wall2.png",
     "wall3": "../data/textures/wall3.png",
     "wall4": "../data/textures/wall4.png",
+    "wall5": "../data/textures/wall5.png",
+    "wall6": "../data/textures/wall6.png",
+    "wall7": "../data/textures/wall7.png",
     "wall_diagonal": "../data/textures/wall_diagonal.png",
     "floor": "../data/textures/floor.png",
 

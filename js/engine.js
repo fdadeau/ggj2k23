@@ -29,28 +29,16 @@ export class Engine {
         
         /** Framerate information */
         this.framerate = 60;
+    }
 
+    initialize() {
         /** Set of textures */
         this.textures = initTextures();
         /** Depth of different x walls */
         this.zBuffer = [];
     }
 
-    /**
-     * Evaluate the brightness % w.r.t. the distance
-     * @param {Number} dist the distance in the world
-     * @returns {Number} a real between 0 (dark) and 1 (light)
-     */
-    brightnessForDistance(dist, max) {
-        const min = 1;
-        if (dist > max) {
-            return 0;
-        }
-        if (dist < min) {
-            return 1;
-        }
-        return 1 - ((dist-min) / (max-min));
-    }
+
 
     /**
      * Main function used to render the game state
@@ -63,15 +51,29 @@ export class Engine {
             this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
             this.ctx.fillStyle = '#FFFFFF';
             this.ctx.font = "18px ka1";
-            this.ctx.fillText(`Loading assets: ${game.loading.loaded}/${game.loading.total}`, WIDTH / 2 - 100, HEIGHT/2 - 9);
+            this.ctx.fillText(`Loading assets: ${game.loading.loaded * 100 / game.loading.total | 0} percent...`, WIDTH / 2 - 200, HEIGHT/2 - 9);
             return;
         }
 
-        if (game.state == STATES.PLAYING && game.on2D) {
+        if (game.state == STATES.WAITING_TO_START) {
+            this.ctx.fillStyle = '#000000';
+            this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            this.ctx.fillStyle = '#FFFFFF';
+            this.ctx.font = "18px ka1";
+            this.ctx.fillText("Double click to start", WIDTH / 2 - 200, HEIGHT/2 - 9);
+            return;
+        }
+
+
+        if (game.state != STATES.PLAYING) {
+            return;
+        }
+
+        if (game.on2D) {
             this.render2D(game);
             return;
         }
-        
+
         // generate the floor and ceiling
         this.floorCasting(game);
         // 
@@ -247,7 +249,7 @@ export class Engine {
             this.zBuffer[x] = perpWallDist;
 
             // adjust brightness
-            let b = this.brightnessForDistance(perpWallDist, game.player.lighter.getLight());
+            let b = brightnessForDistance(perpWallDist, game.player.lighter.getLight());
 
             //Calculate height of line to draw on screen
             let lineHeight = Math.floor(H / perpWallDist);
@@ -330,7 +332,7 @@ export class Engine {
             let floorX = game.player.posX + rowDistance * rayDirX0;
             let floorY = game.player.posY + rowDistance * rayDirY0;
 
-            let b = this.brightnessForDistance(rowDistance, game.player.lighter.getLight());
+            let b = brightnessForDistance(rowDistance, game.player.lighter.getLight());
 
             for(let x = 0; x < W; ++x) {
                 // the cell coord is simply got from the integer parts of floorX and floorY
@@ -394,7 +396,7 @@ export class Engine {
                 return;
             }
 
-            let br = that.brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY), game.player.lighter.getLight());
+            let br = brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY), game.player.lighter.getLight());
 
             if (br == 0) {
                 return;
@@ -642,6 +644,23 @@ function intersection(p0, p1, p2, p3) {
     return null;
 }
 
+/**
+ * Evaluate the brightness % w.r.t. the distance
+ * @param {Number} dist the distance in the world
+ * @returns {Number} a real between 0 (dark) and 1 (light)
+ */
+function brightnessForDistance(dist, max) {
+    const min = 1;
+    if (dist > max) {
+        return 0;
+    }
+    if (dist < min) {
+        return 1;
+    }
+    return 1 - ((dist-min) / (max-min));
+}
+
+
 /** Textures from the tutorial */
 
 const texWidth = 64;
@@ -656,6 +675,9 @@ function initTextures() {
     textures[1] = loadTexture(data.wall2);
     textures[2] = loadTexture(data.wall3);
     textures[3] = loadTexture(data.wall4);
+    textures[4] = loadTexture(data.wall5);
+    textures[5] = loadTexture(data.wall6);
+    textures[6] = loadTexture(data.wall7);
     
     textures[9] = loadTexture(data.wall_diagonal);
     

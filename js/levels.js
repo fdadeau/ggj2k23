@@ -3,6 +3,9 @@ import { buildEnemy } from "./enemies.js";
 
 import { buildPowerUp } from "./powerups.js";
 
+const NB_WALL_TEXTURES = 7;
+
+
 const MAP0 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,2,0,0,0,0,0,1],
@@ -174,7 +177,7 @@ function mkTextures(m) {
     for (let i=0; i < m.length; i++) {
         r[i] = [];
         for (let j=0; j < m[i].length; j++) {
-            r[i][j] = [Math.random() * 4 | 0, Math.random() * 4 | 0, Math.random() * 4 | 0, Math.random() * 4 | 0];
+            r[i][j] = [Math.random() * NB_WALL_TEXTURES | 0, Math.random() * NB_WALL_TEXTURES | 0, Math.random() * NB_WALL_TEXTURES | 0, Math.random() * NB_WALL_TEXTURES | 0];
         }
     } 
     return r;

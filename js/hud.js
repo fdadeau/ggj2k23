@@ -118,7 +118,7 @@ export class Hud {
     drawWeapon(ctx, hudY_origin, id){
         switch(id){
             case WEAPON_AXE:
-                ctx.drawImage(AXE_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
+                ctx.drawImage(data.axe, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 break;
             case WEAPON_WHISKY:
                 ctx.drawImage(WHISKY_IMG, 200, hudY_origin + 5, this.height - 10, this.height - 10);
@@ -129,10 +129,6 @@ export class Hud {
                 ctx.fillText(this.nbTequila, 248, hudY_origin + 64);
                 break;
         }
-    }
-
-    drawLighter(ctx) {
-
     }
 
 

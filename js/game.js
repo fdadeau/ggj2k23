@@ -6,7 +6,7 @@ import { levels } from "./levels.js";
 import { data } from "./preload.js";
 
 /** Game states */
-export const STATES = { LOADING: 0, PLAYING: 1, PAUSED: 2 };
+export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5 };
 
 export class Game {
 
@@ -25,9 +25,13 @@ export class Game {
     setLoadingProgress(loaded, total) {
         this.loading = { loaded, total };
         if (loaded == total) {
-            this.loadLevel("tree");
-            this.state = STATES.PLAYING;
+            this.state = STATES.WAITING_TO_START;
         }
+    }
+
+    start() {
+        this.loadLevel("tree");
+        this.state = STATES.PLAYING;
     }
 
     loadLevel(id) {
@@ -37,13 +41,15 @@ export class Game {
         this.player.initialize(levelData.player.posX, levelData.player.posY, levelData.player.dirX, levelData.player.dirY);
         this.map = levelData.map;
         this.textures = levelData.textures;
-
         this.audio = data.ingame1;
         this.audio.loop = 1;
         this.audio.play();
     }
 
     update(dt) {
+        if (this.state != STATES.PLAYING) {
+            return false;
+        }
         this.enemies.forEach((e,player) => {
             e.update(dt,this.player);   // TODO add player for detecting collisions?
         });
@@ -55,6 +61,9 @@ export class Game {
    
     // Commands
     press(key) {
+        if (this.state != STATES.PLAYING) {
+            return;
+        }
         switch (key) {
             case 'ArrowUp': 
             case 'KeyW':
@@ -117,6 +126,9 @@ export class Game {
         }
     }
     release(key) {
+        if (this.state != STATES.PLAYING) {
+            return;
+        }
         switch (key) {
             case 'KeyW':
             case 'KeyS':
@@ -139,6 +151,9 @@ export class Game {
         }
     }
     mouseMove(dx, dy) {
+        if (this.state != STATES.PLAYING) {
+            return;
+        }
         this.player.moveHead(dx,dy*this.inverted);
     }
 

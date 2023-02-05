@@ -1,12 +1,9 @@
-import { buildWeapon } from "./weapons.js";
+import { buildWeapon, Lighter } from "./weapons.js";
 
 import { Hud } from "./hud.js";
 
-import { data } from "./preload.js";
 
 const FRAME_DELAY = 100;
-
-const WIDTH = 640, HEIGHT = 480;
 
 
 /***
@@ -271,11 +268,23 @@ export default class Player {
     }
 
     isStillOnMap(map, x, y) {
-        return map[x | 0][y | 0] === 0 &&
-            map[x - 0.25 | 0][y | 0] === 0 &&
-            map[x + 0.25 | 0][y | 0] === 0 &&
-            map[x | 0][y - 0.25 | 0] === 0 &&
-            map[x | 0][y + 0.25 | 0] === 0;
+        return this.isOnEmptyTile(map, x, y) &&
+        this.isOnEmptyTile(map, x-0.25, y-0.25) &&
+        this.isOnEmptyTile(map, x-0.25, y+0.25) &&
+        this.isOnEmptyTile(map, x+0.25, y-0.25) &&
+        this.isOnEmptyTile(map, x+0.25, y+0.25);
+    }
+    isOnEmptyTile(map, x, y) {
+        let tileX = x | 0, tileY = y | 0;
+        let inTileX = x - tileX, inTileY = y - inTileX;
+        //if (inTileX < 0) { inTileX *= -1; }
+        //if (inTileY < 0) { inTileY *= -1; }
+        if (map[tileX][tileY] == 1) { return false; }
+        if (map[tileX][tileY] == 2 && inTileX < inTileY) { return false; }
+        if (map[tileX][tileY] == 3 && inTileY < -inTileX) { return false; }
+        if (map[tileX][tileY] == 4 && inTileX < -inTileY) { return false; }
+        if (map[tileX][tileY] == 5 && inTileY < inTileX) { return false; }
+        return true;
     }
 
     moveHead(dx, dy) {
@@ -421,124 +430,3 @@ export default class Player {
     }
 }
 
-
-/***
- * LIGHTER
- */
-
-const FIRE_SPEED = 0.01;
-
-const LIGHTER_OFF = 0, LIGHTER_ON = 1, LIGHTER_BLOW = 2;
-
-const FIRE_ANIMATION_DELAY = 200;
-
-const INTERSHOT_DELAY = 200;
-
-const SIZES = [100, 120, 140, 150, 160, 165, 170, 175, 160, 150, 145, 140, 135, 120, 115, 100, 80, 50];
-
-const SPRITE_ANIM_DELAY = 100;
-const SPRITE_WIDTH = 1000;
-const SPRITE_HEIGHT = 2800 / 4;
-const SPRITE_ANIM_NB = 4;
-
-class Lighter {
-
-    constructor(player) {
-        this.state = LIGHTER_OFF;
-        this.player = player;
-        this.shots = [];
-        this.lastShot = 0;
-        this.blowing = false;
-        this.player = player;
-        this.frame = 0;
-        this.frameDelay = SPRITE_ANIM_DELAY;
-    }
-
-    update(dt) {
-        this.shots = this.shots.filter(s => {
-            s.x += dt * s.dirX * FIRE_SPEED;
-            s.y += dt * s.dirY * FIRE_SPEED;
-            s.delay -= dt;
-            if (s.delay < 0) {
-                // change size
-                s.cycle++;
-                s.image = data["fire" + (Math.random() * 3 + 1 | 0)];
-                s.delay = FIRE_ANIMATION_DELAY;
-                s.offsetX = Math.random() * 40 - 20 | 0;
-                s.offsetY = Math.random() * 40 - 20 | 0;
-            }
-            return s.cycle < SIZES.length;
-        });
-        this.frameDelay -= dt;
-        if (this.frameDelay < 0) {
-            if (this.frame < 2 || this.state != LIGHTER_BLOW) {
-                this.frame = (this.frame + 1) % SPRITE_ANIM_NB;
-            }
-            this.frameDelay = SPRITE_ANIM_DELAY;
-        }
-        this.lastShot += dt;
-        if (this.blowing && this.lastShot > INTERSHOT_DELAY) {
-            this.lastShot = 0;
-            this.addShot();
-        }
-    }
-
-
-    getLight() {
-        if (this.shots.length > 0) {
-            return 10;
-        } 
-        if (this.state > LIGHTER_OFF) {
-            return 4;
-        }
-        return 2;
-    }
-
-
-    toggle() {
-        this.state = (this.state == LIGHTER_OFF) ? LIGHTER_ON : LIGHTER_OFF;
-        this.frame = 0;
-    }
-
-    isVisible() {
-        return this.state > LIGHTER_OFF;
-    }
-
-    blow(b) {
-        this.state = b ? LIGHTER_BLOW : LIGHTER_ON;
-        this.frame = 0;
-    }
-
-    startBlowing() {
-        if (this.state == LIGHTER_BLOW) {
-            this.blowing = true;
-        }
-    }
-    stopBlowing() {
-        this.blowing = false;
-    }
-
-    addShot() {
-        this.shots.push({ 
-            x: this.player.posX + this.player.dirX * 0.2, 
-            y: this.player.posY + this.player.dirY * 0.2, 
-            dirX: this.player.dirX, 
-            dirY: this.player.dirY,
-            delay: FIRE_ANIMATION_DELAY,
-            cycle: 0,
-            image: data["fire" + (Math.random() * 3 + 1 | 0)],
-            offsetX: Math.random() * 40 - 20 | 0,
-            offsetY: Math.random() * 40 - 20 | 0
-        });
-    }
-
-    render(ctx) {
-        this.shots.forEach(s => {
-            ctx.drawImage(s.image, WIDTH/2 - SIZES[s.cycle]/2 + s.offsetX | 0, HEIGHT / 2 - SIZES[s.cycle] + s.offsetY | 0, SIZES[s.cycle]*1.5, SIZES[s.cycle]*1.5);
-        });
-        if (this.state > LIGHTER_OFF) {
-            ctx.drawImage((this.state == LIGHTER_ON) ? data.lighter1 : data.lighter2, 0, this.frame * SPRITE_HEIGHT, SPRITE_WIDTH, SPRITE_HEIGHT, -150, this.state == LIGHTER_ON ? 70 : 100, 500, 350);
-        }
-    }
-
-}

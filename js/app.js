@@ -1,4 +1,4 @@
-import { Game } from "./game.js";
+import { Game, STATES } from "./game.js";
 import { Engine } from "./engine.js";
 import { MicrophoneController } from "./microphone-controller.js";
 
@@ -14,22 +14,16 @@ document.addEventListener("DOMContentLoaded", async function() {
     const canvas = document.getElementById("cvs");
     // Game itself 
     const game = new Game();
-
+    // 2.5D engine
+    const engine = new Engine(canvas);
+    // microphone controller
     const micro = new MicrophoneController();
 
     // preloading... (async)
-    try {
-        await preload((loaded, total) => { game.setLoadingProgress(loaded, total); });
-    }
-    catch (err) {
-        console.error(err);
-        document.body.innerHTML = err;
-        return;
-    }
+    const loader = new Promise(function(resolve, reject) {
+        preload((loaded, total) => { game.setLoadingProgress(loaded, total); });
+    });
 
-    // 2.5D engine
-    const engine = new Engine(canvas);
-    
 
     if (localStorage.getItem(STORAGE_KEY_MOUSE)) {
         game.inverted = 1*localStorage.getItem(STORAGE_KEY_MOUSE);
@@ -48,19 +42,21 @@ document.addEventListener("DOMContentLoaded", async function() {
         game.release(e.code);
     });
     document.addEventListener("click", function(e) {
-        if (document.pointerLockElement && e.button == 0) {
-            game.press("KeyE");
-        }
+        e.preventDefault();
+        return false;
     });
     document.addEventListener("mousedown", function(e) {
+        e.preventDefault();
         if (e.button == 2) {
-            e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             game.press("KeyL");
-            return false;
         }
-    })
+        else if (document.pointerLockElement && e.button == 0) {
+            game.press("KeyE");
+        }
+        return false;
+    }, true)
     document.addEventListener("mouseup", function(e) {
         if (e.button == 2) {
             e.preventDefault();
@@ -69,15 +65,18 @@ document.addEventListener("DOMContentLoaded", async function() {
             game.release("KeyL");
             return false;
         }
-    })
+    }, true);
     // Double click --> switch to full screen + mouse pointer lock
     document.addEventListener("dblclick", async function(e) {
+        if (game.state == STATES.WAITING_TO_START) {
+            engine.initialize();
+            micro.start();
+            game.start();
+        } 
         await document.getElementById("cvs").requestFullscreen();
-        micro.start();
         if (!document.pointerLockElement) {
             await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
         }
-
     });
     document.addEventListener("mousemove", function(e) {
         let dX = e.movementX;
