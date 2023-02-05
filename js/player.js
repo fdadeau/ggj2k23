@@ -345,18 +345,21 @@ export default class Player {
         this.hud.equipeTequila();
     }
 
-    switchToNextWeapon(){
+    switchToNextWeapon(next){
         if(this.isAttacking) {
             return -1;
         }
         let id = this.weapons.lastIndexOf(this.currentWeapon);
-        let newWeapon = (id+1)%this.weapons.length;
+        let newWeapon = (id+next)%this.weapons.length;
 
         if(newWeapon == 0 && this.nbWhisky <= 0){
-            newWeapon = (newWeapon+1)%this.weapons.length;
+            newWeapon = (newWeapon+next)%this.weapons.length;
         }
         if(newWeapon == 1 && this.nbTequila <= 0){
-            newWeapon = (newWeapon+1)%this.weapons.length;
+            newWeapon = (newWeapon+next)%this.weapons.length;
+        }
+        if(newWeapon < 0){
+            newWeapon = 2;
         }
         
         this.currentWeapon = this.weapons[newWeapon];
