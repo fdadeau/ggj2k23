@@ -276,6 +276,10 @@ const ENEMIES3 = function() {
 };
 
 
+const ENEMIES_TEST = function() {
+    const tree = buildEnemy("dandelion", 3.5, 2.5, 1, 0);
+    return [tree];
+};
 
 
 export const levels = {
@@ -296,7 +300,7 @@ export const levels = {
         player: { posX: 2.5, posY: 2.5, dirX: 1, dirY: 0 },
         map: invert(MAP1),
         textures: mkTextures(invert(MAP0)),
-        enemies: () => []
+        enemies: ENEMIES_TEST
     }
 
 }

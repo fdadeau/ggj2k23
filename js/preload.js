@@ -38,8 +38,16 @@ const data = {
 
     // musics
     "ingame1": "../data/sounds/Musique_Calme_V3.mp3",
-    "ingame2": "../data/sounds/Musique_dynamique_V3.mp3"
+    "ingame2": "../data/sounds/Musique_dynamique_V3.mp3",
 
+    // Sounds
+    "axeSound": "../data/sounds/axe.mp3",
+    "drinkSound": "../data/sounds/glou.mp3",
+    "drinkEndSound": "../data/sounds/huu.mp3",
+    "walkSound": "../data/sounds/walk.mp3",
+    "woodSound": "../data/sounds/wood.mp3",
+    "yeetBottleSound": "../data/sounds/yeetBottle.mp3",
+    "hitPlayerSound": "../data/sounds/roblox-death-sound-effect-bis.mp3"
 }
 
 /***

@@ -1,5 +1,5 @@
 
-import {data} from "./preload.js";
+import {data, preload} from "./preload.js";
 
 const WIDTH = 640, HEIGHT = 480;
 
@@ -77,6 +77,11 @@ class Consumable extends Weapon{
 
     setDelay(){
         this.delay = CONSUME_DELAY;
+        data['drinkSound'].play();
+        if(!data['drinkSound'].paused){
+            data['drinkSound'].currentTime = 0;
+            data['drinkSound'].play();
+        }
     }
 
     update(dt, player, enemies){
@@ -123,6 +128,11 @@ class Axe extends Weapon{
 
     setDelay(){
         this.delay = AXE_DELAY;
+        data['axeSound'].play();
+        if(!data['axeSound'].paused){
+            data['axeSound'].currentTime = 0;
+            data['axeSound'].play();
+        }
     }
 
     update(dt, player, enemies){

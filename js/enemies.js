@@ -133,7 +133,6 @@ class Enemy {
             }
         }
 
-        player.invisibilityFrame -= dt;
         player.lighter.shots.forEach(function(s) {
             let dX = s.x - this.x;
             let dY = s.y - this.y;
@@ -145,10 +144,13 @@ class Enemy {
             }
         }.bind(this));
 
-        if(this.distance < this.range && player.invisibilityFrame <=0 && this.health > 0){
-            this.attack();
-            player.hit(this.attackDamage)
-            player.setInvinsibilityFrame();
+        
+        if(this.distance < this.range){
+            if(player.invisibilityFrame <=0 && this.health > 0){
+                this.attack();
+                player.hit(this.attackDamage)
+                player.setInvinsibilityFrame();
+            }
         }
     }
 

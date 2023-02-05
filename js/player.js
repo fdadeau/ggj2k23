@@ -2,6 +2,8 @@ import { buildWeapon, Lighter } from "./weapons.js";
 
 import { Hud } from "./hud.js";
 
+import {data, preload} from "./preload.js";
+
 
 const FRAME_DELAY = 100;
 
@@ -78,6 +80,8 @@ export default class Player {
         }.bind(this.weapons[0]);
 
         this.weapons[0].afterAnimation = function(player) {
+            data['drinkEndSound'].volume = 0.25;
+            data['drinkEndSound'].play();
             if(player.nbWhisky == 0){
                 player.equipeAxe();
             }
@@ -94,6 +98,8 @@ export default class Player {
         }.bind(this.weapons[1]);
 
         this.weapons[1].afterAnimation = function(player) {
+            data['drinkEndSound'].volume = 0.25;
+            data['drinkEndSound'].play();
             if(player.nbTequila == 0){
                 player.equipeAxe();
             }
@@ -275,6 +281,8 @@ export default class Player {
 
         this.lighter.update(dt);
 
+        this.invisibilityFrame -= dt;
+
         this.collectPowerUp(enemies);
 
         // Drunk time
@@ -319,11 +327,13 @@ export default class Player {
     }
 
     stop1() {
+        data['walkSound'].pause();
         this.speed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
 
     stop2() {
+        data['walkSound'].pause();
         this.translSpeed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
@@ -331,11 +341,14 @@ export default class Player {
     walk(dir) {
         this.speed = PLAYER_MOVEMENT_SPEED * dir;
         this.offSpeed = PLAYER_OFFSET_SPEED * 2;
-
+        data['walkSound'].loop = true;
+        data['walkSound'].play();
     }
 
     strafe(dir) {
         this.translSpeed = PLAYER_ROTATION_SPEED * dir;
+        data['walkSound'].loop = true;
+        data['walkSound'].play();
     }
     
     equipeAxe(){
@@ -414,6 +427,7 @@ export default class Player {
         }
         this.health -= damage;
         this.hud.hitAnimation();
+        data['hitPlayerSound'].play();
     }
 
     collectPowerUp(powerup) {
