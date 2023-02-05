@@ -26,7 +26,7 @@ const TIMBER_IMG = new Image();
 TIMBER_IMG.src = '../data/images/raymond.png';
 
 const BACKGROUND_IMG = new Image();
-BACKGROUND_IMG.src = '../data/images/wood.png';
+BACKGROUND_IMG.src = '../data/textures/wood.png';
 
 const ROOT_IMG = new Image();
 ROOT_IMG.src = '../data/hud-roots.png';

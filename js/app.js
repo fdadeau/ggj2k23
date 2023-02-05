@@ -43,6 +43,10 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
     document.addEventListener("click", function(e) {
         e.preventDefault();
+        var rect = document.querySelector("canvas").getBoundingClientRect();
+        let clicX = (e.clientX - rect.left) * 640 / rect.width;
+        let clicY = (e.clientY - rect.top) * 400 / rect.height;
+        game.gui.clickButton(clicX, clicY);
         return false;
     });
     document.addEventListener("mousedown", function(e) {
@@ -69,14 +73,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     // Double click --> switch to full screen + mouse pointer lock
     document.addEventListener("dblclick", async function(e) {
         if (game.state == STATES.WAITING_TO_START) {
+            game.state = STATES.TITLE;
             engine.initialize();
             micro.start();
-            game.start();
         } 
         await document.getElementById("cvs").requestFullscreen();
-        if (!document.pointerLockElement) {
-            await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
-        }
     });
 
     document.addEventListener("wheel", function(e) {

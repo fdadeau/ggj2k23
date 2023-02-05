@@ -8,7 +8,7 @@ import { data } from "./preload.js";
 import { GUI } from "./gui.js";
 
 /** Game states */
-export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6, ARRIVED: 7 };
+export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6, ARRIVED: 7, TITLE: 8 };
 
 export class Game {
 
@@ -23,14 +23,14 @@ export class Game {
         this.enemies = [];
         this.player;
 
-        this.gui = new GUI(this.loading);
+        this.gui = new GUI(this);
         this.currentLevel = 'tree';
     }
 
     setLoadingProgress(loaded, total) {
         this.loading = { loaded, total };
         if (loaded == total) {
-            this.state = STATES.PLAYING_INTRO; // To change
+            this.state = STATES.WAITING_TO_START;
         }
     }
 
@@ -49,6 +49,9 @@ export class Game {
     start() {
         this.loadLevel();
         this.state = STATES.PLAYING;
+        if (!document.pointerLockElement) {
+            document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
+        }
     }
 
     loadLevel() {
@@ -162,6 +165,7 @@ export class Game {
 
     resetGame() {
         this.gui.gameDead = false;
+        this.state = STATES.PLAYING;
         this.start();
     }
 
