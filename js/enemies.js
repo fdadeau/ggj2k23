@@ -226,7 +226,6 @@ class Tree extends Enemy {
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
-            console.log(this.animation[this.frame])
             /*if(this.animation == TREE_HURT && this.frame == this.animation.length -1){
                 if(this.animationBeforeHit == TREE_WALK){
                     this.walk();
@@ -252,9 +251,14 @@ class Tree extends Enemy {
         
         let sourceX = minX / sizeX * this.width | 0;
         let width = (maxX - minX) / sizeX * this.width | 0;
-        let dec = 3;
+
+        let dec = 0;
         
-        if(this.animation != TREE_HURT){
+        
+        if(this.animation != TREE_HURT && this.animation != TREE_PUNCH){
+
+            dec = 3;
+            
             if (angle >= 45 && angle < 135) {
                 dec = 1;
             }
@@ -264,8 +268,6 @@ class Tree extends Enemy {
             else if (angle >= 225 && angle < 315) {
                 dec = 0;
             } 
-        }else{
-            dec = 0;
         }
         
         ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
