@@ -33,6 +33,12 @@ export class Game {
         }
     }
 
+    lookDead() {
+        if (this.state == STATES.PLAYING && this.player.health <= 0) {
+            this.state = STATES.DEAD;
+        }
+    }
+
     start() {
         this.loadLevel("tree");
         this.state = STATES.PLAYING;

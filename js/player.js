@@ -137,9 +137,6 @@ export default class Player {
         this.haveCarrot = false;
         /** Tells if the rabbit have received the carrot */
         this.giveCarrot = false;
-
-        /** Tells if the player is dead */
-        this.isDead = false;
     }
     
     setInvinsibilityFrame(){

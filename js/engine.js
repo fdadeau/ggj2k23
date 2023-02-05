@@ -56,6 +56,10 @@ export class Engine {
             return;
         }
 
+        if (game.state == STATES.DEAD) {
+            game.gui.dead(this.ctx);
+            return;
+        }
 
         if (game.state != STATES.PLAYING) {
             return;

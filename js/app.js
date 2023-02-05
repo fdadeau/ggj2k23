@@ -115,6 +115,9 @@ document.addEventListener("DOMContentLoaded", async function() {
             framerate = 0;
             framesMeasure = now;
         }
+
+        /** If the player is dead */
+        game.lookDead();
     }
     mainloop();
 
