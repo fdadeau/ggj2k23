@@ -86,7 +86,7 @@ export class Hud {
         ctx.drawImage(ROOT_IMG, slot*3-3, hudY_origin + 10,6,60);
         ctx.drawImage(ROOT_IMG, slot*4-3, hudY_origin + 10,6,60);
         ctx.fillStyle = '#fff';
-        ctx.font = "12pt ka1";
+        ctx.font = "12pt pixel-bit-advanced";
 
         // Level slot
         ctx.fillText("LEVEL", 15, hudY_origin + 25);

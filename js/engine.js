@@ -50,7 +50,7 @@ export class Engine {
             this.ctx.fillStyle = '#000000';
             this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
             this.ctx.fillStyle = '#FFFFFF';
-            this.ctx.font = "18px ka1";
+            this.ctx.font = "18px pixel-bit-advanced";
             this.ctx.fillText(`Loading assets: ${game.loading.loaded * 100 / game.loading.total | 0} percent...`, WIDTH / 2 - 200, HEIGHT/2 - 9);
             return;
         }
@@ -59,7 +59,7 @@ export class Engine {
             this.ctx.fillStyle = '#000000';
             this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
             this.ctx.fillStyle = '#FFFFFF';
-            this.ctx.font = "18px ka1";
+            this.ctx.font = "18px pixel-bit-advanced";
             this.ctx.fillText("Double click to start", WIDTH / 2 - 200, HEIGHT/2 - 9);
             return;
         }
