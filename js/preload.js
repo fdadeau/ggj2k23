@@ -7,6 +7,8 @@ const data = {
     "tree-spritesheet": "./data/tree-spritesheet.png",
     "whisky-spritesheet": "./data/whisky-spritesheet.png",
     "tequila-spritesheet": "./data/tequila-spritesheet.png",
+    "turnip-spritesheet": "./data/turnip-spritesheet.png",
+    "dandelion-spritesheet": "./data/dandelion-spritesheet.png",
 
     // images
     "wood": "./data/textures/wood.png",

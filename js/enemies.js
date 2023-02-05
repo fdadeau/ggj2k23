@@ -2,64 +2,6 @@
 const SPEED = 0.001;
 const FRAME_DELAY = 100;
 
-/** ANGRY TREE */
-
-const TREE_WALK = [0,4,8];
-const TREE_IDLE = [0];
-const TREE_PUNCH = [12,12,13,14,15];
-const TREE_HURT = [16,16,16,16,16];
-const TREE_DED = [17];
-const TREE_BURNT = [18];
-
-const TREE_SPRITESHEET = new Image();
-TREE_SPRITESHEET.src = "./data/tree-spritesheet.png";
-const TREE_HEIGHT = 15200/19 | 0;
-const TREE_WIDTH = 800;
-
-const TREE_ATTACK_DAMAGE = 20;
-const TREE_HP = 100;
-const TREE_ATTACK_DELAY = 500;
-const TREE_POINTS_DROP = 50;
-const TREE_RANGE = 1;
-
-/** DEADLY TURNIP */
-const TURNIP_WALK = [0,4,8];
-const TURNIP_IDLE = [0];
-const TURNIP_BITE = [12,12,13,13];
-const TURNIP_HURT = [14,14,14,14,14];
-const TURNIP_DED = [15];
-const TURNIP_BURNT = [16];
-
-const TURNIP_SPRITESHEET = new Image();
-TURNIP_SPRITESHEET.src = "./data/turnip-spritesheet.png";
-const TURNIP_HEIGHT = 7106/17 | 0;
-const TURNIP_WIDTH = 419;
-
-
-const TURNIP_ATTACK_DAMAGE = 20;
-const TURNIP_HP = 100;
-const TURNIP_ATTACK_DELAY = 500;
-const TURNIP_POINTS_DROP = 100;
-const TURNIP_RANGE = 1;
-
-
-/** DANDELION LA MENACE  */
-const DANDELION_WALK = [0,2,4,6];
-const DANDELION_IDLE = [0];
-const DANDELION_YEET = [8,9,10,11];
-const DANDELION_DED = [12];
-const DANDELION_BURNT = [13];
-
-const DANDELION_SPRITESHEET = new Image();
-DANDELION_SPRITESHEET.src = "./data/dandelion-spritesheet.png";
-const DANDELION_HEIGHT = 7000/14 | 0;
-const DANDELION_WIDTH = 500;
-
-const DANDELION_ATTACK_DAMAGE = 5;
-const DANDELION_HP = 10;
-const DANDELION_ATTACK_DELAY = 500;
-const DANDELION_POINTS_DROP = 200;
-const DANDELION_RANGE = 1;
 
 /**
  * Build an enemy of the specified type.
@@ -154,8 +96,10 @@ class Enemy {
         }
     }
 
-    behavior() { }
+    /** Initially empty, allows to have customized behaviors for a given entity */
+    behavior(player) { }
 
+    /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
         return false;
         // return x < this.x - 0.1 || x > this.x + 0.1 || y < this.y - 0.1 || y > this.y - 0.1; 
@@ -213,6 +157,25 @@ class Enemy {
     }
 }
 
+
+
+/** ANGRY TREE */
+const TREE_WALK = [0,4,8];
+const TREE_IDLE = [0];
+const TREE_PUNCH = [12,12,13,14,15];
+const TREE_HURT = [16,16,16,16,16];
+const TREE_DED = [17];
+const TREE_BURNT = [18];
+
+const TREE_HEIGHT = 15200/19 | 0;
+const TREE_WIDTH = 800;
+
+const TREE_ATTACK_DAMAGE = 20;
+const TREE_HP = 100;
+const TREE_ATTACK_DELAY = 500;
+const TREE_POINTS_DROP = 50;
+const TREE_RANGE = 1;
+
 class Tree extends Enemy {
 
     constructor(x, y, dirX, dirY, dropPoints) {
@@ -256,11 +219,28 @@ class Tree extends Enemy {
         }
         
         ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
-        ctx.drawImage(TREE_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
+        ctx.drawImage(data["tree-spritesheet"], sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     
     }
 }
 
+
+/** DEADLY TURNIP */
+const TURNIP_WALK = [0,4,8];
+const TURNIP_IDLE = [0];
+const TURNIP_BITE = [12,12,13,13];
+const TURNIP_HURT = [14,14,14,14,14];
+const TURNIP_DED = [15];
+const TURNIP_BURNT = [16];
+
+const TURNIP_HEIGHT = 7106/17 | 0;
+const TURNIP_WIDTH = 419;
+
+const TURNIP_ATTACK_DAMAGE = 20;
+const TURNIP_HP = 100;
+const TURNIP_ATTACK_DELAY = 500;
+const TURNIP_POINTS_DROP = 100;
+const TURNIP_RANGE = 1;
 
 
 class Turnip extends Enemy {
@@ -300,10 +280,27 @@ class Turnip extends Enemy {
         }
         
         ctx.fillText(`Turnip:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
-        ctx.drawImage(TURNIP_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
+        ctx.drawImage(data["turnip-spritesheet"], sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     
     }
 }
+
+
+/** DANDELION LA MENACE  */
+const DANDELION_WALK = [0,2,4,6];
+const DANDELION_IDLE = [0];
+const DANDELION_YEET = [8,9,10,11];
+const DANDELION_DED = [12];
+const DANDELION_BURNT = [13];
+
+const DANDELION_HEIGHT = 7000/14 | 0;
+const DANDELION_WIDTH = 500;
+
+const DANDELION_ATTACK_DAMAGE = 5;
+const DANDELION_HP = 10;
+const DANDELION_ATTACK_DELAY = 500;
+const DANDELION_POINTS_DROP = 200;
+const DANDELION_RANGE = 1;
 
 class Dandelion extends Enemy {
 
@@ -328,7 +325,7 @@ class Dandelion extends Enemy {
         let dec = 0;
         
         if (angle >= 45 && angle < 135) {
-            dec = 1;
+            dec = 0;
         }
         else if (angle >= 135 && angle < 225) {
             dec = 0;
@@ -338,7 +335,7 @@ class Dandelion extends Enemy {
         }
          
         ctx.fillText(`Dandelion:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
-        ctx.drawImage(DANDELION_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
+        ctx.drawImage(data["dandelion-spritesheet"], sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     
     }
 }

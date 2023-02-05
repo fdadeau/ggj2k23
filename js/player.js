@@ -2,7 +2,7 @@ import { buildWeapon, Lighter } from "./weapons.js";
 
 import { Hud } from "./hud.js";
 
-import {data, preload} from "./preload.js";
+import { data } from "./preload.js";
 
 
 const FRAME_DELAY = 100;

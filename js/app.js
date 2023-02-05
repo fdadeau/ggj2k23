@@ -103,10 +103,10 @@ document.addEventListener("DOMContentLoaded", async function() {
         requestAnimationFrame(mainloop);
         let now = Date.now();
         let dt = now - lastUpdate;
+        lastUpdate = now;
         
         micro.update(game);
         game.update(dt);
-        lastUpdate = now;
         engine.render(game);
 
         if (now < framesMeasure + 1000) {

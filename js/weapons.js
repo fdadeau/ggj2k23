@@ -41,7 +41,6 @@ const AXE_IDLE = [0];
 const TEQUILA_HEIGHT = 4200/6 | 0;
 const TEQUILA_WIDTH = 1000;
 
-
 const TEQUILA_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const TEQUILA_IDLE = [0];
 
@@ -65,8 +64,8 @@ class Weapon{
 
     afterAnimation() { }
 
-    render(ctx, SPRITE, frame, WIDTH, HEIGHT) {
-        ctx.drawImage(SPRITE, 0, frame * HEIGHT, WIDTH, HEIGHT, 350, 20, 450, 390); // TODO : make it clean (temporary, wait final textures)
+    render(ctx, SPRITE, frame, WIDTH, HEIGHT, dX, dY) {
+        ctx.drawImage(SPRITE, 0, frame * HEIGHT, WIDTH, HEIGHT, 350+dX, 20+dY, 450, 390); // TODO : make it clean (temporary, wait final textures)
     }
 }
 
@@ -102,7 +101,7 @@ class Whisky extends Consumable{
     }
 
     render(ctx, frame){
-        super.render(ctx, data["whisky-spritesheet"], frame, WHISKY_WIDTH, WHISKY_HEIGHT);
+        super.render(ctx, data["whisky-spritesheet"], frame, WHISKY_WIDTH, WHISKY_HEIGHT, 0, 0);
     }
 }
 
@@ -115,11 +114,12 @@ class Tequila extends Consumable {
     }
 
     render(ctx, frame){
-        super.render(ctx, data["tequila-spritesheet"], frame, TEQUILA_WIDTH, TEQUILA_HEIGHT);
+        super.render(ctx, data["tequila-spritesheet"], frame, TEQUILA_WIDTH, TEQUILA_HEIGHT, 0, 0);
     }
 }
 
-class Axe extends Weapon{
+const AXE_SHIFT = [-20, -30, -50, -60, -40];
+class Axe extends Weapon {
     constructor(){
         super(25,2.5);
         this.idle = AXE_IDLE;
@@ -144,16 +144,15 @@ class Axe extends Weapon{
     }
     
     render(ctx, frame){
-        super.render(ctx, data["axe-spritesheet"], frame, AXE_WIDTH, AXE_HEIGHT);
+        super.render(ctx, data["axe-spritesheet"], frame, AXE_WIDTH, AXE_HEIGHT, AXE_SHIFT[frame], AXE_SHIFT[frame]);
     }
 }
 
 
 
 /***
- * LIGHTER
+ *  LIGHTER
  */
-
 const FIRE_SPEED = 0.001;
 
 const LIGHTER_OFF = 0, LIGHTER_ON = 1, LIGHTER_BLOW = 2;
