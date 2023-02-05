@@ -207,6 +207,10 @@ class Dialog extends PowerUp {
         super.update(dt);
     }
 
+    hit() {
+        this.taken = true;
+    }
+
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
         ctx.drawImage(DIALOG_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);

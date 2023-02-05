@@ -5,8 +5,10 @@ import { levels } from "./levels.js";
 
 import { data } from "./preload.js";
 
+import { GUI } from "./gui.js";
+
 /** Game states */
-export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5 };
+export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6 };
 
 export class Game {
 
@@ -20,6 +22,8 @@ export class Game {
         
         this.enemies = [];
         this.player;
+
+        this.gui = new GUI(this.loading);
     }
 
     setLoadingProgress(loaded, total) {
