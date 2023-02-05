@@ -115,9 +115,9 @@ const ENEMIES3 = function() {
     const whisky1 = buildPowerUp("whisky", 3.5, 19.5);
     const whisky2 = buildPowerUp("whisky", 3.5, 18.5);
     const whisky3 = buildPowerUp("whisky", 3.5, 17.5);
-    const whisky4 = buildEnemy("tree", 3.5, 13.5,0,0);
+    const whisky4 = buildEnemy("tree", 3.5, 15.5,0,0);
 
-    // Tequila power up
+    // Tequila power upm
     const tequila0 = buildPowerUp("tequila", 2.5, 20.5);
 
     // Uique carrot
@@ -127,7 +127,10 @@ const ENEMIES3 = function() {
     const rabbit = buildPowerUp("rabbit", 10.5, 20.5);
     const dialog = buildPowerUp("dialog", 10.5, 20.5); // same position as rabit
 
-    return [tree0, tree1, /*turnip1,*/ whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, dialog];
+    // Uique rope (level end)
+    const rope = buildPowerUp("rope", 5.5, 14.5);
+
+    return [tree0, tree1, /*turnip1,*/ whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, dialog, rope];
 };
 
 
