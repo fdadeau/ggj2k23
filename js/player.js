@@ -270,6 +270,8 @@ export default class Player {
 
         this.currentWeapon.update(dt,this,enemies);
 
+        this.hud.update(dt);
+
         this.lighter.update(dt);
 
         this.collectPowerUp(enemies);
@@ -410,7 +412,7 @@ export default class Player {
             return;
         }
         this.health -= damage;
-        // TODO : end game
+        this.hud.hitAnimation();
     }
 
     collectPowerUp(powerup) {

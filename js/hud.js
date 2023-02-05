@@ -1,7 +1,6 @@
 const WEAPON_WHISKY = 0;
 const WEAPON_TEQUILA = 1;
 const WEAPON_AXE = 2;
-const WEAPON_LIGHTER = 4;
 
 const NB_SLOTS = 7;
 
@@ -32,6 +31,22 @@ BACKGROUND_IMG.src = '../data/wood.png';
 const ROOT_IMG = new Image();
 ROOT_IMG.src = '../data/hud-roots.png';
 
+const FILTER_SPRITESHEET = new Image();
+FILTER_SPRITESHEET.src = '../data/raymon-scar-spritesheet.png';
+const FILTER_HEIGHT = 150/2;
+const FILTER_WIDTH = 75;
+
+const TIMBER_SPRITESHEET = new Image();
+TIMBER_SPRITESHEET.src = "../data/raymond-spritesheet.png"
+const TIMBER_HEIGHT = 375/5;
+const TIMBER_WIDTH = 75;
+const TIMBER_HIT = [0,1,2,1,0];
+const TIMBER_IDLE = [0];
+const TIMBER_DED = [4];
+
+const FRAME_DELAY = 200;
+
+
 export class Hud {
 
     constructor(hudHeight) {
@@ -55,6 +70,38 @@ export class Hud {
         this.nbTequila = 0;
         // Tells if the carrot is present
         this.haveCarrot = false;
+
+        this.delay = 0;
+        this.frame = 0;
+        this.idle();
+    }
+
+    hitAnimation(){
+        this.setAnimation(TIMBER_HIT);
+    }
+
+    idle(){
+        this.setAnimation(TIMBER_IDLE);
+    }
+
+    ded(){
+        this.setAnimation(TIMBER_DED);
+    }
+
+    update(dt){
+        this.delay -= dt;
+        if(this.delay <= 0) {
+            this.delay = FRAME_DELAY;
+            this.frame = (this.frame + 1) % this.animation.length;
+            if(this.frame == 0 && this.animation == TIMBER_HIT){
+                this.idle();
+            }
+        }
+    }
+
+    setAnimation(anim) {
+        this.animation = anim;
+        this.frame = 0;
     }
 
     render(ctx, player) {
@@ -77,10 +124,6 @@ export class Hud {
 
         // Draw the separators
         let slot = cvs.width / NB_SLOTS;
-        //ctx.strokeRect(slot, hudY_origin + 10, 0, this.height - 20);
-        //ctx.strokeRect(slot * 2, hudY_origin + 10, 0, this.height - 20);
-        //ctx.strokeRect(slot * 3, hudY_origin, 0, this.height);
-        //ctx.strokeRect(slot * 4, hudY_origin, 0, this.height);
         ctx.drawImage(ROOT_IMG, slot-3, hudY_origin + 10,6,60);
         ctx.drawImage(ROOT_IMG, slot*2-3, hudY_origin + 10,6,60);
         ctx.drawImage(ROOT_IMG, slot*3-3, hudY_origin + 10,6,60);
@@ -97,8 +140,19 @@ export class Hud {
         ctx.fillText(this.score, 100, hudY_origin + 55);
 
         // Skin slot
-        ctx.drawImage(TIMBER_IMG, 275, hudY_origin + 1, slot - 2, this.height);
-
+        ctx.drawImage(TIMBER_SPRITESHEET, 0, ((this.animation[this.frame]) * TIMBER_HEIGHT), TIMBER_WIDTH, TIMBER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
+        
+        if(this.health <= 50){
+            if(this.health == 0){
+                if(this.animation != TIMBER_DED){
+                    this.ded();
+                }
+                ctx.drawImage(FILTER_SPRITESHEET, 0, FILTER_HEIGHT, FILTER_WIDTH, FILTER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
+            }else{
+                ctx.drawImage(FILTER_SPRITESHEET, 0, 0, FILTER_WIDTH, FILTER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
+            }
+        }
+        
         // Weapon slot
         this.drawWeapon(ctx, hudY_origin, this.weapon);
 
@@ -144,7 +198,6 @@ export class Hud {
             let barLevel = (this.health * 512) / 100
             let red;
             let green;
-            //console.log(barLevel);
             if (barLevel < 255) {
                 red = 255;
                 green = barLevel;
