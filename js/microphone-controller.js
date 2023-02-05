@@ -10,21 +10,23 @@ export class MicrophoneController {
 
     }
 
-    start() {
+    async start() {
         this.audioContext = new AudioContext();
         // Attempt to get audio input
-        navigator.mediaDevices.getUserMedia(
-        {
-            "audio": {
-                "mandatory": {
-                    "googEchoCancellation": "false",
-                    "googAutoGainControl": "false",
-                    "googNoiseSuppression": "false",
-                    "googHighpassFilter": "false"
-                },
-                "optional": []
-            },
-        }).then((stream) => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(
+                {
+                    "audio": {
+                        "mandatory": {
+                            "googEchoCancellation": "false",
+                            "googAutoGainControl": "false",
+                            "googNoiseSuppression": "false",
+                            "googHighpassFilter": "false"
+                        },
+                        "optional": []
+                    },
+                });
+            
             // Create an AudioNode from the stream.
             this.mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
             // Connect it to the destination.
@@ -32,10 +34,11 @@ export class MicrophoneController {
             this.analyser.fftSize = 2048;
             this.mediaStreamSource.connect( this.analyser );
             
-        }).catch((err) => {
+        }
+        catch(err) {
             // always check for errors at the end.
             console.error(`${err.name}: ${err.message}`);
-        });
+        };
     }
 
 
