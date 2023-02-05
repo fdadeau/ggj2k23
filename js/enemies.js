@@ -2,16 +2,6 @@
 const SPEED = 0.001;
 const FRAME_DELAY = 100;
 
-/** CUTE DINOSAUR */
-
-const WALK = [4,5,6,7,8,9,10,11,12,13];
-const IDLE = [0];
-
-const DINO_SPRITESHEET = new Image();
-DINO_SPRITESHEET.src = "../data/dino-spritesheet.png";
-const DINO_HEIGHT = 5664/24 | 0;
-const DINO_WIDTH = 240;
-
 /** ANGRY TREE */
 
 const TREE_WALK = [0,4,8];
@@ -76,8 +66,6 @@ const DANDELION_RANGE = 1;
  */
 export function buildEnemy(type,x,y,dx,dy) {
     switch (type) {
-        case "dino":
-            return new Dino(x,y,dx,dy,WALK,IDLE);
         case "tree":
             return new Tree(x,y,dx,dy,TREE_WALK,TREE_IDLE,TREE_HURT, TREE_PUNCH, TREE_POINTS_DROP);
         case "turnip":
@@ -166,7 +154,7 @@ class Enemy {
     attack(){
         console.log(this.animationBeforeHit)
         if(this.animationBeforeHit == undefined){
-            this.animationBeforeHit = this.animation; // TODO : il récupère trop vite ici du coup ça surcharge
+            this.animationBeforeHit = this.animation;
         }
         
         this.setAnimation(this.attackA);
@@ -179,7 +167,7 @@ class Enemy {
 
     hit(amount){
         if(this.animationBeforeHit == undefined){
-            this.animationBeforeHit = this.animation; // TODO : le pb est la, ça prend le frappe
+            this.animationBeforeHit = this.animation;
         }
         this.stop();
         this.health -= amount;
@@ -188,53 +176,6 @@ class Enemy {
             this.stop();
         }
     }
-}
-
-class Dino extends Enemy {
-
-    constructor(x, y, dirX, dirY, walkA, idleA, hurtA) {
-        super(x, y, dirX, dirY, walkA, idleA, hurtA, 9999, 0);
-        this.setAnimation(IDLE);
-        this.factor = 2;
-        this.height = DINO_HEIGHT;
-        this.width = DINO_WIDTH;
-        this.vMove = 20;
-    }
-
-    update(dt, player) {
-        super.update(dt, player);
-        this.frameDelay -= dt;
-        if (this.frameDelay <= 0) {
-            this.frameDelay = FRAME_DELAY;
-            this.frame = (this.frame + 1) % this.animation.length;
-        }
-    }
-
-    render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
-        let sourceX = minX / sizeX * this.width | 0;
-        let width = (maxX - minX) / sizeX * this.width | 0;
-        
-        let dec = 2;
-        if (this.speed == 0) {
-            if (angle >= 45 && angle < 135) {
-                dec = 0;
-            }
-            else if (angle >= 135 && angle < 225) {
-                dec = 3;
-            }
-            else if (angle >= 225 && angle < 315) {
-                dec = 1;
-            }
-        }
-        else {
-            dec = angle > 90 && angle < 270 ? 10 : 0; 
-        }
-        ctx.fillStyle = '#fff';
-        ctx.fillText(`Dino:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
-
-        ctx.drawImage(DINO_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
-    }
-
 }
 
 class Tree extends Enemy {

@@ -136,7 +136,8 @@ export class Hud {
     }
 
 
-    equipeWeapon(id){
+    equipeWeapon(id){ // TODO : remettre ça
+        console.log("hello")
         this.weapon = id;
     }
 

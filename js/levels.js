@@ -45,6 +45,7 @@ const MAP1 = [
 
 const ENEMIES2 = function() {
 
+    /*
     // dino running around
     const dino0 = buildEnemy("dino", 3.5, 5.5, 0, 1);
     dino0.behavior = function() {
@@ -63,7 +64,7 @@ const ENEMIES2 = function() {
     // static dino
     const dino1 = buildEnemy("dino", 6.5, 4.5, 1, 0);
 
-    return [dino0, dino1];
+    return [dino0, dino1];*/
 };
 
 
