@@ -47,23 +47,19 @@ export class Engine {
     render(game) {
 
         if (game.state == STATES.LOADING) {
-            this.ctx.fillStyle = '#000000';
-            this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            this.ctx.fillStyle = '#FFFFFF';
-            this.ctx.font = "18px pixel-bit-advanced";
-            this.ctx.fillText(`Loading assets: ${game.loading.loaded * 100 / game.loading.total | 0} percent...`, WIDTH / 2 - 200, HEIGHT/2 - 9);
+            game.gui.loading(this.ctx);
             return;
         }
 
         if (game.state == STATES.WAITING_TO_START) {
-            this.ctx.fillStyle = '#000000';
-            this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            this.ctx.fillStyle = '#FFFFFF';
-            this.ctx.font = "18px pixel-bit-advanced";
-            this.ctx.fillText("Double click to start", WIDTH / 2 - 200, HEIGHT/2 - 9);
+            game.gui.waitingToStart(this.ctx);
             return;
         }
 
+        if (game.state == STATES.DEAD) {
+            game.gui.dead(this.ctx);
+            return;
+        }
 
         if (game.state != STATES.PLAYING) {
             return;

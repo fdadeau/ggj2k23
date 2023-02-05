@@ -134,7 +134,7 @@ class Enemy {
 
         player.invisibilityFrame -= dt;
 
-        if(this.distance < this.range && player.invisibilityFrame <=0){
+        if(this.distance < this.range && player.invisibilityFrame <=0 && this.health > 0){
             this.attack();
             player.hit(this.attackDamage)
             player.setInvinsibilityFrame();

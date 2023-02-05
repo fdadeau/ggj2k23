@@ -50,26 +50,11 @@ export function buildPowerUp(type,x,y) {
         case "tequila":
             return new TequilaItem(x, y);
         case "carrot":
-            // Singleton
-            if (carrotInstance < 1) {
-                carrotInstance = 1;
-                return new CarrotItem(x, y);
-            }
-            break;
+            return new CarrotItem(x, y);
         case "rabbit":
-            // Singleton
-            if (rabbitInstance < 1) {
-                rabbitInstance = 1;
-                return new Rabbit(x, y);
-            }
-            break;
+            return new Rabbit(x, y);
         case "dialog":
-            // Singleton
-            if (dialogInstance < 1) {
-                dialogInstance = 1;
-                return new Dialog(x, y);
-            }
-            break;
+            return new Dialog(x, y);
     }
 }
 
@@ -205,6 +190,10 @@ class Dialog extends PowerUp {
 
     update(dt) {
         super.update(dt);
+    }
+
+    hit() {
+        this.taken = true;
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {

@@ -5,8 +5,10 @@ import { levels } from "./levels.js";
 
 import { data } from "./preload.js";
 
+import { GUI } from "./gui.js";
+
 /** Game states */
-export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5 };
+export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6 };
 
 export class Game {
 
@@ -20,6 +22,9 @@ export class Game {
         
         this.enemies = [];
         this.player;
+
+        this.gui = new GUI(this.loading);
+        this.currentLevel = 'tree';
     }
 
     setLoadingProgress(loaded, total) {
@@ -29,13 +34,19 @@ export class Game {
         }
     }
 
+    lookDead() {
+        if (this.state == STATES.PLAYING && this.player.health <= 0) {
+            this.state = STATES.DEAD;
+        }
+    }
+
     start() {
-        this.loadLevel("tree");
+        this.loadLevel();
         this.state = STATES.PLAYING;
     }
 
-    loadLevel(id) {
-        let levelData = levels[id];
+    loadLevel() {
+        let levelData = levels[this.currentLevel];
         this.enemies = levelData.enemies();
         this.player =  new Player();
         this.player.initialize(levelData.player.posX, levelData.player.posY, levelData.player.dirX, levelData.player.dirY);
@@ -50,81 +61,96 @@ export class Game {
         if (this.state != STATES.PLAYING) {
             return false;
         }
-        this.enemies.forEach((e,player) => {
+        this.enemies.forEach((e) => {
             e.update(dt,this.player);   // TODO add player for detecting collisions?
         });
         this.player.update(dt, this.map, this.enemies);
 
         //this.player.currentWeapon.update(dt);   // TODO remove (only debug)
+
+        /** If the player is dead */
+        this.lookDead();
     }
 
    
     // Commands
     press(key) {
-        if (this.state != STATES.PLAYING) {
-            return;
-        }
-        switch (key) {
-            case 'ArrowUp': 
-            case 'KeyW':
-                this.player.walk(1);
-                break;
-            case 'KeyS':
-            case 'ArrowDown':
-                this.player.walk(-0.5);
-                break;
-            case 'ArrowLeft': 
-            case 'KeyA':
-                this.player.strafe(-1);
-                break;
-            case 'ArrowRight':
-            case 'KeyD':
-                this.player.strafe(1);
-                break;
-            case 'KeyB':
-                this.player.lighter.toggle();
-                break;
-            case 'KeyL':
-                this.player.lighter.blow(true);
-                break;
-            case 'KeyP':
-                this.paused = !this.paused;
-                break;
-            case 'Semicolon':
-                this.on2D = !this.on2D;
-                break;
-            case 'KeyI':
-                this.inverted *= -1;
-                localStorage.setItem(STORAGE_KEY_MOUSE, this.inverted);
-                break;
-            case 'KeyE':
-                this.player.attack();
-                break;
-            case 'KeyF':
-                this.player.lighter.startBlowing();
-                break;
-            case 'Digit1':
-                this.player.equipeAxe();
-                break;
-            case 'Digit3':
-                if(this.player.nbTequila > 0){
-                    this.player.equipeTequila(); 
-                }else{
+        if (this.state == STATES.PLAYING) {
+            switch (key) {
+                case 'ArrowUp': 
+                case 'KeyW':
+                    this.player.walk(1);
+                    break;
+                case 'KeyS':
+                case 'ArrowDown':
+                    this.player.walk(-0.5);
+                    break;
+                case 'ArrowLeft': 
+                case 'KeyA':
+                    this.player.strafe(-1);
+                    break;
+                case 'ArrowRight':
+                case 'KeyD':
+                    this.player.strafe(1);
+                    break;
+                case 'KeyB':
+                    this.player.lighter.toggle();
+                    break;
+                case 'KeyL':
+                    this.player.lighter.blow(true);
+                    break;
+                case 'KeyP':
+                    this.paused = !this.paused;
+                    break;
+                case 'Semicolon':
+                    this.on2D = !this.on2D;
+                    break;
+                case 'KeyI':
+                    this.inverted *= -1;
+                    localStorage.setItem(STORAGE_KEY_MOUSE, this.inverted);
+                    break;
+                case 'KeyE':
+                    this.player.attack(this.enemies);
+                    break;
+                case 'KeyF':
+                    this.player.lighter.startBlowing();
+                    break;
+                case 'Digit1':
                     this.player.equipeAxe();
-                }
+                    break;
+                case 'Digit3':
+                    if(this.player.nbTequila > 0){
+                        this.player.equipeTequila(); 
+                    }else{
+                        this.player.equipeAxe();
+                    }
+                    break;
+                case 'Digit2':
+                    if(this.player.nbWhisky > 0){
+                        this.player.equipeWhisky();
+                    }else{
+                        this.player.equipeAxe();
+                    }
+                    break;
+                case 'Space':
+                    this.player.switchToNextWeapon(-1);
+                    break;
+            }
+        } else if (this.state == STATES.DEAD) {
+            switch (key) {
+                case 'Space' :
+                case 'Enter' :
+                    this.resetGame();
                 break;
-            case 'Digit2':
-                if(this.player.nbWhisky > 0){
-                    this.player.equipeWhisky();
-                }else{
-                    this.player.equipeAxe();
-                }
-                break;
-            case 'Space':
-                this.player.switchToNextWeapon(-1);
-                break;
+            }
         }
     }
+
+    resetGame() {
+        this.gui.gameDead = false;
+        this.start();
+    }
+
     release(key) {
         if (this.state != STATES.PLAYING) {
             return;
