@@ -11,7 +11,7 @@ const WIDTH = 640;
 /** Screen height */
 const HEIGHT = WIDTH * 10 / 16;
 
-import { STATES } from "./Game.js";
+import { STATES } from "./game.js";
 
 import { data } from "./preload.js";
 
@@ -105,8 +105,8 @@ export class Engine {
 
         // print framerate & debug info
         this.ctx.fillStyle = "white";
-        this.ctx.fillText(this.framerate, 10, 10);
-        this.ctx.fillText(game.player.getInfos(), 10, 20);
+        //this.ctx.fillText(this.framerate, 10, 10);
+        //this.ctx.fillText(game.player.getInfos(), 10, 20);
     }
 
 
