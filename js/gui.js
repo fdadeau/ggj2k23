@@ -80,11 +80,11 @@ export class GUI {
         }
         // If we see the controls
         if (clicX >= BUTTON_CONTROLS.x && clicX <= BUTTON_CONTROLS.x + BUTTON_CONTROLS.width && clicY >= BUTTON_CONTROLS.y && clicY <= BUTTON_CONTROLS.y + BUTTON_CONTROLS.height) {
-
+            // TODO
         }
         // If we see the credits
         if (clicX >= BUTTON_CREDITS.x && clicX <= BUTTON_CREDITS.x + BUTTON_CREDITS.width && clicY >= BUTTON_CREDITS.y && clicY <= BUTTON_CREDITS.y + BUTTON_CREDITS.height) {
-
+            // TODO
         }
     }
 

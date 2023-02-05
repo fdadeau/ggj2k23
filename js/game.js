@@ -57,7 +57,6 @@ export class Game {
     loadLevel() {
         let levelData = levels[this.currentLevel];
         this.enemies = levelData.enemies();
-        console.log(this.enemies)
         this.player =  new Player();
         this.player.initialize(levelData.player.posX, levelData.player.posY, levelData.player.dirX, levelData.player.dirY);
         this.map = levelData.map;
