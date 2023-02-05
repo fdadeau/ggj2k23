@@ -384,6 +384,7 @@ export default class Player {
                         if (this.haveCarrot) {
                             this.haveCarrot = false;
                             this.giveCarrot = true;
+                            e.nibble = true;
                             // Deleting the bull dialog
                             powerup.forEach(function(e2) {
                                 if (e2.constructor.name == "Dialog") {

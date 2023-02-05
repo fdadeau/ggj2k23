@@ -20,6 +20,10 @@ let carrotInstance = 0;
 
 const RABBIT_SPRITESHEET = new Image();
 RABBIT_SPRITESHEET.src = "../data/images/rabbit.png";
+const KILLER_RABBIT_SPRITESHEET = new Image();
+KILLER_RABBIT_SPRITESHEET.src = "../data/images/killer-rabbit.png";
+const NIBBLE_RABBIT_SPRITESHEET = new Image();
+NIBBLE_RABBIT_SPRITESHEET.src = "../data/images/nibble-rabbit.png";
 const RABBIT_HEIGHT = 454 | 0;
 const RABBIT_WIDTH = 454;
 let rabbitInstance = 0;
@@ -111,10 +115,6 @@ class WhiskyItem extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-
-        //ctx.fillStyle = '#fff';
-        //ctx.fillText(`Whisky:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 40);
-
         ctx.drawImage(WHISKY_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
@@ -135,10 +135,6 @@ class TequilaItem extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-
-        //ctx.fillStyle = '#fff';
-        //ctx.fillText(`Tequila:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 30);
-
         ctx.drawImage(TEQUILA_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
@@ -159,10 +155,6 @@ class CarrotItem extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-
-        //ctx.fillStyle = '#fff';
-        //ctx.fillText(`Tequila:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 30);
-
         ctx.drawImage(CARROT_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
@@ -176,19 +168,27 @@ class Rabbit extends PowerUp {
         this.height = RABBIT_HEIGHT + this.decalage;
         this.width = RABBIT_WIDTH;
         this.points = 0;
+        this.killer = false;
+        this.nibble = false;
     }
 
     update(dt) {
         super.update(dt);
     }
 
+    hit() {
+        this.killer = true;
+    }
+
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-
-        //ctx.fillStyle = '#fff';
-        //ctx.fillText(`Tequila:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 30);
-
-        ctx.drawImage(RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
+        if (this.killer) {
+            ctx.drawImage(KILLER_RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
+        } else if (this.nibble) {
+            ctx.drawImage(NIBBLE_RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
+        } else {
+            ctx.drawImage(RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
+        }
     }
 }
 
@@ -209,10 +209,6 @@ class Dialog extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-
-        //ctx.fillStyle = '#fff';
-        //ctx.fillText(`Tequila:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 30);
-
         ctx.drawImage(DIALOG_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
