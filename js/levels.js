@@ -223,7 +223,12 @@ const ENEMIES3 = function() {
     return [tree0, tree1, /*turnip1,*/ whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, rope];
 };
 
+const ENEMIES_TEST = function() {
+    // static dino
+    const tree = buildEnemy("tree", 3.5, 2.5, 1, 0);
 
+    return [tree];
+};
 
 
 export const levels = {
@@ -244,7 +249,7 @@ export const levels = {
         player: { posX: 2.5, posY: 2.5, dirX: 1, dirY: 0 },
         map: invert(MAP1),
         textures: mkTextures(invert(MAP0)),
-        enemies: () => []
+        enemies: ENEMIES_TEST
     }
 
 }

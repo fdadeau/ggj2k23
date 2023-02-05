@@ -44,7 +44,8 @@ const TIMBER_HIT = [0,1,2,1,0];
 const TIMBER_IDLE = [0];
 const TIMBER_DED = [4];
 
-const FRAME_DELAY = 200;
+const FRAME_DELAY = 150;
+const RED_OVERLAY_DELAY = 200;
 
 
 export class Hud {
@@ -72,11 +73,15 @@ export class Hud {
         this.haveCarrot = false;
 
         this.delay = 0;
+        this.redDelay = undefined;
         this.frame = 0;
         this.idle();
+        this.red = false;
     }
 
     hitAnimation(){
+        this.redDelay = RED_OVERLAY_DELAY
+        this.red = true;
         this.setAnimation(TIMBER_HIT);
     }
 
@@ -96,6 +101,11 @@ export class Hud {
             if(this.frame == 0 && this.animation == TIMBER_HIT){
                 this.idle();
             }
+        }
+
+        this.redDelay -= dt;
+        if(this.redDelay != undefined && this.redDelay <= 0){
+            this.red = false;   
         }
     }
 
@@ -167,6 +177,12 @@ export class Hud {
         
         // Reset the font height
         ctx.font = "6pt Verdana";
+        if(this.red){
+            ctx.globalAlpha = 0.25;
+            ctx.fillStyle = '#f00';
+            ctx.fillRect(0, 0, cvs.width, cvs.height);
+            ctx.globalAlpha = 1;
+        }
     }
 
     drawWeapon(ctx, hudY_origin, id){
