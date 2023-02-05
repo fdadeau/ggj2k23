@@ -1,4 +1,4 @@
-# Dandelion's Revenge 
+# Dandelions' Revenge 
 
 A 2.5D first-person shooter made during the 2023 edition of the Global Game Jam at Besançon, France. 
 

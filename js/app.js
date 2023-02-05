@@ -1,9 +1,7 @@
 import { Game, STATES } from "./game.js";
 import { Engine } from "./engine.js";
 import { MicrophoneController } from "./microphone-controller.js";
-
 import { preload } from "./preload.js";
-
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
