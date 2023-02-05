@@ -4,10 +4,10 @@ const WIDTH = 640;
 const HEIGHT = WIDTH * 10 / 16;
 
 const TITLE_IMG = new Image();
-TITLE_IMG.src = "../data/title-screen.png"; // To change
+TITLE_IMG.src = "./data/title-screen.png"; // To change
 
 const BUTTON_IMG = new Image();
-BUTTON_IMG.src = "../data/textures/wood.png"; // To change
+BUTTON_IMG.src = "./data/textures/wood.png"; // To change
 const BUTTON_HEIGHT = 50 | 0;
 const BUTTON_WIDTH = 300;
 
@@ -36,7 +36,7 @@ const BUTTON_CREDITS = {
 }
 
 const OUTRO_IMG = new Image();
-// OUTRO_IMG.src = "../data/some-outro.png"; // To change
+// OUTRO_IMG.src = "./data/some-outro.png"; // To change
 const OUTRO_HEIGHT = 15200/19 | 0;
 const OUTRO_WIDTH = 800;
 

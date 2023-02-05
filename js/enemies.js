@@ -12,7 +12,7 @@ const TREE_DED = [17];
 const TREE_BURNT = [18];
 
 const TREE_SPRITESHEET = new Image();
-TREE_SPRITESHEET.src = "../data/tree-spritesheet.png";
+TREE_SPRITESHEET.src = "./data/tree-spritesheet.png";
 const TREE_HEIGHT = 15200/19 | 0;
 const TREE_WIDTH = 800;
 
@@ -31,7 +31,7 @@ const TURNIP_DED = [15];
 const TURNIP_BURNT = [16];
 
 const TURNIP_SPRITESHEET = new Image();
-TURNIP_SPRITESHEET.src = "../data/turnip-spritesheet.png";
+TURNIP_SPRITESHEET.src = "./data/turnip-spritesheet.png";
 const TURNIP_HEIGHT = 7106/17 | 0;
 const TURNIP_WIDTH = 419;
 
@@ -51,7 +51,7 @@ const DANDELION_DED = [12];
 const DANDELION_BURNT = [13];
 
 const DANDELION_SPRITESHEET = new Image();
-DANDELION_SPRITESHEET.src = "../data/dandelion-spritesheet.png";
+DANDELION_SPRITESHEET.src = "./data/dandelion-spritesheet.png";
 const DANDELION_HEIGHT = 7000/14 | 0;
 const DANDELION_WIDTH = 500;
 
@@ -347,11 +347,11 @@ class Dandelion extends Enemy {
 
 
 const RABBIT_SPRITESHEET = new Image();
-RABBIT_SPRITESHEET.src = "../data/images/rabbit.png";
+RABBIT_SPRITESHEET.src = "./data/images/rabbit.png";
 const KILLER_RABBIT_SPRITESHEET = new Image();
-KILLER_RABBIT_SPRITESHEET.src = "../data/images/killer-rabbit.png";
+KILLER_RABBIT_SPRITESHEET.src = "./data/images/killer-rabbit.png";
 const NIBBLE_RABBIT_SPRITESHEET = new Image();
-NIBBLE_RABBIT_SPRITESHEET.src = "../data/images/nibble-rabbit.png";
+NIBBLE_RABBIT_SPRITESHEET.src = "./data/images/nibble-rabbit.png";
 
 const RABBIT_ANIMATION = [0];
 

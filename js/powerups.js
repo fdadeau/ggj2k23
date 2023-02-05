@@ -1,30 +1,30 @@
 /** CUTE WHISKY */
 
 const WHISKY_SPRITESHEET = new Image();
-WHISKY_SPRITESHEET.src = "../data/images/whisky.png";
+WHISKY_SPRITESHEET.src = "./data/images/whisky.png";
 const WHISKY_HEIGHT = 500 | 0;
 const WHISKY_WIDTH = 500;
 
 /** NOT CUTE TEQUILA */
 
 const TEQUILA_SPRITESHEET = new Image();
-TEQUILA_SPRITESHEET.src = "../data/images/tequila.png";
+TEQUILA_SPRITESHEET.src = "./data/images/tequila.png";
 const TEQUILA_HEIGHT = 500 | 0;
 const TEQUILA_WIDTH = 500;
 
 const CARROT_SPRITESHEET = new Image();
-CARROT_SPRITESHEET.src = "../data/images/carrot.png";
+CARROT_SPRITESHEET.src = "./data/images/carrot.png";
 const CARROT_HEIGHT = 454 | 0;
 const CARROT_WIDTH = 454;
 
 
 const DIALOG_SPRITESHEET = new Image();
-DIALOG_SPRITESHEET.src = "../data/images/dialog.png";
+DIALOG_SPRITESHEET.src = "./data/images/dialog.png";
 const DIALOG_HEIGHT = 663 | 0;
 const DIALOG_WIDTH = 663;
 
 const ROPE_SPRITESHEET = new Image();
-ROPE_SPRITESHEET.src = "../data/images/rope.png";
+ROPE_SPRITESHEET.src = "./data/images/rope.png";
 const ROPE_HEIGHT = 400 | 0;
 const ROPE_WIDTH = 50;
 

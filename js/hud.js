@@ -8,36 +8,36 @@ import { data } from "./preload.js";
 
 
 const AXE_IMG = new Image();
-AXE_IMG.src = '../data/images/axe.png';
+AXE_IMG.src = './data/images/axe.png';
 
 const HEART_IMG = new Image();
-HEART_IMG.src = '../data/images/heart.png';
+HEART_IMG.src = './data/images/heart.png';
 
 const WHISKY_IMG = new Image();
-WHISKY_IMG.src = '../data/images/whisky.png';
+WHISKY_IMG.src = './data/images/whisky.png';
 
 const TEQUILA_IMG = new Image();
-TEQUILA_IMG.src = '../data/images/tequila.png';
+TEQUILA_IMG.src = './data/images/tequila.png';
 
 const CARROT_IMG = new Image();
-CARROT_IMG.src = '../data/images/carrot.png';
+CARROT_IMG.src = './data/images/carrot.png';
 
 const TIMBER_IMG = new Image();
-TIMBER_IMG.src = '../data/images/raymond.png';
+TIMBER_IMG.src = './data/images/raymond.png';
 
 const BACKGROUND_IMG = new Image();
-BACKGROUND_IMG.src = '../data/textures/wood.png';
+BACKGROUND_IMG.src = './data/textures/wood.png';
 
 const ROOT_IMG = new Image();
-ROOT_IMG.src = '../data/hud-roots.png';
+ROOT_IMG.src = './data/hud-roots.png';
 
 const FILTER_SPRITESHEET = new Image();
-FILTER_SPRITESHEET.src = '../data/raymon-scar-spritesheet.png';
+FILTER_SPRITESHEET.src = './data/raymon-scar-spritesheet.png';
 const FILTER_HEIGHT = 150/2;
 const FILTER_WIDTH = 75;
 
 const TIMBER_SPRITESHEET = new Image();
-TIMBER_SPRITESHEET.src = "../data/raymond-spritesheet.png"
+TIMBER_SPRITESHEET.src = "./data/raymond-spritesheet.png"
 const TIMBER_HEIGHT = 375/5;
 const TIMBER_WIDTH = 75;
 const TIMBER_HIT = [0,1,2,1,0];
@@ -222,17 +222,17 @@ export class Hud {
                 green = 255;
             }
             barColor = 'rgb(' + red + ', ' + green + ', 0)';
-            image.src = '../data/images/heart.png';
+            image.src = './data/images/heart.png';
         } else {
             height += 45;
             levelRef = this.sobriety;
             // Drunk animation (tequila)
             if (player.isDrunk) {
                 barColor = '#dfe8e8';
-                image.src = '../data/images/tequila.png';
+                image.src = './data/images/tequila.png';
             } else {
                 barColor = 'rgb(220, 131, 58)';
-                image.src = '../data/images/whisky.png';
+                image.src = './data/images/whisky.png';
             }
         }
 
