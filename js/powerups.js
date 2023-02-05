@@ -12,6 +12,28 @@ TEQUILA_SPRITESHEET.src = "../data/images/tequila.png";
 const TEQUILA_HEIGHT = 500 | 0;
 const TEQUILA_WIDTH = 500;
 
+const CARROT_SPRITESHEET = new Image();
+CARROT_SPRITESHEET.src = "../data/images/carrot.png";
+const CARROT_HEIGHT = 454 | 0;
+const CARROT_WIDTH = 454;
+let carrotInstance = 0;
+
+const RABBIT_SPRITESHEET = new Image();
+RABBIT_SPRITESHEET.src = "../data/images/rabbit.png";
+const KILLER_RABBIT_SPRITESHEET = new Image();
+KILLER_RABBIT_SPRITESHEET.src = "../data/images/killer-rabbit.png";
+const NIBBLE_RABBIT_SPRITESHEET = new Image();
+NIBBLE_RABBIT_SPRITESHEET.src = "../data/images/nibble-rabbit.png";
+const RABBIT_HEIGHT = 454 | 0;
+const RABBIT_WIDTH = 454;
+let rabbitInstance = 0;
+
+const DIALOG_SPRITESHEET = new Image();
+DIALOG_SPRITESHEET.src = "../data/images/dialog.png";
+const DIALOG_HEIGHT = 663 | 0;
+const DIALOG_WIDTH = 663;
+let dialogInstance = 0;
+
 /**
  * Build a power up of the specified type.
  * @param {string} type Power up type
@@ -21,12 +43,33 @@ const TEQUILA_WIDTH = 500;
  * @param {number} dy initial direction on Y axis
  * @returns A newly-built power up of the specified type.
  */
-export function buildPowerUp(type,x,y,dx,dy) {
+export function buildPowerUp(type,x,y) {
     switch (type) {
         case "whisky":
             return new WhiskyItem(x, y);
         case "tequila":
             return new TequilaItem(x, y);
+        case "carrot":
+            // Singleton
+            if (carrotInstance < 1) {
+                carrotInstance = 1;
+                return new CarrotItem(x, y);
+            }
+            break;
+        case "rabbit":
+            // Singleton
+            if (rabbitInstance < 1) {
+                rabbitInstance = 1;
+                return new Rabbit(x, y);
+            }
+            break;
+        case "dialog":
+            // Singleton
+            if (dialogInstance < 1) {
+                dialogInstance = 1;
+                return new Dialog(x, y);
+            }
+            break;
     }
 }
 
@@ -58,8 +101,8 @@ class PowerUp {
 
 class WhiskyItem extends PowerUp {
 
-    constructor(x, y, dirX, dirY) {
-        super(x, y, dirX, dirY);
+    constructor(x, y) {
+        super(x, y);
         this.factor = 0.25;
         this.height = WHISKY_HEIGHT;
         this.width = WHISKY_WIDTH;
@@ -72,18 +115,14 @@ class WhiskyItem extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-
-        //ctx.fillStyle = '#fff';
-        //ctx.fillText(`Whisky:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 40);
-
         ctx.drawImage(WHISKY_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
 
 class TequilaItem extends PowerUp {
 
-    constructor(x, y, dirX, dirY) {
-        super(x, y, dirX, dirY);
+    constructor(x, y) {
+        super(x, y);
         this.factor = 0.25;
         this.height = TEQUILA_HEIGHT;
         this.width = TEQUILA_WIDTH;
@@ -96,10 +135,80 @@ class TequilaItem extends PowerUp {
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y) {
         let sourceX = minX / sizeX * this.width | 0;
-
-        //ctx.fillStyle = '#fff';
-        //ctx.fillText(`Tequila:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`, 10, 30);
-
         ctx.drawImage(TEQUILA_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
+    }
+}
+
+class CarrotItem extends PowerUp {
+
+    constructor(x, y) {
+        super(x, y);
+        this.factor = 0.25;
+        this.height = CARROT_HEIGHT;
+        this.width = CARROT_WIDTH;
+        this.points = 0;
+    }
+
+    update(dt) {
+        super.update(dt);
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y) {
+        let sourceX = minX / sizeX * this.width | 0;
+        ctx.drawImage(CARROT_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
+    }
+}
+
+class Rabbit extends PowerUp {
+
+    constructor(x, y) {
+        super(x, y);
+        this.factor = 0.25;
+        this.decalage = 800;
+        this.height = RABBIT_HEIGHT + this.decalage;
+        this.width = RABBIT_WIDTH;
+        this.points = 0;
+        this.killer = false;
+        this.nibble = false;
+    }
+
+    update(dt) {
+        super.update(dt);
+    }
+
+    hit() {
+        this.killer = true;
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y) {
+        let sourceX = minX / sizeX * this.width | 0;
+        if (this.killer) {
+            ctx.drawImage(KILLER_RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
+        } else if (this.nibble) {
+            ctx.drawImage(NIBBLE_RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
+        } else {
+            ctx.drawImage(RABBIT_SPRITESHEET, sourceX, - this.decalage, this.width, this.height, x, y, maxX - minX, sizeY);
+        }
+    }
+}
+
+class Dialog extends PowerUp {
+
+    constructor(x, y) {
+        super(x, y);
+        this.factor = 0.2;
+        this.decalage = 200;
+        this.height = DIALOG_HEIGHT + this.decalage;
+        this.width = DIALOG_WIDTH;
+        this.points = 0;
+    }
+
+    update(dt) {
+        super.update(dt);
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y) {
+        let sourceX = minX / sizeX * this.width | 0;
+        ctx.drawImage(DIALOG_SPRITESHEET, sourceX, 0, this.width, this.height, x, y, maxX - minX, sizeY);
     }
 }
