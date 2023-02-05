@@ -141,7 +141,6 @@ export default class Player {
 
         this.hud = new Hud(75);
 
-
         /** Invisibilty frame */
         this.invisibilityFrame = INVISIVILTY_FRAME;
 
@@ -152,6 +151,8 @@ export default class Player {
         this.haveCarrot = false;
         /** Tells if the rabbit have received the carrot */
         this.giveCarrot = false;
+        /** Tells if the player finished the level */
+        this.arrived = false;
     }
     
     setInvinsibilityFrame(){
@@ -445,6 +446,9 @@ export default class Player {
                                 }
                             });
                         }
+                        break;
+                    case 'Rope' :
+                        this.arrived = true;
                         break;
                 }
             }
