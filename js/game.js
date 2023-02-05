@@ -61,7 +61,7 @@ export class Game {
         if (this.state != STATES.PLAYING) {
             return false;
         }
-        this.enemies.forEach((e,player) => {
+        this.enemies.forEach((e) => {
             e.update(dt,this.player);   // TODO add player for detecting collisions?
         });
         this.player.update(dt, this.map, this.enemies);

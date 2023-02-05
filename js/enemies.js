@@ -152,7 +152,6 @@ class Enemy {
     }
 
     attack(){
-        console.log(this.animationBeforeHit)
         if(this.animationBeforeHit == undefined){
             this.animationBeforeHit = this.animation;
         }
