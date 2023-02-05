@@ -121,7 +121,7 @@ export class Game {
                 }
                 break;
             case 'Space':
-                this.player.switchToNextWeapon(1);
+                this.player.switchToNextWeapon(-1);
                 break;
         }
     }
