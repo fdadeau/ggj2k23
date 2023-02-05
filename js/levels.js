@@ -106,23 +106,86 @@ const ENEMIES4 = function() {
     //from left to right, top to bottom
     //ENEMIES
     //turnips
-    const turnip0 = buildEnemy("turnip", 27.5, 28.5, 0, 1);
+    const turnip0 = buildEnemy("turnip", 27.5, 28.5, -1, 0);
+    turnip0.behavior = function() {
+        if (!this.xTarget || !this.yTarget) {
+            this.xTarget = 22.5;
+            this.yTarget = 28.5;
+            this.walk();
+        }
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+            this.dirX = -this.dirX;
+            this.xTarget += this.dirX * 5;
+            this.angle = (this.angle + 180) % 360;
+        }
+    }.bind(turnip0);
     const turnip1 = buildEnemy("turnip", 7.5, 22.5, 0, 1);
     const turnip2 = buildEnemy("turnip", 24.5, 21.5, 0, 1);
 
     //trees
     const tree0 = buildEnemy("tree", 1.5, 18.5, 0, 1);
     const tree1 = buildEnemy("tree", 27.5, 13.5, 0, 1);
+
     const tree2 = buildEnemy("tree", 12.5, 9.5, 0, 1);
-    const tree3 = buildEnemy("tree", 13.5, 4.5, 0, 1);
+    tree2.behavior = function() {
+        if (!this.xTarget || !this.yTarget) {
+            this.xTarget = 12.5;
+            this.yTarget = 15.5;
+            this.walk();
+        }
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+            this.dirY = -this.dirY;
+            this.yTarget += this.dirY * 6;
+            this.angle = (this.angle + 180) % 360;
+        }
+    }.bind(tree2);
+
+    const tree3 = buildEnemy("tree", 13.5, 4.5, 1, 0);
+    tree3.behavior = function() {
+        if (!this.xTarget || !this.yTarget) {
+            this.xTarget = 20.5;
+            this.yTarget = 4.5;
+            this.walk();
+        }
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+            this.dirX = -this.dirX;
+            this.xTarget += this.dirX * 7;
+            this.angle = (this.angle + 180) % 360;
+        }
+    }.bind(tree3);
     
     //dandelion
     const dandelion0 = buildEnemy("dandelion", 9.5, 27.5, 0, 1);
     const dandelion1 = buildEnemy("dandelion", 15.5, 22.5, 0, 1);
     const dandelion2 = buildEnemy("dandelion", 28.5, 11.5, 0, 1);
     const dandelion3 = buildEnemy("dandelion", 1.5, 9.5, 0, 1);
-    const dandelion4 = buildEnemy("dandelion", 16.5, 6.5, 0, 1);
+    const dandelion4 = buildEnemy("dandelion", 16.5, 6.5, 1, 0);
+    dandelion4.behavior = function() {
+        if (!this.xTarget || !this.yTarget) {
+            this.xTarget = 23.5;
+            this.yTarget = 6.5;
+            this.walk();
+        }
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+            this.dirX = -this.dirX;
+            this.xTarget += this.dirX * 7;
+            this.angle = (this.angle + 180) % 360;
+        }
+    }.bind(dandelion4);
+
     const dandelion5 = buildEnemy("dandelion", 2.5, 2.5, 0, 1);
+    dandelion5.behavior = function() {
+        if (!this.xTarget || !this.yTarget) {
+            this.xTarget = 2.5;
+            this.yTarget = 4.5;
+            this.walk();
+        }
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+            this.dirY = -this.dirY;
+            this.yTarget += this.dirY * 2;
+            this.angle = (this.angle + 180) % 360;
+        }
+    }.bind(dandelion5);
 
     //rabbit
     const rabbit = buildEnemy("rabbit", 25.5, 1.5, 0, 1);
