@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         } 
         await document.getElementById("cvs").requestFullscreen();
         if (!document.pointerLockElement) {
-            //await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
+            await document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
         }
         game.press("SemiColon")
     });
