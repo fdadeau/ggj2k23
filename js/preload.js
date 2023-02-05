@@ -2,52 +2,52 @@
 const data = {
     
     // spritesheets
-    "axe-spritesheet": "../data/axe-spritesheet.png",
-    "lighter-spritesheet": "../data/lighter-spritesheet.png",
-    "tree-spritesheet": "../data/tree-spritesheet.png",
-    "whisky-spritesheet": "../data/whisky-spritesheet.png",
-    "tequila-spritesheet": "../data/tequila-spritesheet.png",
+    "axe-spritesheet": "./data/axe-spritesheet.png",
+    "lighter-spritesheet": "./data/lighter-spritesheet.png",
+    "tree-spritesheet": "./data/tree-spritesheet.png",
+    "whisky-spritesheet": "./data/whisky-spritesheet.png",
+    "tequila-spritesheet": "./data/tequila-spritesheet.png",
 
     // images
-    "wood": "../data/textures/wood.png",
-    "hud-roots": "../data/hud-roots.png",
-    "axe": "../data/images/axe.png",
-    "heart": "../data/images/heart.png",
-    "tequila": "../data/images/tequila.png",
-    "timber": "../data/images/timber.jpeg",
-    "whisky": "../data/images/whisky.png",
+    "wood": "./data/textures/wood.png",
+    "hud-roots": "./data/hud-roots.png",
+    "axe": "./data/images/axe.png",
+    "heart": "./data/images/heart.png",
+    "tequila": "./data/images/tequila.png",
+    "timber": "./data/images/timber.jpeg",
+    "whisky": "./data/images/whisky.png",
 
     // lighter
-    "lighter1": "../data/lighter-spritesheet.png",
-    "lighter2": "../data/blow-spritesheet.png",
+    "lighter1": "./data/lighter-spritesheet.png",
+    "lighter2": "./data/blow-spritesheet.png",
 
-    "fire1": "../data/images/fire1.png",
-    "fire2": "../data/images/fire2.png",
-    "fire3": "../data/images/fire3.png",
+    "fire1": "./data/images/fire1.png",
+    "fire2": "./data/images/fire2.png",
+    "fire3": "./data/images/fire3.png",
 
     // textures 
-    "wall1": "../data/textures/wall1.png",
-    "wall2": "../data/textures/wall2.png",
-    "wall3": "../data/textures/wall3.png",
-    "wall4": "../data/textures/wall4.png",
-    "wall5": "../data/textures/wall5.png",
-    "wall6": "../data/textures/wall6.png",
-    "wall7": "../data/textures/wall7.png",
-    "wall_diagonal": "../data/textures/wall_diagonal.png",
-    "floor": "../data/textures/floor.png",
+    "wall1": "./data/textures/wall1.png",
+    "wall2": "./data/textures/wall2.png",
+    "wall3": "./data/textures/wall3.png",
+    "wall4": "./data/textures/wall4.png",
+    "wall5": "./data/textures/wall5.png",
+    "wall6": "./data/textures/wall6.png",
+    "wall7": "./data/textures/wall7.png",
+    "wall_diagonal": "./data/textures/wall_diagonal.png",
+    "floor": "./data/textures/floor.png",
 
     // musics
-    "ingame1": "../data/sounds/Musique_Calme_V3.mp3",
-    "ingame2": "../data/sounds/Musique_dynamique_V3.mp3",
+    "ingame1": "./data/sounds/Musique_Calme_V3.mp3",
+    "ingame2": "./data/sounds/Musique_dynamique_V3.mp3",
 
     // Sounds
-    "axeSound": "../data/sounds/axe.mp3",
-    "drinkSound": "../data/sounds/glou.mp3",
-    "drinkEndSound": "../data/sounds/huu.mp3",
-    "walkSound": "../data/sounds/walk.mp3",
-    "woodSound": "../data/sounds/wood.mp3",
-    "yeetBottleSound": "../data/sounds/yeetBottle.mp3",
-    "hitPlayerSound": "../data/sounds/roblox-death-sound-effect-bis.mp3"
+    "axeSound": "./data/sounds/axe.mp3",
+    "drinkSound": "./data/sounds/glou.mp3",
+    "drinkEndSound": "./data/sounds/huu.mp3",
+    "walkSound": "./data/sounds/walk.mp3",
+    "woodSound": "./data/sounds/wood.mp3",
+    "yeetBottleSound": "./data/sounds/yeetBottle.mp3",
+    "hitPlayerSound": "./data/sounds/roblox-death-sound-effect-bis.mp3"
 }
 
 /***
