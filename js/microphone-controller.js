@@ -34,7 +34,7 @@ export class MicrophoneController {
         }).catch((err) => {
             // always check for errors at the end.
             console.error(`${err.name}: ${err.message}`);
-            alert('Stream generation failed.');
+           // alert('Stream generation failed.');
         });
     }
 
