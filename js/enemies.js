@@ -78,7 +78,8 @@ export function buildEnemy(type,x,y,dx,dy) {
             return new Turnip(x,y,dx,dy,TURNIP_POINTS_DROP);
         case "dandelion":
             return new Dandelion(x,y,dx,dy, DANDELION_POINTS_DROP);
-        // ... TODO ... make more enemies
+        case "rabbit":
+            return new Rabbit(x,y,dx,dy,0);
     }
 }
 
@@ -117,7 +118,7 @@ class Enemy {
     update(dt, player) { 
         this.x += this.dirX * dt * this.speed;
         this.y += this.dirY * dt * this.speed;
-        this.behavior(dt);
+        this.behavior(dt, player);
 
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
@@ -333,10 +334,101 @@ class Dandelion extends Enemy {
         else if (angle >= 225 && angle < 315) {
             dec = 0;
         }
-       
-        
+         
         ctx.fillText(`Dandelion:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(DANDELION_SPRITESHEET, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
     
     }
+}
+
+
+
+
+const RABBIT_SPRITESHEET = new Image();
+RABBIT_SPRITESHEET.src = "../data/images/rabbit.png";
+const KILLER_RABBIT_SPRITESHEET = new Image();
+KILLER_RABBIT_SPRITESHEET.src = "../data/images/killer-rabbit.png";
+const NIBBLE_RABBIT_SPRITESHEET = new Image();
+NIBBLE_RABBIT_SPRITESHEET.src = "../data/images/nibble-rabbit.png";
+
+const RABBIT_ANIMATION = [0];
+
+const RABBIT_HEIGHT = 454 | 0;
+const RABBIT_WIDTH = 454;
+
+class Rabbit extends Enemy {
+
+    constructor(x, y, dirX, dirY, dropPoints) {
+        super(x, y, dirX, dirY, RABBIT_ANIMATION, RABBIT_ANIMATION, RABBIT_ANIMATION, RABBIT_ANIMATION, RABBIT_ANIMATION, RABBIT_ANIMATION, 200, 20, 0.2);
+        this.setAnimation(RABBIT_ANIMATION);
+        this.factor = 0.5;
+        this.height = RABBIT_HEIGHT;
+        this.width = RABBIT_WIDTH;
+        this.vMove = 60;
+        this.dropPoints = dropPoints;
+        this.range = 0.2;
+    }
+
+    update(dt, player) {
+        super.update(dt, player);
+
+        if (this.nibble) {
+            return;
+        }
+        let dX = player.posX - this.x;
+        let dY = player.posY - this.y;
+        let norm = Math.sqrt(dX*dX+dY*dY);
+                
+        if (this.killer) {
+            // todo detect wall collision
+            this.dirX = dX / norm;
+            this.dirY = dY / norm;
+            this.speed = 0.002;
+            return;
+        }
+    
+        if (norm < 2 && player.haveCarrot) {
+            this.nibble = true;
+            return;
+        }
+        
+        if (norm < 2 && !player.haveCarrot) {
+            this.killer = true;
+        }
+        
+    }
+
+    hit() {
+        this.killer = true;
+    }
+
+    render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
+        let sourceX = minX / sizeX * this.width | 0;
+        let width = (maxX - minX) / sizeX * this.width | 0;
+
+        let dec = 0;
+        
+        if (angle >= 45 && angle < 135) {
+            dec = 1;
+        }
+        else if (angle >= 135 && angle < 225) {
+            dec = 0;
+        }
+        else if (angle >= 225 && angle < 315) {
+            dec = 0;
+        }
+       
+        let img = RABBIT_SPRITESHEET;
+        if (this.nibble) {
+            img = NIBBLE_RABBIT_SPRITESHEET;
+        }
+        else if (this.killer) {
+            img = KILLER_RABBIT_SPRITESHEET;
+        }
+
+        //ctx.fillText(`Rbbit:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
+        ctx.drawImage(img, sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
+    
+    }
+
 }

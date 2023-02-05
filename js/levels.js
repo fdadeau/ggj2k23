@@ -215,13 +215,12 @@ const ENEMIES3 = function() {
     const carrot = buildPowerUp("carrot", 6.5, 20.5);
 
     // Uique rabbit and dialog
-    const rabbit = buildPowerUp("rabbit", 10.5, 20.5);
-    const dialog = buildPowerUp("dialog", 10.5, 20.5); // same position as rabit
+    const rabbit = buildEnemy("rabbit", 12.5, 25.5, 0, 0);
 
     // Uique rope (level end)
     const rope = buildPowerUp("rope", 5.5, 14.5);
 
-    return [tree0, tree1, /*turnip1,*/ whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, dialog, rope];
+    return [tree0, tree1, /*turnip1,*/ whisky0, whisky1, whisky2, whisky3, whisky4, tequila0, carrot, rabbit, rope];
 };
 
 
@@ -239,7 +238,7 @@ export const levels = {
         player: { posX: 2.5, posY: 26.5, dirX: 1, dirY: 0 },
         map: invert(MAP0),
         textures: mkTextures(invert(MAP0)),
-        enemies: ENEMIES4
+        enemies: ENEMIES3
     },
     "test": {
         player: { posX: 2.5, posY: 2.5, dirX: 1, dirY: 0 },
