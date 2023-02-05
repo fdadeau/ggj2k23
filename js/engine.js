@@ -247,7 +247,7 @@ export class Engine {
             this.zBuffer[x] = perpWallDist;
 
             // adjust brightness
-            let b = this.brightnessForDistance(perpWallDist, game.player.lighting)
+            let b = this.brightnessForDistance(perpWallDist, game.player.lighter.getLight());
 
             //Calculate height of line to draw on screen
             let lineHeight = Math.floor(H / perpWallDist);
@@ -330,7 +330,7 @@ export class Engine {
             let floorX = game.player.posX + rowDistance * rayDirX0;
             let floorY = game.player.posY + rowDistance * rayDirY0;
 
-            let b = this.brightnessForDistance(rowDistance, game.player.lighting);
+            let b = this.brightnessForDistance(rowDistance, game.player.lighter.getLight());
 
             for(let x = 0; x < W; ++x) {
                 // the cell coord is simply got from the integer parts of floorX and floorY
@@ -394,7 +394,7 @@ export class Engine {
                 return;
             }
 
-            let br = that.brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY), game.player.lighting);
+            let br = that.brightnessForDistance(Math.sqrt(spriteX*spriteX+spriteY*spriteY), game.player.lighter.getLight());
 
             if (br == 0) {
                 return;
