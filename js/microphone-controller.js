@@ -4,13 +4,14 @@ export class MicrophoneController {
 
     constructor() {
 
-        this.audioContext = new AudioContext();
+        this.audioContext;
         this.analyser;
         this.on = false;
 
     }
 
     start() {
+        this.audioContext = new AudioContext();
         // Attempt to get audio input
         navigator.mediaDevices.getUserMedia(
         {
@@ -25,16 +26,15 @@ export class MicrophoneController {
             },
         }).then((stream) => {
             // Create an AudioNode from the stream.
-            const mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
+            this.mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
             // Connect it to the destination.
             this.analyser = this.audioContext.createAnalyser();
             this.analyser.fftSize = 2048;
-            mediaStreamSource.connect( this.analyser );
+            this.mediaStreamSource.connect( this.analyser );
             
         }).catch((err) => {
             // always check for errors at the end.
             console.error(`${err.name}: ${err.message}`);
-           // alert('Stream generation failed.');
         });
     }
 

@@ -55,7 +55,7 @@ export class GUI {
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         ctx.fillStyle = '#FFFFFF';
         ctx.font = "18px pixel-bit-advanced";
-        ctx.fillText(`Loading assets: ${this.game.loading.loaded * 100 / this.game.loading.total | 0} percent...`, WIDTH / 2 - 200, HEIGHT/2 - 9);
+        ctx.fillText(`Loading assets: ${this.game.loading.loaded * 100 / this.game.loading.total | 0} %...`, WIDTH / 2 - 200, HEIGHT/2 - 9);
     }
 
     showTitleScreen(ctx) {
