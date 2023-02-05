@@ -224,7 +224,7 @@ export const levels = {
         player: { posX: 2.5, posY: 26.5, dirX: 1, dirY: 0 },
         map: invert(MAP0),
         textures: mkTextures(invert(MAP0)),
-        enemies: ENEMIES3
+        enemies: ENEMIES4
     },
     "test": {
         player: { posX: 2.5, posY: 2.5, dirX: 1, dirY: 0 },

@@ -71,8 +71,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (game.state == STATES.WAITING_TO_START) {
             engine.initialize();
             micro.start();
-            game.start();
-            
+            game.start();            
         } 
         await document.getElementById("cvs").requestFullscreen();
         if (!document.pointerLockElement) {
