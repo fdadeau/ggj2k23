@@ -349,8 +349,10 @@ const ANIM_KILLER = [0];
 const ANIM_NIBBLER = [3];
 const ANIM_WAITING = [2];
 
-const RABBIT_HEIGHT = 454;
-const RABBIT_WIDTH = 454;
+const RABBIT_HEIGHT = 500;
+const RABBIT_WIDTH = 500;
+
+const JUMP_SPEED = 0.015;
 
 class Rabbit extends Enemy {
 
@@ -363,6 +365,9 @@ class Rabbit extends Enemy {
         this.vMove = 60;
         this.dropPoints = dropPoints;
         this.range = 0.2;
+
+        this.initVMove = 60;
+        this.decZ = 0;
     }
 
     update(dt, player) {
@@ -380,6 +385,9 @@ class Rabbit extends Enemy {
             this.dirX = dX / norm;
             this.dirY = dY / norm;
             this.speed = 0.002;
+            this.decZ += dt * JUMP_SPEED;
+            this.vMove = this.initVMove+3*Math.sin(this.decZ) * 6;    
+            this.setAnimation(ANIM_KILLER);
             return;
         }
     
@@ -392,6 +400,7 @@ class Rabbit extends Enemy {
         if (norm < 2 && !player.haveCarrot) {
             this.killer = true;
             this.setAnimation(ANIM_KILLER);
+            return;
         }
         
     }
@@ -405,17 +414,7 @@ class Rabbit extends Enemy {
         let width = (maxX - minX) / sizeX * this.width | 0;
 
         let dec = 0;
-        
-        if (angle >= 45 && angle < 135) {
-            dec = 1;
-        }
-        else if (angle >= 135 && angle < 225) {
-            dec = 0;
-        }
-        else if (angle >= 225 && angle < 315) {
-            dec = 0;
-        }
-       
+               
         //ctx.fillText(`Rbbit:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(data["rabbit-spritesheet"], sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
         
