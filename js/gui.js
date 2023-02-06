@@ -284,28 +284,8 @@ export class GUI {
         if (this.gameArrived == false) {
             audio.pause();
             audio.playSound(won == 1 ? "victoryMusic" : "defeatMusic", "main", 0.4, false);
-
             document.querySelector("canvas").classList.add("fade");
-        
-            this.gameArrived = true;
-            ctx.globalAlpha = 0.5;
-            ctx.textAlign = "center";
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = '#ffd728';
-            ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("You've reached", WIDTH / 2, HEIGHT/2 - 50);
-            ctx.font = "45px pixel-bit-advanced";
-            ctx.fillText("the surface !", WIDTH / 2, HEIGHT/2);
-            ctx.fillStyle = '#fff';
-            ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2, HEIGHT/2 + 75);
-            data["ingame1"].pause();
-            data["ingame2"].pause();
-            data["walkSound"].pause();
-            data["victoryMusic"].loop = false;
-            data["victoryMusic"].play();
+            this.game.state = STATES.PLAYING_OUTRO;
         }
     }
 
@@ -336,7 +316,7 @@ export class GUI {
             this.showOutro = true;
             this.time = now + 1000;
             this.step = 0;
-            document.querySelector("canvas").classList.add("fade");
+            document.querySelector("canvas").classList.remove("fade");
             ctx.textAlign = "center";
             ctx.font = "40px Times";
             ctx.fillStyle = "white";
@@ -353,10 +333,13 @@ export class GUI {
 
 
 const INTRO = [
-    (t, ctx, now) => {
-        t.time = now + 1000;
-        document.querySelector("canvas").classList.remove("fade");
-    }, 
+    (t,ctx,now) => {
+        t.time = now + 2000;
+        drawOldStyle(ctx);
+        ctx.font = "40px pixel-bit-advanced";
+        ctx.textAlign = "center";
+        ctx.fillText("A few moments later...", WIDTH / 2, HEIGHT / 2);
+    },
     (t,ctx,now) => {
         t.time = now + 3000;
         document.querySelector("canvas").classList.remove("fade");
@@ -489,6 +472,7 @@ const INTRO = [
         document.querySelector("canvas").classList.add("fade");
     },
     (t,ctx,now) => {
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
         t.time = now + 1000;
         audio.playSound("ouch", "player", 0.4);
     },
@@ -503,7 +487,6 @@ const OUTRO = [
     (t, ctx, now) => {
         t.time = now + 1000;
         document.querySelector("canvas").classList.remove("fade");
-        audio.playMusic("", )
     }, 
     (t,ctx,now) => {
         t.time = now + 3000;

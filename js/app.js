@@ -37,6 +37,12 @@ document.addEventListener("DOMContentLoaded", async function() {
             localStorage.setItem(STORAGE_KEY_MOUSE, game.inverted);
             return;
         }
+        if ((e.key == " " || e.key == "Enter") && game.state == STATES.PLAYING_INTRO) {
+            document.querySelector("canvas").classList.remove("fade");
+            audio.pause();
+            game.start();
+            return;   
+        }
         game.press(e.code);
     });
     document.addEventListener("keyup", function(e) {

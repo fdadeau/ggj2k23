@@ -138,14 +138,6 @@ export class Game {
                 break;
             }
         }
-        /* else if (this.state == STATES.ARRIVED) {
-            switch (key) {
-                case 'Space' :
-                case 'Enter' :
-                    this.state = STATES.PLAYING_OUTRO;
-                break;
-            }
-        }*/
     }
 
     resetGame() {
