@@ -73,6 +73,11 @@ export class Engine {
             return;
         }
 
+        if (game.state == STATES.PAUSE) {
+            game.gui.pause(this.ctx);
+            return;
+        }
+
         if (game.state == STATES.PLAYING_OUTRO) {
             game.gui.playOutro(this.ctx);
             return;

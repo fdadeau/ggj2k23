@@ -1,8 +1,7 @@
+import { audio } from "./audio.js";
 import { data } from "./preload.js";
 
 import { STATES } from "./game.js";
-
-import { audio } from "./audio.js";
 
 // Assuming 640x400 (10/16 ratio) 
 
@@ -52,6 +51,7 @@ export class GUI {
     constructor(game) {
         this.game = game;
         this.time = 0;
+        //this.gamePaused = false;
         //this.gameDead = false;
         //this.gameArrived = false;
         //this.showIntro = false;
@@ -128,12 +128,24 @@ export class GUI {
             ctx.fillText("DANDELIONED", WIDTH / 2 - 200, HEIGHT/2);
             ctx.fillStyle = '#FFFFFF';
             ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2 - 290, HEIGHT/2 + 75);
-            data["ingame1"].pause();
-            data["ingame2"].pause();
-            data["walkSound"].pause();
-            data["defeatMusic"].loop = false;
-            data["defeatMusic"].play();
+            ctx.fillText("Press P to Resume", WIDTH / 2 - 290, HEIGHT/2 + 75);
+        }
+    }
+
+    /** Pause screen */
+    pause(ctx) {
+        if (this.gamePaused == false) {
+            this.gamePaused = true;
+            ctx.globalAlpha = 0.25;
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#fff';
+            ctx.font = "35px pixel-bit-advanced";
+            ctx.fillText("|| PAUSE", WIDTH / 2 - 110, HEIGHT/2 - 50);
+            ctx.font = "23px pixel-bit-advanced";
+            ctx.fillText("Press P to resume", WIDTH / 2 - 170, HEIGHT/2 + 20);
+            audio.pause()
         }
     }
     
@@ -157,11 +169,8 @@ export class GUI {
             ctx.fillText("the surface !", WIDTH / 2 - 200, HEIGHT/2);
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2 - 300, HEIGHT/2 + 75);
-            data["ingame1"].pause();
-            data["ingame2"].pause();
-            data["walkSound"].pause();
-            data["victoryMusic"].loop = false;
-            data["victoryMusic"].play();
+            audio.pause()
+            audio.playSound('victoryMusic',3,1,false);
         }
     }
 

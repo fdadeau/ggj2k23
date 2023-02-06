@@ -68,14 +68,15 @@ const data = {
     "axeSound": "./data/sounds/axe.mp3",
     "drinkSound": "./data/sounds/glou.mp3",
     "drinkEndSound": "./data/sounds/huu.mp3",
-    "walkSound": "./data/sounds/walk.mp3",
+    "walkSound": "./data/sounds/walk-bis.mp3",
     "woodSound": "./data/sounds/wood.mp3",
     "yeetBottleSound": "./data/sounds/yeetBottle.mp3",
-    "hitPlayerSound": "./data/sounds/roblox-death-sound-effect-bis.mp3",
+    "hitPlayerSound": "./data/sounds/hurt.mp3",
     "crunch": "./data/sounds/crunch.mp3",
     "ouch": "./data/sounds/ouch.mp3",
     "foule": "./data/sounds/foule.mp3",
-    'throw': "./data/sounds/throw.mp3"
+    'throw': "./data/sounds/throw.mp3",
+    "whoosh": "./data/sounds/whoosh.mp3"
 }
 
 /***
