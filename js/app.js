@@ -43,6 +43,19 @@ document.addEventListener("DOMContentLoaded", async function() {
             game.start();
             return;   
         }
+
+        // to remove for the final version
+        if (e.key == "Dead") {
+            if (game.state != STATES.PLAYING) {
+                document.querySelector("canvas").classList.remove("fade");
+                audio.pause();
+                game.start();
+            }
+            else {
+                game.player.hasExited = confirm("gagner ?") ? 1 : 2;
+                return;
+            }
+        }
         game.press(e);
     });
     document.addEventListener("keyup", function(e) {

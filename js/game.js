@@ -64,7 +64,7 @@ export class Game {
             this.state = STATES.DEAD;
             return;
         }
-        if (this.player.hasEscaped) {
+        if (this.player.hasExited) {
             this.state = STATES.FINISHED;
         }
     }

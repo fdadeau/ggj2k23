@@ -51,11 +51,6 @@ export class GUI {
     constructor(game) {
         this.game = game;
         this.time = 0;
-        //this.gamePaused = false;
-        //this.gameDead = false;
-        //this.gameArrived = false;
-        //this.showIntro = false;
-        //this.showOutro = false;
     }
 
     /** Loading screen */
@@ -295,12 +290,10 @@ export class GUI {
     
     /** Winning screen */
     finished(ctx, won) {
-        if (this.gameArrived == false) {
-            audio.pause();
-            document.querySelector("canvas").classList.add("fade");
-            this.game.state = STATES.PLAYING_OUTRO;
-            this.end = won;
-        }
+        audio.pause();
+        this.game.state = STATES.PLAYING_OUTRO;
+        this.end = won;
+        this.showOutro = false;
     }
 
     /** Intro animation */
@@ -326,13 +319,12 @@ export class GUI {
     /** Outro animation */
     playOutro(ctx) {
         let now = Date.now();
-        if (this.showOutro == false) {
+        if (!this.showOutro) {
             this.showOutro = true;
             this.time = now + 1000;
-            this.step = 0;
-            document.querySelector("canvas").classList.remove("fade");
+            this.step = -1;
+            document.querySelector("canvas").classList.add("fade");
             ctx.textAlign = "center";
-            ctx.font = "40px Times";
             ctx.fillStyle = "white";
         }
         if (now < this.time) {
@@ -499,52 +491,59 @@ const INTRO = [
 
 const OUTRO = [
     (t, ctx, now) => {
-        t.time = now + 1000;
+        t.time = now + 2000;
+        ctx.drawImage(data["outro1"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound("breathing", 0, 0.4, false);
         document.querySelector("canvas").classList.remove("fade");
     }, 
     (t,ctx,now) => {
-        t.time = now + 2000;
-        ctx.drawImage(data["fin1"], 0, 0, WIDTH, HEIGHT);
-        audio.playSound("breathing", 0, 0.4, true);
+        t.time = now + 1000;
+        audio.playSound(t.end == 1 ? "victoryMusic" : "defeatMusic", 1, 0.4, false);
     },
     (t,ctx,now) => {
-        t.time = now + 3000;
-        ctx.drawImage(data["fin2"], 0, 0, WIDTH, HEIGHT);
+        t.time = now + 1000;
+        ctx.drawImage(data["outro2"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 2000;
         audio.playSound("truck-start", 0, 0.4, false);
     },
     (t,ctx,now) => {
         t.time = now + 1000;
-        ctx.drawImage(data["fin3"], 0, 0, WIDTH, HEIGHT);
-        audio.playSound(won == 1 ? "victoryMusic" : "defeatMusic", "end", 0.4, false);
+        ctx.drawImage(data["outro3"], 0, 0, WIDTH, HEIGHT);
+        
     },
     (t,ctx,now) => {
         t.time = now + 1000;
-        ctx.drawImage(data["fin4"], 0, 0, WIDTH, HEIGHT);
+        ctx.drawImage(data["outro4"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
-        if (this.end == 2) {
-            t.time = now + 3000;
+        if (t.end == 1) {
+            t.time = now + 5000;
         }
         else {
-            drawOldStyle(ctx);
-            ctx.textAlign = "center";
-            ctx.font = "40px pixel-bit-advanced";
-            ctx.fillText('GAME OVER,', WIDTH / 2, HEIGHT / 2 - 50);
+            t.time = now + 4000;
         }
+        drawOldStyle(ctx);
+        ctx.textAlign = "center";
+        ctx.font = "40px pixel-bit-advanced";
+        ctx.fillText('GAME OVER', WIDTH / 2, HEIGHT / 2);
     },
     (t,ctx,now) => {
-        if (this.end == 2) {
-            t.time = now + 3000;
-            ctx.drawImage(data["fin4"], 0, 0, WIDTH, HEIGHT);
+        if (t.end == 2) {
+            t.time = now + 2000;
+            ctx.drawImage(data["outro5"], 0, 0, WIDTH, HEIGHT);
         }
         else {
-            ctx.drawImge(data["rabbit-spritesheet"], 0, 500*3, 500, 500, WIDTH /2 - 150, HEIGHT/2 - 200, 300, 300)
-            ctx.fillText('THANKS FOR PLAYING!', WIDTH / 2, HEIGHT / 2 + 250);
+            ctx.clearRect(0,0, WIDTH, HEIGHT);
+            ctx.drawImage(data["rabbit-spritesheet"], 0, 500*3, 500, 500, WIDTH /2 - 110, HEIGHT/2 - 120, 220, 220)
+            ctx.fillText('THANK YOU', WIDTH / 2, HEIGHT / 2 + 150);
+            ctx.fillText('FOR PLAYING!', WIDTH / 2, HEIGHT / 2 + 200);
         }
     },
     (t,ctx,now) => {
-        if (this.end == 2) {
-            ctx.drawImage(data["fin5"], 0, 0, WIDTH, HEIGHT);
+        if (t.end == 2) {
+            ctx.drawImage(data["outro6"], 0, 0, WIDTH, HEIGHT);
         }
     }  
 ]
