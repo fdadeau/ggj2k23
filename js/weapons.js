@@ -8,7 +8,7 @@ import { WIDTH, HEIGHT } from "./gui.js";
  * 
  * @returns A newly-built weapon of the specified type.
  */
-export function buildWeapon(type,){
+export function buildWeapon(type){
     switch(type){
         case 'whisky':
             return new Whisky();
@@ -266,10 +266,11 @@ export class Lighter {
         });
         this.frameDelay -= dt;
         if (this.frameDelay < 0) {
-            this.frame = (this.frame + 1) % SPRITE_ANIM_NB;
+            this.frame = (this.frame + 1) % (this.state == LIGHTER_BLOW ? SPRITE_ANIM_NB+2 : SPRITE_ANIM_NB);
             if (this.frame == 0 && this.state == LIGHTER_BLOW) {
                 this.frame = 2;
             }
+            
             this.frameDelay = SPRITE_ANIM_DELAY;
         }
         this.lastShot += dt;
