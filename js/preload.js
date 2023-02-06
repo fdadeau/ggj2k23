@@ -54,6 +54,8 @@ const data = {
     "woodTexture" : "./data/textures/wood.png",
     // 
     "logoGGJ": "./data/logoGGJ.png",
+    "logoOFNI": "./data/logoOFNI.png",
+    "logoDPS": "./data/logoDPS.png",
     "intro1": "./data/cinematics/intro-1.png",
     "intro2": "./data/cinematics/intro-2.png",
     "intro3": "./data/cinematics/intro-3.png",

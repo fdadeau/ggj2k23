@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", async function() {
             let clicX = (e.clientX - rect.left) * WIDTH / rect.width;
             let clicY = (e.clientY - rect.top) * HEIGHT / rect.height;
             game.gui.clickButton(clicX, clicY);
+        } else if (game.state == STATES.CONTROLS || game.state == STATES.CREDITS) {
+            game.state = STATES.TITLE;
         }
         return false;
     });
@@ -88,11 +90,13 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
 
     document.addEventListener("wheel", function(e) {
-        if (e.deltaY > 0) {
-            game.player.switchToNextWeapon(-1);
-        }
-        else if (e.deltaY < 0) {
-            game.player.switchToNextWeapon(1);
+        if (game.state == STATES.PLAYING) {
+            if (e.deltaY > 0) {
+                game.player.switchToNextWeapon(-1);
+            }
+            else if (e.deltaY < 0) {
+                game.player.switchToNextWeapon(1);
+            }
         }
     });
 
