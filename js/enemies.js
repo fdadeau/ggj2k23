@@ -357,7 +357,7 @@ const JUMP_SPEED = 0.015;
 class Rabbit extends Enemy {
 
     constructor(x, y, dirX, dirY, dropPoints) {
-        super(x, y, dirX, dirY, ANIM_WAITING, ANIM_WAITING, ANIM_WAITING, ANIM_WAITING, ANIM_WAITING, ANIM_WAITING, 200, 20, 0.2);
+        super(x, y, dirX, dirY, ANIM_KILLER, ANIM_WAITING, ANIM_KILLER, ANIM_KILLER, ANIM_KILLER, ANIM_KILLER, 200, 20, 0.2);
         this.setAnimation(ANIM_WAITING);
         this.factor = 0.5;
         this.height = RABBIT_HEIGHT;
@@ -387,7 +387,7 @@ class Rabbit extends Enemy {
             this.speed = 0.002;
             this.decZ += dt * JUMP_SPEED;
             this.vMove = this.initVMove+3*Math.sin(this.decZ) * 6;    
-            this.setAnimation(ANIM_KILLER);
+            //this.setAnimation(ANIM_KILLER);
             return;
         }
     

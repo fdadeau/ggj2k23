@@ -78,28 +78,24 @@ const MAP1 = [
 ]
 
 
+const MAP2 = [
+    [1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,4,1,1,1,5,0,1],
+    [1,0,1,1,1,1,1,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,1,1,1,1,1,0,1],
+    [1,0,3,1,1,1,2,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1]
+]
 const ENEMIES2 = function() {
-
-    /*
-    // dino running around
-    const dino0 = buildEnemy("dino", 3.5, 5.5, 0, 1);
-    dino0.behavior = function() {
-        if (!this.xTarget || !this.yTarget) {
-            this.xTarget = 3.5;
-            this.yTarget = 7.5;
-            this.walk();
-        }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
-            this.dirY = -this.dirY;
-            this.yTarget += this.dirY * 4;
-            this.angle = (this.angle + 180) % 360;
-        }
-    }.bind(dino0);
-
-    // static dino
-    const dino1 = buildEnemy("dino", 6.5, 4.5, 1, 0);
-
-    return [dino0, dino1];*/
+    //rabbit
+    const rabbit = buildEnemy("rabbit", 7.5, 7.5, 0, 1);
+    //POWER UP
+    const carrot = buildPowerUp("carrot", 7.5, 4.5);
+    
+    return [rabbit, carrot];
 };
 
 const ENEMIES4 = function() {
@@ -299,8 +295,14 @@ export const levels = {
     "test": {
         player: { posX: 2.5, posY: 2.5, dirX: 1, dirY: 0 },
         map: invert(MAP1),
-        textures: mkTextures(invert(MAP0)),
+        textures: mkTextures(invert(MAP1)),
         enemies: ENEMIES_TEST
+    },
+    "testFD": {
+        player: { posX: 4.5, posY: 4.5, dirX: 1, dirY: 0 },
+        map: invert(MAP2),
+        textures: mkTextures(invert(MAP2)),
+        enemies: ENEMIES2
     }
 
 }
@@ -315,6 +317,9 @@ function invert(m) {
         let l = m.length - 1;
         for (let j=0; j < m[i].length; j++) {
             let c = m[0].length - 1;
+            if (!r[i]) {
+                r[i] = [];
+            }
             r[i][j] = m[l-j][i];
         }
     }

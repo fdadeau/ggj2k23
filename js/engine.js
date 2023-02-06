@@ -132,6 +132,8 @@ export class Engine {
         //length of ray from current position to next x or y-side
         let sideDistX, sideDistY;
 
+        let nbSteps = 0;
+
         //calculate step and initial sideDist
         if (rayDirX < 0) {
             stepX = -1;
@@ -172,6 +174,8 @@ export class Engine {
                 side = 1;
                 whichSide = (stepY > 0) ? 2 : 0;
             }
+            nbSteps++;
+
             //Check if ray has hit a wall
             let kind = game.map[mapX][mapY];
 
@@ -186,11 +190,50 @@ export class Engine {
                 kind == 4 && (whichSide == 1 || whichSide == 2) ||
                 kind == 5 && (whichSide == 2 || whichSide == 3)) {
                 hit = 1;
+                
                 //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
                 perpWallDist = (side == 0) ? (sideDistX - deltaDistX) : (sideDistY - deltaDistY);
+                
+                // Special case
+                if (nbSteps == 1 && game.map[posX][posY] > 1) {
+                    // inside a triangle, looking at opposite wall
+                    
+                    pt_ = { x: game.player.posX, y: game.player.posY - 1 };
+                    
+                    //perpWallDist = Math.min(Math.abs(pt_.x - posX), Math.abs(pt_.y - posY));
+
+                    // diag descendante :
+                    let diag1, diag2;
+                    if (game.map[posX][posY] == 5 || game.map[posX][posY] == 3) {
+                        diag1 = {x: posX, y: posY};
+                        diag2 = {x: posX+1, y:posY-1};
+                    }
+                    else {
+                        diag1 = {x: posX+1, y:posY};
+                        diag2 = {x: posX, y:posY-1};
+                    }
+
+                    let pt2 = intersection(pt, pt_, diag1, diag2);
+    
+                    let dX = (pt.x - pt_.x);
+                    let dY = (pt.y - pt_.y);
+                    let dist2 = Math.sqrt(dX*dX+dY*dY);
+
+                    dX = (pt2.x - pt_.x);
+                    dY = (pt2.y - pt_.y);
+                    let dist1 = Math.sqrt(dX*dX+dY*dY);
+
+                    let ratio = (dist1) / dist2;
+                    perpWallDist = perpWallDist * ratio;
+                    
+                    whichSide = 4;
+                    pt_ = pt2;                    
+                }
             }
+            // looking at a diagonal wall block
             else if (kind >= 2) {
 
+                // point on the entry wall
                 pt_ = getPointOnWall(whichSide, side, sideDistX, sideDistY, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game);
 
                 let whichSide_, sideDistX_, sideDistY_, side_; 
@@ -206,6 +249,7 @@ export class Engine {
                     whichSide_ = (stepY > 0) ? 0 : 2;
                 }
 
+                // point on the opposite wall
                 pt = getPointOnWall(whichSide_, side_, sideDistX_, sideDistY_, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game);
                 
                 if (kind == 2 && (whichSide_ == 3 || whichSide_ == 0) || 
@@ -226,7 +270,7 @@ export class Engine {
                     }
 
                     let pt2 = intersection(pt, pt_, diag1, diag2);
-                    
+
                     let dX = (pt.x - pt_.x);
                     let dY = (pt.y - pt_.y);
                     let dist2 = Math.sqrt(dX*dX+dY*dY);
@@ -666,7 +710,7 @@ function intersection(p0, p1, p2, p3) {
         return {x: p0.x + (t * s1_x), y: p0.y + (t * s1_y)}
     }
   
-    return null;
+    return {x: p0.x + (t * s1_x), y: p0.y + (t * s1_y)}
 }
 
 /**
