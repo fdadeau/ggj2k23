@@ -1,5 +1,7 @@
 import { data } from "./preload.js";
 
+import { STATES } from "./game.js";
+
 // Assuming 640x400 (10/16 ratio) 
 
 /** Screen width */
@@ -55,9 +57,9 @@ export class GUI {
 
     /** Loading screen */
     loading(ctx) {
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = '#fff';
         ctx.font = "18px pixel-bit-advanced";
         ctx.textAlign = "center";
         ctx.fillText(`Loading assets: ${this.game.loading.loaded * 100 / this.game.loading.total | 0} %...`, WIDTH / 2, HEIGHT/2);
@@ -70,7 +72,7 @@ export class GUI {
         // Buttons
         ctx.font = "26px pixel-bit-advanced";
         ctx.textAlign = "center";
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = '#fff';
         [BUTTON_PLAY, BUTTON_CONTROLS, BUTTON_CREDITS].forEach((b,i,a) => {
             ctx.drawImage(data.woodTexture, b.x, b.y, b.width, b.height);
             ctx.fillText(b.text, b.x + b.width/2, b.y + b.height - 26/2);
@@ -80,7 +82,7 @@ export class GUI {
 
     clickButton(clicX, clicY) {
         // If we play
-        if (clicX >= BUTTON_PLAY.x && clicX <= BUTTON_PLAY.x + BUTTON_PLAY.width && clicY >= BUTTON_PLAY.y && clicY <= BUTTON_PLAY.y + BUTTON_PLAY.height) {
+        if (this.clicOnButton(clicX, clicY, BUTTON_PLAY)) {
             if (!document.pointerLockElement) {
                 document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
             }
@@ -88,22 +90,46 @@ export class GUI {
             this.game.start();
         }
         // If we see the controls
-        else if (clicX >= BUTTON_CONTROLS.x && clicX <= BUTTON_CONTROLS.x + BUTTON_CONTROLS.width && clicY >= BUTTON_CONTROLS.y && clicY <= BUTTON_CONTROLS.y + BUTTON_CONTROLS.height) {
-            // TODO
+        else if (this.clicOnButton(clicX, clicY, BUTTON_CONTROLS)) {
+            this.game.state = STATES.CONTROLS;
+            console.log('toto');
         }
         // If we see the credits
-        else if (clicX >= BUTTON_CREDITS.x && clicX <= BUTTON_CREDITS.x + BUTTON_CREDITS.width && clicY >= BUTTON_CREDITS.y && clicY <= BUTTON_CREDITS.y + BUTTON_CREDITS.height) {
-            // TODO
+        else if (this.clicOnButton(clicX, clicY, BUTTON_CREDITS)) {
+            this.game.state = STATES.CREDITS;
         }
     }
 
+    clicOnButton(clicX, clicY, BUTTON) {
+        return clicX >= BUTTON.x && clicX <= BUTTON.x + BUTTON.width && clicY >= BUTTON.y && clicY <= BUTTON.y + BUTTON.height;
+    }
+
+    showControls(ctx) {
+        // Background image
+        for(let i = 0; i < 4; i++) {
+            ctx.drawImage(data.wood, 0, HEIGHT / 4 * i, WIDTH, HEIGHT / 4);
+        }
+        ctx.textAlign = "center";
+        ctx.fillStyle = '#fff';
+        ctx.font = "23px pixel-bit-advanced";
+    }
+
+    showCredits(ctx) {
+        // Background image
+        for(let i = 0; i < 4; i++) {
+            ctx.drawImage(data.wood, 0, HEIGHT / 4 * i, WIDTH, HEIGHT / 4);
+        }
+        ctx.textAlign = "center";
+        ctx.fillStyle = '#fff';
+        ctx.font = "23px pixel-bit-advanced";
+    }
 
     /** Waiting to start screen */
     waitingToStart(ctx) {
         ctx.textAlign = "center";
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = '#fff';
         ctx.font = "23px pixel-bit-advanced";
         ctx.fillText("Loading complete", WIDTH / 2, HEIGHT/2 - 50);
         ctx.fillText("Double click to start",  WIDTH/2, HEIGHT/2 +50);
@@ -114,16 +140,17 @@ export class GUI {
         if (this.gameDead == false) {
             this.gameDead = true;
             ctx.globalAlpha = 0.25;
+            ctx.textAlign = "center";
             ctx.fillStyle = '#f00';
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
             ctx.globalAlpha = 1;
             ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("You've been", WIDTH / 2 - 150, HEIGHT/2 - 50);
+            ctx.fillText("You've been", WIDTH / 2, HEIGHT/2 - 50);
             ctx.font = "45px pixel-bit-advanced";
-            ctx.fillText("DANDELIONED", WIDTH / 2 - 200, HEIGHT/2);
-            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
+            ctx.fillStyle = '#fff';
             ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2 - 290, HEIGHT/2 + 75);
+            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
             data["ingame1"].pause();
             data["ingame2"].pause();
             data["walkSound"].pause();
@@ -137,16 +164,18 @@ export class GUI {
         if (this.gameArrived == false) {
             this.gameArrived = true;
             ctx.globalAlpha = 0.5;
+            ctx.textAlign = "center";
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
             ctx.globalAlpha = 1;
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = '#ffd728';
             ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("You've reached", WIDTH / 2 - 170, HEIGHT/2 - 50);
+            ctx.fillText("You've reached", WIDTH / 2, HEIGHT/2 - 50);
             ctx.font = "45px pixel-bit-advanced";
-            ctx.fillText("the surface !", WIDTH / 2 - 200, HEIGHT/2);
+            ctx.fillText("the surface !", WIDTH / 2, HEIGHT/2);
+            ctx.fillStyle = '#fff';
             ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2 - 300, HEIGHT/2 + 75);
+            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2, HEIGHT/2 + 75);
             data["ingame1"].pause();
             data["ingame2"].pause();
             data["walkSound"].pause();
