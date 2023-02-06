@@ -92,12 +92,10 @@ export class GUI {
         // If we see the controls
         else if (this.clicOnButton(clicX, clicY, BUTTON_CONTROLS)) {
             this.game.state = STATES.CONTROLS;
-            console.log('controls');
         }
         // If we see the credits
         else if (this.clicOnButton(clicX, clicY, BUTTON_CREDITS)) {
             this.game.state = STATES.CREDITS;
-            console.log('credits');
         }
     }
 
@@ -108,13 +106,72 @@ export class GUI {
     showControls(ctx) {
         // Theme
         this.drawMenuTheme(ctx, 'Controls');
+        ctx.textAlign = "left";
         
-        // Left column
+        // WASD / arrows
+        ctx.drawImage(data.wasd, 15, 140, 80, 80);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('WASD / arrows', 120, 170);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Move', 120, 200);
+
+        // Left click / L
+        ctx.drawImage(data["left-click"], 15, 240, 35, 40);
+        ctx.drawImage(data.key, 60, 240, 40, 40);
+        ctx.fillText('L', 75, 268);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('Left click / L', 120, 250);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Use the lighter', 120, 280);
+
+        // Right click / E
+        ctx.drawImage(data["right-click"], 15, 320, 35, 40);
+        ctx.drawImage(data.key, 60, 320, 40, 40);
+        ctx.fillText('E', 75, 348);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('Right click / E', 120, 330);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Attack / equip', 120, 360);
 
         // Root separator
-        ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 70, 10, 230);
+        ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 70, 10, 250);
 
-        // Right column
+        // Scroll / space
+        ctx.drawImage(data.scroll, 340, 160, 35, 40);
+        ctx.drawImage(data.key, 380, 170, 50, 15);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('Scroll / space', 450, 170);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Change equipment', 450, 200);
+
+        // F / blow
+        ctx.drawImage(data.key, 340, 240, 40, 40);
+        ctx.fillText('F',  354, 268);
+        ctx.drawImage(data.mike, 395, 242, 25, 35);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('F / blow (mike)', 450, 250);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Blow on the lighter', 450, 280);
+
+         // I
+        ctx.drawImage(data.key, 340, 320, 40, 40);
+        ctx.fillText('I', 354, 348);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('I', 450, 330);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Invert mouse', 450, 360);
     }
 
     showCredits(ctx) {
@@ -159,6 +216,7 @@ export class GUI {
     }
 
     drawMenuTheme(ctx, title) {
+        ctx.textAlign = "center";
         // Background image
         for(let i = 0; i < 4; i++) {
             ctx.drawImage(data.wood, 0, HEIGHT / 4 * i, WIDTH, HEIGHT / 4);

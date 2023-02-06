@@ -56,6 +56,7 @@ const data = {
     "logoGGJ": "./data/logoGGJ.png",
     "logoOFNI": "./data/logoOFNI.png",
     "logoDPS": "./data/logoDPS.png",
+
     "intro1": "./data/cinematics/intro-1.png",
     "intro2": "./data/cinematics/intro-2.png",
     "intro3": "./data/cinematics/intro-3.png",
@@ -65,6 +66,14 @@ const data = {
     "intro7": "./data/cinematics/intro-7.png",
     // outro
     // TO COME
+
+    // Controls
+    "wasd": "./data/controls/wasd.png",
+    "left-click": "./data/controls/left-click.png",
+    "right-click": "./data/controls/right-click.png",
+    "scroll": "./data/controls/scroll.png",
+    "key": "./data/controls/key.png",
+    "mike": "./data/controls/mike.png",
 
     // Sounds
     "axeSound": "./data/sounds/axe.mp3",
