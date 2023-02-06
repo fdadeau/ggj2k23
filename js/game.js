@@ -77,7 +77,7 @@ export class Game {
                 case 'ArrowUp': 
                 case 'KeyW':
                     if(key.repeat){
-                        return;
+                        //return;
                     }
                     this.player.walk(1);
                     break;
