@@ -395,7 +395,8 @@ class Rabbit extends Enemy {
         this.dirX = dX / norm;
         this.dirY = dY / norm;
                     
-        if (norm < 2 && player.haveCarrot) {
+        
+        if (norm < 0.5 && player.haveCarrot) {
             if (this.killer) {
                 audio.playMusic("ingame1", 0.4);
             }

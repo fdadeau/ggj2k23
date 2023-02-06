@@ -3,7 +3,7 @@ import Player from "./player.js";
 
 import { levels } from "./levels.js";
 
-import { data } from "./preload.js";
+import { audio } from "./audio.js";
 
 import { GUI } from "./gui.js";
 
@@ -59,9 +59,7 @@ export class Game {
         this.player.initialize(levelData.player.posX, levelData.player.posY, levelData.player.dirX, levelData.player.dirY);
         this.map = levelData.map;
         this.textures = levelData.textures;
-        this.audio = data.ingame1;
-        this.audio.loop = 1;
-        this.audio.play();
+        audio.playMusic("ingame1", 0.4);
     }
 
     update(dt) {
