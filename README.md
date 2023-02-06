@@ -14,9 +14,12 @@ A return to the roots of FPS games with a 2.5D shooter inspired from Wolfenstein
 
 ## How to play
 
-- ZQSD or Up/Left/Down/Right arrows to move
-- left click or E to attack / use right hand weapon
-- right click or B to use lighter 
+- ZQSD or Up/Left/Down/Right arrows to move 
+- left click or L to use lighter
+- right click or E to attack / use equipment
+- F or blow in your microphone to blow on the lighter
+
+- I to invert mouse
 
 Explore the caves. Beware the various creatures in them. 
 Grab alcohol bottles, drink them and combine your heavy breath with the lighter to produce deadly flames!
@@ -29,7 +32,3 @@ Ready? Play it online: [https://fdadeau.github.io/ggj2k23](https://fdadeau.githu
 - No Shortcuts - game engine has been entirely built using VanillaJS and raytracing algorithms
 - Year of the Rabbit - you are in a rabbit hole, right? there are surely some rabbits in it 
 - Is This The End? - make sure you accomplish additional quest before exiting the level...
-
-
-
-
