@@ -257,7 +257,7 @@ export class GUI {
 
     /** Dead screen */
     dead(ctx) {
-        if (this.gameDead == false) {
+        if (this.gameDead == undefined || this.gameDead == false) {
             this.gameDead = true;
             ctx.globalAlpha = 0.25;
             ctx.textAlign = "center";
@@ -270,8 +270,9 @@ export class GUI {
             ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
             ctx.fillStyle = '#fff';
             ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press P to Resume", WIDTH / 2 - 290, HEIGHT/2 + 75);
-            data["defeatMusic"].play();
+            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
+            audio.pause();
+            audio.playSound('defeatMusic',0,1,false);
         }
     }
 
@@ -288,7 +289,7 @@ export class GUI {
             ctx.fillText("|| PAUSE", WIDTH / 2 - 110, HEIGHT/2 - 50);
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press P to resume", WIDTH / 2 - 170, HEIGHT/2 + 20);
-            audio.pause()
+            audio.pause();
         }
     }
     
