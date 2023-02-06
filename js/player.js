@@ -188,6 +188,7 @@ export default class Player {
     }
 
     getInfos() {
+      //  return `x-0.25=${this.posX-0.25}, y+0.25=${this.posY+0.25}`;
         return `Player: posX=${this.posX.toFixed(2)}, posY=${this.posY.toFixed(2)}, dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}`;
     }
 
@@ -304,14 +305,12 @@ export default class Player {
     }
     isOnEmptyTile(map, x, y) {
         let tileX = x | 0, tileY = y | 0;
-        let inTileX = x - tileX, inTileY = y - inTileX;
-        //if (inTileX < 0) { inTileX *= -1; }
-        //if (inTileY < 0) { inTileY *= -1; }
+        let inTileX = x - tileX, inTileY = y - tileY;
         if (map[tileX][tileY] == 1) { return false; }
-        if (map[tileX][tileY] == 2 && inTileX < inTileY) { return false; }
-        if (map[tileX][tileY] == 3 && inTileY < -inTileX) { return false; }
-        if (map[tileX][tileY] == 4 && inTileX < -inTileY) { return false; }
-        if (map[tileX][tileY] == 5 && inTileY < inTileX) { return false; }
+        if (map[tileX][tileY] == 2 && inTileX <= inTileY) { return false; }
+        if (map[tileX][tileY] == 3 && inTileX >= 1-inTileY) { return false; }
+        if (map[tileX][tileY] == 4 && inTileX >= inTileY) { return false; }
+        if (map[tileX][tileY] == 5 && inTileX <= 1-inTileY) { return false; }
         return true;
     }
 

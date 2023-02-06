@@ -21,6 +21,8 @@ A return to the roots of FPS games with a 2.5D shooter inspired from Wolfenstein
 Explore the caves. Beware the various creatures in them. 
 Grab alcohol bottles, drink them and combine your heavy breath with the lighter to produce deadly flames!
 
+Ready? Play it online: [https://fdadeau.github.io/ggj2k23](https://fdadeau.github.io/ggj2k23)
+
 ## Diversifiers
 
 - Sharing is caring (Sponsored by GitHub) - there you are

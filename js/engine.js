@@ -246,6 +246,7 @@ export class Engine {
                     perpWallDist = (perpWallDist + d*ratio);               
 
                     whichSide = 4;
+                    pt = pt2;
                 }
             }  
         } 
@@ -557,6 +558,8 @@ export class Engine {
                 }
             }
         }
+
+        // draw character
         this.ctx.fillStyle = "#0000FF";
         this.ctx.strokeStyle = "#0000FF";
         this.ctx.beginPath();
@@ -568,6 +571,8 @@ export class Engine {
         this.ctx.lineTo(10 + game.player.posX*square + game.player.dirX * square | 0, 10 + posY*square - game.player.dirY * square | 0);
         this.ctx.closePath();
         this.ctx.stroke();
+
+        this.ctx.strokeRect(10 + (game.player.posX - 0.25)*square | 0, 10+(posY - 0.25)*square | 0, 0.5*square, 0.5*square);
 
         this.ctx.fillText(game.player.getInfos(), game.map.length * square + 20, 20);
         [0, WIDTH/2, WIDTH-1].forEach((x,i) => {
@@ -613,6 +618,7 @@ export class Engine {
         });
     }
 }
+
 
 function getPointOnWall(whichSide, side, sideDistX, sideDistY, deltaDistX, deltaDistY, rayDirX, rayDirY, mapX, mapY, game) {
 
