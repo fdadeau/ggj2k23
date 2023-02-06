@@ -40,7 +40,11 @@ export const audio = {
             this.ambiance.currentTime = 0;
     },
 
-    pause: function() {
+    pause: function(s) {
+        if (s !== undefined && this.sounds[s]) {
+            this.sounds[s].pause();
+            return;
+        }
         if (this.ambiance) 
             this.ambiance.pause();
         for (let s in this.sounds) {
@@ -48,7 +52,11 @@ export const audio = {
         }
     },
 
-    resume: function() {
+    resume: function(s) {
+        if (s !== undefined && this.sounds[s]) {
+            this.sounds[s].play();
+            return;
+        }
         if (this.ambiance) this.ambiance.play();
         for (let s in this.sounds) {
             if (this.sounds[s].loop) 

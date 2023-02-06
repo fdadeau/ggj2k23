@@ -214,7 +214,7 @@ const INTRO = [
         ctx.textAlign = "center";
         ctx.font = "40px pixel-bit-advanced";
         ctx.fillText("Hum... I'm thirsty!", WIDTH / 2, HEIGHT / 2);
-        audio.sounds[0].pause();
+        audio.pause(0);
     },
     (t,ctx,now) => {
         t.time = now + 1000;
@@ -302,11 +302,12 @@ const INTRO = [
         document.querySelector("canvas").classList.add("fade");
     },
     (t,ctx,now) => {
+        t.time = now + 1000;
         audio.playSound("ouch", "player", 0.4);
     },
     (t) => {
-        document.querySelector("canvas").classList.remove("fade");
         t.game.start();        
+        document.querySelector("canvas").classList.remove("fade");
     }
 ]
 
