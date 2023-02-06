@@ -23,6 +23,7 @@ export function buildWeapon(type,){
 /** Whisky */
 const WHISKY_HEIGHT = 4200/6 | 0;
 const WHISKY_WIDTH = 1000;
+const WHISKY_INCREASE_SOBRIETY = 25;
 
 const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const WHISKY_IDLE = [0];
@@ -39,6 +40,7 @@ const AXE_IDLE = [0];
 /** TEQUILA */
 const TEQUILA_HEIGHT = 4200/6 | 0;
 const TEQUILA_WIDTH = 1000;
+const TEQUILA_INCREASE_SOBRIETY = 15;
 
 const TEQUILA_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const TEQUILA_IDLE = [0];
@@ -104,7 +106,7 @@ class Whisky extends Consumable{
         if(player.nbWhisky == 0){
             return;
         }
-        player.sobriety += 10;
+        player.sobriety += WHISKY_INCREASE_SOBRIETY;
         player.nbWhisky--;
     }
 
@@ -138,7 +140,7 @@ class Tequila extends Consumable {
             return;
         }
         player.isDrunk = true;
-        player.sobriety += 10;
+        player.sobriety += TEQUILA_INCREASE_SOBRIETY;
         player.nbTequila--;
     }
 

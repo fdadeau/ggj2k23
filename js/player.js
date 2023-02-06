@@ -7,6 +7,8 @@ import { data } from "./preload.js";
 
 const FRAME_DELAY = 100;
 
+const NATURAL_SOBRIETY_DECREASE = 0.1;
+
 
 /***
  * Class describing the main character of the game.
@@ -56,7 +58,7 @@ export default class Player {
         this.score = 0;
 
         /** player's health */
-        this.health = 100;
+        this.health = 10;
 
         /** player's sobriety */
         this.sobriety = 0;
@@ -206,6 +208,10 @@ export default class Player {
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
+            this.sobriety -= NATURAL_SOBRIETY_DECREASE;
+            if(this.sobriety < 0){
+                this.sobriety = 0;
+            }
             this.frame = (this.frame + 1) % this.animation.length;
             if(this.frame == 0 && this.isAttacking){
                 this.isAttacking = false;
