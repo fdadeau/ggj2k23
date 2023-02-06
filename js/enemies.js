@@ -323,7 +323,7 @@ class Dandelion extends Enemy {
         this.factor = 0.5;
         this.height = DANDELION_HEIGHT;
         this.width = DANDELION_WIDTH;
-        this.vMove = 20;
+        this.vMove = 50;
         this.dropPoints = dropPoints;
     }
 
@@ -363,7 +363,7 @@ const ANIM_WAITING = [2];
 const RABBIT_HEIGHT = 500;
 const RABBIT_WIDTH = 500;
 
-const JUMP_SPEED = 0.015;
+const JUMP_SPEED = 0.035;
 
 class Rabbit extends Enemy {
 
@@ -390,7 +390,18 @@ class Rabbit extends Enemy {
         let dX = player.posX - this.x;
         let dY = player.posY - this.y;
         let norm = Math.sqrt(dX*dX+dY*dY);
-                
+        this.dirX = dX / norm;
+        this.dirY = dY / norm;
+                    
+        if (norm < 2 && player.haveCarrot) {
+            this.nibble = true;
+            this.setAnimation(ANIM_NIBBLER);
+            this.dirX = 0;
+            this.dirY = 0;
+            player.haveCarrot = false;
+            return;
+        }
+        
         if (this.killer) {
             // todo detect wall collision
             this.dirX = dX / norm;
@@ -398,16 +409,10 @@ class Rabbit extends Enemy {
             this.speed = 0.002;
             this.decZ += dt * JUMP_SPEED;
             this.vMove = this.initVMove+3*Math.sin(this.decZ) * 6;    
-            //this.setAnimation(ANIM_KILLER);
             return;
         }
-    
-        if (norm < 2 && player.haveCarrot) {
-            this.nibble = true;
-            this.setAnimation(ANIM_NIBBLER);
-            return;
-        }
-        
+
+
         if (norm < 2 && !player.haveCarrot) {
             this.killer = true;
             this.setAnimation(ANIM_KILLER);
