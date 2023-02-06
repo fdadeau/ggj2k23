@@ -60,6 +60,8 @@ const data = {
     "intro4": "./data/cinematics/intro-4.png",
     "intro5": "./data/cinematics/intro-5.png",
     "intro6": "./data/cinematics/intro-6.png",
+    "intro6_2": "./data/cinematics/intro-6_2.png",
+    "intro6_3": "./data/cinematics/intro-6_3.png",
     "intro7": "./data/cinematics/intro-7.png",
     // outro
     // TO COME
