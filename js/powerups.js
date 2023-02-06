@@ -16,7 +16,7 @@ const DIALOG_HEIGHT = 663 | 0;
 const DIALOG_WIDTH = 663;
 
 const ROPE_HEIGHT = 400 | 0;
-const ROPE_WIDTH = 50;
+const ROPE_WIDTH = 100;
 
 /**
  * Build a power up of the specified type.
