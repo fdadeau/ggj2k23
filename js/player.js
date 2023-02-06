@@ -98,8 +98,6 @@ export default class Player {
 
         /** Tells if the player have found the carrot */
         this.haveCarrot = false;
-        /** Tells if the rabbit have received the carrot */
-        this.giveCarrot = false;
         /** Tells if the player finished the level */
         this.arrived = false;
     }

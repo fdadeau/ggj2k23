@@ -266,8 +266,9 @@ export class Lighter {
         });
         this.frameDelay -= dt;
         if (this.frameDelay < 0) {
-            if (this.frame < 2 || this.state != LIGHTER_BLOW) {
-                this.frame = (this.frame + 1) % SPRITE_ANIM_NB;
+            this.frame = (this.frame + 1) % SPRITE_ANIM_NB;
+            if (this.frame == 0 && this.state == LIGHTER_BLOW) {
+                this.frame = 2;
             }
             this.frameDelay = SPRITE_ANIM_DELAY;
         }
