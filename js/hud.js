@@ -106,8 +106,8 @@ export class Hud {
         ctx.drawImage(data["raymond-spritesheet"], 0, ((this.animation[this.frame]) * TIMBER_HEIGHT), TIMBER_WIDTH, TIMBER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
         
         if(player.health <= 50){
-            if(player.health == 0){
-                if(this.animation != TIMBER_DED){
+            if(player.health <= 25){
+                if(player.health <= 0 && this.animation != TIMBER_DED){
                     this.ded();
                 }
                 ctx.drawImage(data["filter-spritesheet"], 0, FILTER_HEIGHT, FILTER_WIDTH, FILTER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);

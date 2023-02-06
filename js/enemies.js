@@ -183,11 +183,11 @@ const TREE_BURNT = [18];
 const TREE_HEIGHT = 15200/19 | 0;
 const TREE_WIDTH = 800;
 
-const TREE_ATTACK_DAMAGE = 20;
-const TREE_HP = 100;
+const TREE_ATTACK_DAMAGE = 15;
+const TREE_HP = 120;
 const TREE_ATTACK_DELAY = 500;
 const TREE_POINTS_DROP = 50;
-const TREE_RANGE = 1;
+const TREE_RANGE = 1.1;
 
 class Tree extends Enemy {
 
@@ -249,11 +249,11 @@ const TURNIP_BURNT = [16];
 const TURNIP_HEIGHT = 7106/17 | 0;
 const TURNIP_WIDTH = 419;
 
-const TURNIP_ATTACK_DAMAGE = 20;
-const TURNIP_HP = 100;
+const TURNIP_ATTACK_DAMAGE = 25;
+const TURNIP_HP = 50;
 const TURNIP_ATTACK_DELAY = 500;
 const TURNIP_POINTS_DROP = 100;
-const TURNIP_RANGE = 1;
+const TURNIP_RANGE = 0.9;
 
 
 class Turnip extends Enemy {
@@ -310,7 +310,7 @@ const DANDELION_HEIGHT = 7000/14 | 0;
 const DANDELION_WIDTH = 500;
 
 const DANDELION_ATTACK_DAMAGE = 5;
-const DANDELION_HP = 10;
+const DANDELION_HP = 1.15;
 const DANDELION_ATTACK_DELAY = 500;
 const DANDELION_POINTS_DROP = 200;
 const DANDELION_RANGE = 1;
