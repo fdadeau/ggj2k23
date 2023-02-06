@@ -228,8 +228,8 @@ export class GUI {
         }
 
         // Hanging ropes
-        ctx.drawImage(data.rope, WIDTH / 3, -45, 20, 100);
-        ctx.drawImage(data.rope, (WIDTH / 3) * 2 - 25, -45, 20, 100);
+        ctx.drawImage(data["rope-menu"], WIDTH / 3, -45, 20, 100);
+        ctx.drawImage(data["rope-menu"], (WIDTH / 3) * 2 - 25, -45, 20, 100);
 
         // Title text
         ctx.textAlign = "center";
