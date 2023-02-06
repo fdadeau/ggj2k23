@@ -17,6 +17,7 @@ A return to the roots of FPS games with a 2.5D shooter inspired from Wolfenstein
 - ZQSD or Up/Left/Down/Right arrows to move 
 - left click or L to use lighter
 - right click or E to attack / use equipment
+- space or scroll to change equipment
 - F or blow in your microphone to blow on the lighter
 
 - I to invert mouse

@@ -53,6 +53,16 @@ export class Engine {
             return;
         }
 
+        if (game.state == STATES.CONTROLS) {
+            game.gui.showControls(this.ctx);
+            return;
+        }
+
+        if (game.state == STATES.CREDITS) {
+            game.gui.showCredits(this.ctx);
+            return;
+        }
+
         if (game.state == STATES.PLAYING_INTRO) {
             game.gui.playIntro(this.ctx);
             return;

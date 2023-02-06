@@ -9,7 +9,7 @@ import { GUI } from "./gui.js";
 
 
 /** Game states */
-export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6, FINISHED: 7, TITLE: 8 };
+export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6, FINISHED: 7, TITLE: 8, CONTROLS: 9, CREDITS: 10 };
 
 export class Game {
 

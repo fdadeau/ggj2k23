@@ -60,9 +60,9 @@ export class GUI {
 
     /** Loading screen */
     loading(ctx) {
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = '#fff';
         ctx.font = "18px pixel-bit-advanced";
         ctx.textAlign = "center";
         ctx.fillText(`Loading assets: ${this.game.loading.loaded * 100 / this.game.loading.total | 0} %...`, WIDTH / 2, HEIGHT/2);
@@ -75,9 +75,10 @@ export class GUI {
         // Buttons
         ctx.font = "26px pixel-bit-advanced";
         ctx.textAlign = "center";
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = '#fff';
         [BUTTON_PLAY, BUTTON_CONTROLS, BUTTON_CREDITS].forEach((b,i,a) => {
             ctx.drawImage(data.woodTexture, b.x, b.y, b.width, b.height);
+            ctx.strokeRect(b.x, b.y, b.width, b.height);
             ctx.fillText(b.text, b.x + b.width/2, b.y + b.height - 26/2);
         });
         ctx.drawImage(data.logoGGJ, WIDTH - 100, HEIGHT - 100, 90, 90);
@@ -85,7 +86,7 @@ export class GUI {
 
     clickButton(clicX, clicY) {
         // If we play
-        if (clicX >= BUTTON_PLAY.x && clicX <= BUTTON_PLAY.x + BUTTON_PLAY.width && clicY >= BUTTON_PLAY.y && clicY <= BUTTON_PLAY.y + BUTTON_PLAY.height) {
+        if (this.clicOnButton(clicX, clicY, BUTTON_PLAY)) {
             if (!document.pointerLockElement) {
                 document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
             }
@@ -93,22 +94,162 @@ export class GUI {
             this.game.state = STATES.PLAYING_INTRO;
         }
         // If we see the controls
-        else if (clicX >= BUTTON_CONTROLS.x && clicX <= BUTTON_CONTROLS.x + BUTTON_CONTROLS.width && clicY >= BUTTON_CONTROLS.y && clicY <= BUTTON_CONTROLS.y + BUTTON_CONTROLS.height) {
-            // TODO
+        else if (this.clicOnButton(clicX, clicY, BUTTON_CONTROLS)) {
+            this.game.state = STATES.CONTROLS;
         }
         // If we see the credits
-        else if (clicX >= BUTTON_CREDITS.x && clicX <= BUTTON_CREDITS.x + BUTTON_CREDITS.width && clicY >= BUTTON_CREDITS.y && clicY <= BUTTON_CREDITS.y + BUTTON_CREDITS.height) {
-            // TODO
+        else if (this.clicOnButton(clicX, clicY, BUTTON_CREDITS)) {
+            this.game.state = STATES.CREDITS;
         }
     }
 
+    clicOnButton(clicX, clicY, BUTTON) {
+        return clicX >= BUTTON.x && clicX <= BUTTON.x + BUTTON.width && clicY >= BUTTON.y && clicY <= BUTTON.y + BUTTON.height;
+    }
+
+    showControls(ctx) {
+        // Theme
+        this.drawMenuTheme(ctx, 'Controls');
+        ctx.textAlign = "left";
+        
+        // WASD / arrows
+        ctx.drawImage(data.wasd, 15, 140, 80, 80);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('WASD / arrows', 120, 170);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Move', 120, 200);
+
+        // Left click / L
+        ctx.drawImage(data["left-click"], 15, 240, 35, 40);
+        ctx.drawImage(data.key, 60, 240, 40, 40);
+        ctx.fillText('L', 75, 267);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('Left click / L', 120, 250);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Use the lighter', 120, 280);
+
+        // Right click / E
+        ctx.drawImage(data["right-click"], 15, 320, 35, 40);
+        ctx.drawImage(data.key, 60, 320, 40, 40);
+        ctx.fillText('E', 75, 347);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('Right click / E', 120, 330);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Attack / equip', 120, 360);
+
+        // Root separator
+        ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 70, 10, 250);
+
+        // Scroll / space
+        ctx.drawImage(data.scroll, 340, 160, 35, 40);
+        ctx.drawImage(data.key, 380, 170, 50, 15);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('Scroll / space', 450, 170);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Change equipment', 450, 200);
+
+        // F / blow
+        ctx.drawImage(data.key, 385, 240, 40, 40);
+        ctx.fillText('F', 400, 267);
+        ctx.drawImage(data.mike, 345, 242, 25, 35);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('F / blow (mike)', 450, 250);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Blow on the lighter', 450, 280);
+
+         // I
+        ctx.drawImage(data.key, 385, 320, 40, 40);
+        ctx.fillText('I', 400, 347);
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "15px pixel-bit-advanced";
+        ctx.fillText('I', 450, 330);
+        ctx.fillStyle = '#fff';
+        ctx.font = "11.5px pixel-bit-advanced";
+        ctx.fillText('Invert mouse', 450, 360);
+    }
+
+    showCredits(ctx) {
+        // Theme
+        this.drawMenuTheme(ctx, 'Credits');
+
+        // Coding
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "25px pixel-bit-advanced";
+        ctx.fillText('Coding', WIDTH / 3.5, HEIGHT/2 - 40);
+        ctx.fillStyle = '#fff';
+        ctx.font = "20px pixel-bit-advanced";
+        ctx.fillText('Fred Dadeau', WIDTH / 3.5, HEIGHT/2);
+        ctx.fillText('Robin Grappe', WIDTH / 3.5, HEIGHT/2 + 30);
+        ctx.fillText('Tayeb Hakkar', WIDTH / 3.5, HEIGHT/2 + 60);
+
+        // Root separator
+        ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 60, 10, 120);
+
+        // Game Art
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "25px pixel-bit-advanced";
+        ctx.fillText('Game Art', (WIDTH / 3.5) * 2.6, HEIGHT/2 - 40);
+        ctx.fillStyle = '#fff';
+        ctx.font = "20px pixel-bit-advanced";
+        ctx.fillText('Marie-Almina', (WIDTH / 3.5) * 2.6, HEIGHT/2);
+        ctx.fillText('Gindre', (WIDTH / 3.5) * 2.6, HEIGHT/2 + 30);
+        ctx.fillText('Elea Jacquin', (WIDTH / 3.5) * 2.6, HEIGHT/2 + 60);
+
+        // Special Thanks
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "25px pixel-bit-advanced";
+        ctx.fillText('Special Thanks', WIDTH / 2, HEIGHT/2 + 110);
+        ctx.fillStyle = '#fff';
+        ctx.font = "20px pixel-bit-advanced";
+        ctx.fillText('OFNI association', WIDTH / 2, HEIGHT/2 + 150);
+        ctx.fillText('DPS association', WIDTH / 2, HEIGHT/2 + 180);
+
+        //Logos
+        ctx.drawImage(data.logoOFNI, 20, HEIGHT - 75, 130, 70);
+        ctx.drawImage(data.logoDPS, WIDTH - 150, HEIGHT - 75, 130, 50);
+    }
+
+    drawMenuTheme(ctx, title) {
+        ctx.textAlign = "center";
+
+        // Background image
+        for(let i = 0; i < 4; i++) {
+            ctx.drawImage(data.wood, 0, HEIGHT / 4 * i, WIDTH, HEIGHT / 4);
+        }
+
+        // Hanging ropes
+        ctx.drawImage(data.rope, WIDTH / 3, -45, 20, 100);
+        ctx.drawImage(data.rope, (WIDTH / 3) * 2 - 25, -45, 20, 100);
+
+        // Title text
+        ctx.textAlign = "center";
+        ctx.fillStyle = '#fff';
+        ctx.font = "50px pixel-bit-advanced";
+        ctx.fillText(title, WIDTH / 2, HEIGHT/2 - 100);
+        ctx.fillStyle = '#fff';
+
+        // Home
+        ctx.drawImage(data.home, 15, 15, 40, 40);
+        ctx.font = "12px pixel-bit-advanced";
+        ctx.fillText('click', 36, 75);
+    }
 
     /** Waiting to start screen */
     waitingToStart(ctx) {
         ctx.textAlign = "center";
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = '#fff';
         ctx.font = "23px pixel-bit-advanced";
         ctx.fillText("Loading complete", WIDTH / 2, HEIGHT/2 - 50);
         ctx.fillText("Double click to start",  WIDTH/2, HEIGHT/2 +50);
@@ -119,16 +260,17 @@ export class GUI {
         if (this.gameDead == false) {
             this.gameDead = true;
             ctx.globalAlpha = 0.25;
+            ctx.textAlign = "center";
             ctx.fillStyle = '#f00';
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
             ctx.globalAlpha = 1;
             ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("You've been", WIDTH / 2 - 150, HEIGHT/2 - 50);
+            ctx.fillText("You've been", WIDTH / 2, HEIGHT/2 - 50);
             ctx.font = "45px pixel-bit-advanced";
-            ctx.fillText("DANDELIONED", WIDTH / 2 - 200, HEIGHT/2);
-            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
+            ctx.fillStyle = '#fff';
             ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2 - 290, HEIGHT/2 + 75);
+            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
             data["ingame1"].pause();
             data["ingame2"].pause();
             data["walkSound"].pause();
@@ -147,16 +289,18 @@ export class GUI {
         
             this.gameArrived = true;
             ctx.globalAlpha = 0.5;
+            ctx.textAlign = "center";
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
             ctx.globalAlpha = 1;
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = '#ffd728';
             ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("You've reached", WIDTH / 2 - 170, HEIGHT/2 - 50);
+            ctx.fillText("You've reached", WIDTH / 2, HEIGHT/2 - 50);
             ctx.font = "45px pixel-bit-advanced";
-            ctx.fillText("the surface !", WIDTH / 2 - 200, HEIGHT/2);
+            ctx.fillText("the surface !", WIDTH / 2, HEIGHT/2);
+            ctx.fillStyle = '#fff';
             ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2 - 300, HEIGHT/2 + 75);
+            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2, HEIGHT/2 + 75);
             data["ingame1"].pause();
             data["ingame2"].pause();
             data["walkSound"].pause();

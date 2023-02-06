@@ -54,6 +54,9 @@ const data = {
     "woodTexture" : "./data/textures/wood.png",
     // 
     "logoGGJ": "./data/logoGGJ.png",
+    "logoOFNI": "./data/logoOFNI.png",
+    "logoDPS": "./data/logoDPS.png",
+
     "intro1": "./data/cinematics/intro-1.png",
     "intro2": "./data/cinematics/intro-2.png",
     "intro3": "./data/cinematics/intro-3.png",
@@ -63,6 +66,15 @@ const data = {
     "intro7": "./data/cinematics/intro-7.png",
     // outro
     // TO COME
+
+    // Icons
+    "wasd": "./data/icons/wasd.png",
+    "left-click": "./data/icons/left-click.png",
+    "right-click": "./data/icons/right-click.png",
+    "scroll": "./data/icons/scroll.png",
+    "key": "./data/icons/key.png",
+    "mike": "./data/icons/mike.png",
+    "home": "./data/icons/home.png",
 
     // Sounds
     "axeSound": "./data/sounds/axe.mp3",
