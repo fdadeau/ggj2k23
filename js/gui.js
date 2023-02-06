@@ -277,7 +277,7 @@ export class GUI {
 
     /** Pause screen */
     pause(ctx) {
-        if (this.gamePaused == false) {
+        if (this.gamePaused == undefined || this.gamePaused == false) {
             this.gamePaused = true;
             ctx.globalAlpha = 0.25;
             ctx.fillStyle = '#000';
@@ -289,7 +289,6 @@ export class GUI {
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press P to resume", WIDTH / 2 - 170, HEIGHT/2 + 20);
             audio.pause()
-            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
         }
     }
     
