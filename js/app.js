@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (game.state == STATES.WAITING_TO_START) {
             game.state = STATES.TITLE;
             data['titleScreenMusic'].volume = 0.1;
+            data['titleScreenMusic'].loop = true;
             data['titleScreenMusic'].play();
             engine.initialize();
             await micro.start();

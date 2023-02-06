@@ -33,6 +33,8 @@ const CONSUME_DELAY = 300;
 const AXE_HEIGHT = 5000/5 | 0;
 const AXE_WIDTH = 1000;
 const AXE_DELAY = 375;
+const AXE_DAMAGE = 20;
+const AXE_RANGE = 1.2;
 
 const AXE_ATTACK = [0,1,2,3,3,4];
 const AXE_IDLE = [0];
@@ -163,7 +165,7 @@ class Tequila extends Consumable {
 const AXE_SHIFT = [-20, -30, -50, -60, -40];
 class Axe extends Weapon {
     constructor(){
-        super(25,2.5);
+        super(AXE_DAMAGE,AXE_RANGE);
         this.idle = AXE_IDLE;
         this.use = AXE_ATTACK;
     }
