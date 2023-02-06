@@ -148,7 +148,7 @@ export class Game {
                     break;
             }
         } else if (this.state == STATES.DEAD) {
-            switch (key) {
+            switch (key instanceof KeyboardEvent?key.code:key) {
                 case 'Space' :
                 case 'Enter' :
                     this.resetGame();
