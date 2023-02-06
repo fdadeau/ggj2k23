@@ -75,6 +75,7 @@ export class GUI {
         ctx.fillStyle = '#fff';
         [BUTTON_PLAY, BUTTON_CONTROLS, BUTTON_CREDITS].forEach((b,i,a) => {
             ctx.drawImage(data.woodTexture, b.x, b.y, b.width, b.height);
+            ctx.strokeRect(b.x, b.y, b.width, b.height);
             ctx.fillText(b.text, b.x + b.width/2, b.y + b.height - 26/2);
         });
         ctx.drawImage(data.logoGGJ, WIDTH - 100, HEIGHT - 100, 90, 90);
@@ -120,7 +121,7 @@ export class GUI {
         // Left click / L
         ctx.drawImage(data["left-click"], 15, 240, 35, 40);
         ctx.drawImage(data.key, 60, 240, 40, 40);
-        ctx.fillText('L', 75, 268);
+        ctx.fillText('L', 75, 267);
         ctx.fillStyle = '#ffd728';
         ctx.font = "15px pixel-bit-advanced";
         ctx.fillText('Left click / L', 120, 250);
@@ -131,7 +132,7 @@ export class GUI {
         // Right click / E
         ctx.drawImage(data["right-click"], 15, 320, 35, 40);
         ctx.drawImage(data.key, 60, 320, 40, 40);
-        ctx.fillText('E', 75, 348);
+        ctx.fillText('E', 75, 347);
         ctx.fillStyle = '#ffd728';
         ctx.font = "15px pixel-bit-advanced";
         ctx.fillText('Right click / E', 120, 330);
@@ -153,9 +154,9 @@ export class GUI {
         ctx.fillText('Change equipment', 450, 200);
 
         // F / blow
-        ctx.drawImage(data.key, 340, 240, 40, 40);
-        ctx.fillText('F',  355, 268);
-        ctx.drawImage(data.mike, 395, 242, 25, 35);
+        ctx.drawImage(data.key, 385, 240, 40, 40);
+        ctx.fillText('F', 400, 267);
+        ctx.drawImage(data.mike, 345, 242, 25, 35);
         ctx.fillStyle = '#ffd728';
         ctx.font = "15px pixel-bit-advanced";
         ctx.fillText('F / blow (mike)', 450, 250);
@@ -164,8 +165,8 @@ export class GUI {
         ctx.fillText('Blow on the lighter', 450, 280);
 
          // I
-        ctx.drawImage(data.key, 340, 320, 40, 40);
-        ctx.fillText('I', 355, 348);
+        ctx.drawImage(data.key, 385, 320, 40, 40);
+        ctx.fillText('I', 400, 347);
         ctx.fillStyle = '#ffd728';
         ctx.font = "15px pixel-bit-advanced";
         ctx.fillText('I', 450, 330);
