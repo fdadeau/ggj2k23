@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             localStorage.setItem(STORAGE_KEY_MOUSE, game.inverted);
             return;
         }
-        game.press(e.code);
+        game.press(e);
     });
     document.addEventListener("keyup", function(e) {
         game.release(e.code);

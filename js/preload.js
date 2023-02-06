@@ -2,20 +2,20 @@
 const data = {
     
     // spritesheets
-    "axe-spritesheet": "./data/axe-spritesheet.png",
-    "lighter-spritesheet": "./data/lighter-spritesheet.png",
-    "tree-spritesheet": "./data/tree-spritesheet.png",
-    "whisky-spritesheet": "./data/whisky-spritesheet.png",
-    "tequila-spritesheet": "./data/tequila-spritesheet.png",
-    "turnip-spritesheet": "./data/turnip-spritesheet.png",
-    "dandelion-spritesheet": "./data/dandelion-spritesheet.png",
-    "rabbit-spritesheet": "./data/rabbit-spritesheet.png",
-    "filter-spritesheet": "./data/raymon-scar-spritesheet.png",
-    "raymond-spritesheet": "./data/raymond-spritesheet.png",
+    "axe-spritesheet": "./data/spritesheets/axe-spritesheet.png",
+    "lighter-spritesheet": "./data/spritesheets/lighter-spritesheet.png",
+    "tree-spritesheet": "./data/spritesheets/tree-spritesheet.png",
+    "whisky-spritesheet": "./data/spritesheets/whisky-spritesheet.png",
+    "tequila-spritesheet": "./data/spritesheets/tequila-spritesheet.png",
+    "turnip-spritesheet": "./data/spritesheets/turnip-spritesheet.png",
+    "dandelion-spritesheet": "./data/spritesheets/dandelion-spritesheet.png",
+    "rabbit-spritesheet": "./data/spritesheets/rabbit-spritesheet.png",
+    "filter-spritesheet": "./data/spritesheets/raymon-scar-spritesheet.png",
+    "raymond-spritesheet": "./data/spritesheets/raymond-spritesheet.png",
 
     // images
     "wood": "./data/textures/wood.png",
-    "hud-roots": "./data/hud-roots.png",
+    "hud-roots": "./data/images/hud-roots.png",
     "axe": "./data/images/axe.png",
     "heart": "./data/images/heart.png",
     "tequila": "./data/images/tequila.png",
@@ -25,8 +25,8 @@ const data = {
     "rope": "./data/images/rope.png",
 
     // lighter
-    "lighter1": "./data/lighter-spritesheet.png",
-    "lighter2": "./data/blow-spritesheet.png",
+    "lighter1": "./data/spritesheets/lighter-spritesheet.png",
+    "lighter2": "./data/spritesheets/blow-spritesheet.png",
     "fire1": "./data/images/fire1.png",
     "fire2": "./data/images/fire2.png",
     "fire3": "./data/images/fire3.png",
@@ -53,9 +53,9 @@ const data = {
     "titleScreen": "./data/title-screen.png",
     "woodTexture" : "./data/textures/wood.png",
     // 
-    "logoGGJ": "./data/logoGGJ.png",
-    "logoOFNI": "./data/logoOFNI.png",
-    "logoDPS": "./data/logoDPS.png",
+    "logoGGJ": "./data/logos/logoGGJ.png",
+    "logoOFNI": "./data/logos/logoOFNI.png",
+    "logoDPS": "./data/logos/logoDPS.png",
 
     "intro1": "./data/cinematics/intro-1.png",
     "intro2": "./data/cinematics/intro-2.png",
@@ -82,14 +82,15 @@ const data = {
     "axeSound": "./data/sounds/axe.mp3",
     "drinkSound": "./data/sounds/glou.mp3",
     "drinkEndSound": "./data/sounds/huu.mp3",
-    "walkSound": "./data/sounds/walk.mp3",
+    "walkSound": "./data/sounds/walk-bis.mp3",
     "woodSound": "./data/sounds/wood.mp3",
     "yeetBottleSound": "./data/sounds/yeetBottle.mp3",
-    "hitPlayerSound": "./data/sounds/roblox-death-sound-effect-bis.mp3",
+    "hitPlayerSound": "./data/sounds/hurt.mp3",
     "crunch": "./data/sounds/crunch.mp3",
     "ouch": "./data/sounds/ouch.mp3",
     "foule": "./data/sounds/foule.mp3",
-    'throw': "./data/sounds/throw.mp3"
+    'throw': "./data/sounds/throw.mp3",
+    "whoosh": "./data/sounds/whoosh.mp3"
 }
 
 /***

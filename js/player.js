@@ -4,6 +4,8 @@ import { Hud } from "./hud.js";
 
 import { data } from "./preload.js";
 
+import { audio } from "./audio.js";
+
 
 const FRAME_DELAY = 100;
 
@@ -49,7 +51,7 @@ export default class Player {
         this.offSpeed = PLAYER_OFFSET_SPEED;
 
         /** Movement: set to a value > 0 to strafe */
-        this.strafeSpeed = 0;
+        this.translSpeed = 0;
 
         /** Used when the character raises/lowers his head */
         this.pitch = 0;
@@ -164,18 +166,28 @@ export default class Player {
 
         this.offset = (this.offset + this.offSpeed) % (2 * Math.PI);
         this.altitude = this.posZ + 0.01 * Math.cos(this.offset);
+        let isMovingX = this.speed != 0;
+        let isMovingY = this.translSpeed != 0;
 
         // move forward/backward
         if (this.speed != 0) {
             let newX = this.posX + this.dirX * dt * this.speed;
+            let newY = this.posY + this.dirY * dt * this.speed;
+
             if (this.isStillOnMap(map, newX, this.posY) && !enemies.some(e => e.collides(newX, this.posY))) {
                 this.posX = newX;
             }
-            let newY = this.posY + this.dirY * dt * this.speed;
+            
             if (this.isStillOnMap(map, this.posX, newY) && !enemies.some(e => e.collides(newX, this.posY))) {
                 this.posY = newY;
             }
+
+            let dist = Math.sqrt(Math.pow(this.posX-newX,2) + Math.pow(this.posY-newY,2));
+            if(dist > 0.015){
+                isMovingX = false;
+            }
         }
+
         // strafe left/right
         if (this.translSpeed != 0) {
             // compute orthogonal vector to current direction
@@ -204,7 +216,17 @@ export default class Player {
             if (this.isStillOnMap(map, this.posX, newY) && !enemies.some(e => e.collides(this.posX, newY))) {
                 this.posY = newY;
             }
-        } 
+
+            let dist = Math.sqrt(Math.pow(this.posX-newX,2) + Math.pow(this.posY-newY,2));
+
+            if(dist > 0.01){
+               isMovingY = false;
+            }
+        }
+
+        if(!isMovingX && !isMovingY){
+            // TODO : stop sound here
+        }
 
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
@@ -271,28 +293,26 @@ export default class Player {
     }
 
     stop1() {
-        data['walkSound'].pause();
+        // TODO : stop sound here
         this.speed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
 
     stop2() {
-        data['walkSound'].pause();
+        // TODO : stop sound here
         this.translSpeed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
 
     walk(dir) {
+       // TODO : play sound here
         this.speed = PLAYER_MOVEMENT_SPEED * dir;
         this.offSpeed = PLAYER_OFFSET_SPEED * 2;
-        data['walkSound'].loop = true;
-        data['walkSound'].play();
     }
 
     strafe(dir) {
+        // TODO : play sound here
         this.translSpeed = PLAYER_ROTATION_SPEED * dir;
-        data['walkSound'].loop = true;
-        data['walkSound'].play();
     }
     
     equipeAxe(){
@@ -380,7 +400,7 @@ export default class Player {
         }
         this.health -= damage;
         this.hud.hitAnimation();
-        data['hitPlayerSound'].play();
+        audio.playSound('hitPlayerSound',7,0.5,false);
     }
 
     collectPowerUp(powerup) {
