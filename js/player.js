@@ -7,6 +7,8 @@ import { data } from "./preload.js";
 
 const FRAME_DELAY = 100;
 
+const NATURAL_SOBRIETY_DECREASE = 0.1;
+
 
 /***
  * Class describing the main character of the game.
@@ -21,6 +23,8 @@ const PLAYER_OFFSET_SPEED = 0.05;
 const MAX_PITCH = 2000;
 
 const INVISIVILTY_FRAME = 2000;
+
+const PLAYER_HP = 100;
 
 export default class Player {
 
@@ -56,7 +60,7 @@ export default class Player {
         this.score = 0;
 
         /** player's health */
-        this.health = 100;
+        this.health = PLAYER_HP;
 
         /** player's sobriety */
         this.sobriety = 0;
@@ -67,68 +71,6 @@ export default class Player {
             buildWeapon("tequila"),
             buildWeapon("axe"),
         ];
-
-        // Whisky
-        this.weapons[0].behavior = function(player) {
-            if(player.nbWhisky == 0){
-                return;
-            }
-
-            player.sobriety += 10;
-            player.nbWhisky--;
-            player.equipeAxe();
-        }.bind(this.weapons[0]);
-
-        this.weapons[0].afterAnimation = function(player) {
-            data['drinkEndSound'].volume = 0.25;
-            data['drinkEndSound'].play();
-            if(player.nbWhisky == 0){
-                player.equipeAxe();
-            }
-        }.bind(this.weapons[0]);
-
-        // Tequila
-        this.weapons[1].behavior = function(player) {
-            if(player.nbTequila == 0){
-                return;
-            }
-            player.isDrunk = true;
-            player.sobriety += 10;
-            player.nbTequila--;
-        }.bind(this.weapons[1]);
-
-        this.weapons[1].afterAnimation = function(player) {
-            data['drinkEndSound'].volume = 0.25;
-            data['drinkEndSound'].play();
-            if(player.nbTequila == 0){
-                player.equipeAxe();
-            }
-        }.bind(this.weapons[0]);
-
-        // Axe
-        this.weapons[2].behavior = function(player, enemies) {
-            enemies.forEach(function(e) {
-                if(e.distance <= player.currentWeapon.range){
-                    let u = {
-                        x:player.posX-e.x,
-                        y:player.posY-e.y
-                    };
-
-                    let v = {
-                        x:player.dirX,
-                        y:player.dirY
-                    };
-
-                    let x = u.x*v.x + u.y*v.y
-                    
-                    if(x < 0 && e.health > 0){
-                        e.hit(player.currentWeapon.damage);
-                        player.score += e.dropPoints ?? 0;
-                        //angle = Math.acos(-x/(1));
-                    }
-                }
-            },this);
-        }.bind(this.weapons[2]);
 
         this.currentWeapon = this.weapons[2];
         this.lighter = new Lighter(this);
@@ -268,6 +210,10 @@ export default class Player {
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
+            this.sobriety -= NATURAL_SOBRIETY_DECREASE;
+            if(this.sobriety < 0){
+                this.sobriety = 0;
+            }
             this.frame = (this.frame + 1) % this.animation.length;
             if(this.frame == 0 && this.isAttacking){
                 this.isAttacking = false;
@@ -384,11 +330,20 @@ export default class Player {
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+next)%this.weapons.length;
 
-        if(newWeapon == 0 && this.nbWhisky <= 0){
-            newWeapon = (newWeapon+next)%this.weapons.length;
-        }
-        if(newWeapon == 1 && this.nbTequila <= 0){
-            newWeapon = (newWeapon+next)%this.weapons.length;
+        if(next < 0){
+            if(newWeapon == 1 && this.nbTequila <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
+            if(newWeapon == 0 && this.nbWhisky <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
+        }else{
+            if(newWeapon == 0 && this.nbWhisky <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
+            if(newWeapon == 1 && this.nbTequila <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
         }
         if(newWeapon < 0){
             newWeapon = 2;

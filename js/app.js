@@ -1,7 +1,8 @@
 import { Game, STATES } from "./game.js";
 import { Engine } from "./engine.js";
 import { MicrophoneController } from "./microphone-controller.js";
-import { preload } from "./preload.js";
+import { preload, data } from "./preload.js";
+import { WIDTH, HEIGHT } from "./gui.js";
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
@@ -43,8 +44,8 @@ document.addEventListener("DOMContentLoaded", async function() {
         e.preventDefault();
         if (game.state == STATES.TITLE) {
             var rect = canvas.getBoundingClientRect();
-            let clicX = (e.clientX - rect.left) * 640 / rect.width;
-            let clicY = (e.clientY - rect.top) * 400 / rect.height;
+            let clicX = (e.clientX - rect.left) * WIDTH / rect.width;
+            let clicY = (e.clientY - rect.top) * HEIGHT / rect.height;
             game.gui.clickButton(clicX, clicY);
         }
         return false;
@@ -54,15 +55,15 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (e.button == 2) {
             e.stopPropagation();
             e.stopImmediatePropagation();
-            game.press("KeyL");
+            game.press("KeyE");
         }
         else if (document.pointerLockElement && e.button == 0) {
-            game.press("KeyE");
+            game.press("KeyL");
         }
         return false;
     }, true)
     document.addEventListener("mouseup", function(e) {
-        if (e.button == 2) {
+        if (e.button == 0) {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
@@ -74,6 +75,8 @@ document.addEventListener("DOMContentLoaded", async function() {
     document.addEventListener("dblclick", async function(e) {
         if (game.state == STATES.WAITING_TO_START) {
             game.state = STATES.TITLE;
+            data['titleScreenMusic'].volume = 0.1;
+            data['titleScreenMusic'].play();
             engine.initialize();
             await micro.start();
         } 

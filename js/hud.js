@@ -23,25 +23,14 @@ const RED_OVERLAY_DELAY = 200;
 export class Hud {
 
     constructor(hudHeight) {
-        // Score
-        this.score = 0;
         // Level
         this.level = 1;
-        // Health (in %)
-        this.health = 100;
-        // Sobriety bar (in %)
-        this.sobriety = 0;
         // Weapon id
         this.weapon = WEAPON_AXE;
         // Hud Height
         this.height = hudHeight;
-        // Number of whisky bottles
-        this.nbWhisky = 0;
-        // Number of tequila bottles
-        this.nbTequila = 0;
-        // Tells if the carrot is present
-        this.haveCarrot = false;
 
+        // Animation variables
         this.delay = 0;
         this.redDelay = undefined;
         this.frame = 0;
@@ -85,13 +74,6 @@ export class Hud {
     }
 
     render(ctx, player) {
-        this.health = player.health;
-        this.sobriety = player.sobriety;
-        this.nbWhisky = player.nbWhisky;
-        this.nbTequila = player.nbTequila;
-        this.score = player.score;
-        this.haveCarrot = player.haveCarrot;
-
         let hudY_origin = cvs.height - this.height;
        
         // Draw the window
@@ -118,13 +100,13 @@ export class Hud {
 
         // Score slot
         ctx.fillText("SCORE", 100, hudY_origin + 25);
-        ctx.fillText(this.score, 100, hudY_origin + 55);
+        ctx.fillText(player.score, 100, hudY_origin + 55);
 
         // Skin slot
         ctx.drawImage(data["raymond-spritesheet"], 0, ((this.animation[this.frame]) * TIMBER_HEIGHT), TIMBER_WIDTH, TIMBER_HEIGHT, 275, hudY_origin + 1, slot - 2, this.height);
         
-        if(this.health <= 50){
-            if(this.health == 0){
+        if(player.health <= 50){
+            if(player.health == 0){
                 if(this.animation != TIMBER_DED){
                     this.ded();
                 }
@@ -135,14 +117,14 @@ export class Hud {
         }
         
         // Weapon slot
-        this.drawWeapon(ctx, hudY_origin, this.weapon);
+        this.drawWeapon(ctx, player, hudY_origin, this.weapon);
 
         // Draw the health and sobriety bars
         this.drawBar(ctx, player, 'health');
         this.drawBar(ctx, player, 'sobriety');
 
         // DRaw the carrot if the player have it
-        if (this.haveCarrot) {
+        if (player.haveCarrot) {
             ctx.drawImage(data.carrot, cvs.width - slot / 2, 10, 30, 30);
         }
         
@@ -156,18 +138,18 @@ export class Hud {
         }
     }
 
-    drawWeapon(ctx, hudY_origin, id){
+    drawWeapon(ctx, player, hudY_origin, id){
         switch(id){
             case WEAPON_AXE:
                 ctx.drawImage(data.axe, 200, hudY_origin + 5, this.height - 10, this.height - 10);
                 break;
             case WEAPON_WHISKY:
                 ctx.drawImage(data.whisky, 200, hudY_origin + 5, this.height - 10, this.height - 10);
-                ctx.fillText(this.nbWhisky, 248, hudY_origin + 64);
+                ctx.fillText(player.nbWhisky, 248, hudY_origin + 64);
                 break;
             case WEAPON_TEQUILA:
                 ctx.drawImage(data.tequila, 200, hudY_origin + 5, this.height - 10, this.height - 10);
-                ctx.fillText(this.nbTequila, 248, hudY_origin + 64);
+                ctx.fillText(player.nbTequila, 248, hudY_origin + 64);
                 break;
         }
     }
@@ -181,8 +163,8 @@ export class Hud {
 
         if (type == 'health') {
             height += 10;
-            levelRef = this.health;
-            let barLevel = (this.health * 512) / 100
+            levelRef = player.health;
+            let barLevel = (player.health * 512) / 100
             let red;
             let green;
             if (barLevel < 255) {
@@ -196,7 +178,7 @@ export class Hud {
             image = data.heart;
         } else {
             height += 45;
-            levelRef = this.sobriety;
+            levelRef = player.sobriety;
             // Drunk animation (tequila)
             if (player.isDrunk) {
                 barColor = '#dfe8e8';
@@ -209,13 +191,13 @@ export class Hud {
 
         // Fill the bars
         ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        let miniMargin = 2;
         let barHeight = 20;
         let barWidth = slot * 2 + slot / 3;
         ctx.fillRect(slot * 4 + 10, height, barWidth, barHeight);
         ctx.fillStyle = barColor;
         let fillBar = (levelRef * barWidth) / 100;
-        let miniMargin = 2;
-        ctx.fillRect(slot * 4 + 10 + miniMargin, height + miniMargin, (levelRef < miniMargin) ? fillBar : fillBar - miniMargin * 2, barHeight - miniMargin * 2);
+        ctx.fillRect(slot * 4 + 10 + miniMargin, height + miniMargin, fillBar*0.98, barHeight-miniMargin*2);
 
         // Draw the images
         ctx.drawImage(image, slot * 6 + 50, height - 5, 30, 30);
@@ -225,32 +207,12 @@ export class Hud {
     /**
      * SETTERS
      */
-    incrementScore(amount) {
-        this.score += amount;
-    }
-
     incrementLevel() {
         this.level++;
     }
 
     decrementLevel() {
         this.level++;
-    }
-
-    hit(damage) {
-        this.health -= damage;
-    }
-
-    heal(regen) {
-        this.health += regen;
-    }
-
-    drink(amount) {
-        this.sobriety += amount;
-    }
-
-    spit(amount) {
-        this.sobriety += amount;
     }
 
     changeWeapon(weapon) {

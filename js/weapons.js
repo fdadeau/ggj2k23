@@ -1,7 +1,6 @@
 
 import {data, preload} from "./preload.js";
-
-const WIDTH = 640, HEIGHT = 480;
+import { WIDTH, HEIGHT } from "./gui.js";
 
 /**
  * Build a weapon of the specified type.
@@ -24,6 +23,7 @@ export function buildWeapon(type,){
 /** Whisky */
 const WHISKY_HEIGHT = 4200/6 | 0;
 const WHISKY_WIDTH = 1000;
+const WHISKY_INCREASE_SOBRIETY = 25;
 
 const WHISKY_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const WHISKY_IDLE = [0];
@@ -40,6 +40,7 @@ const AXE_IDLE = [0];
 /** TEQUILA */
 const TEQUILA_HEIGHT = 4200/6 | 0;
 const TEQUILA_WIDTH = 1000;
+const TEQUILA_INCREASE_SOBRIETY = 15;
 
 const TEQUILA_DRINK = [0,1,2,2,2,3,3,3,4,5];
 const TEQUILA_IDLE = [0];
@@ -100,6 +101,26 @@ class Whisky extends Consumable{
         this.addSobriety = 10;
     }
 
+    behavior(player){
+        super.behavior();
+        if(player.nbWhisky == 0){
+            return;
+        }
+        player.sobriety += WHISKY_INCREASE_SOBRIETY;
+        player.nbWhisky--;
+    }
+
+    afterAnimation(player){
+        super.afterAnimation();
+        data['drinkEndSound'].volume = 0.25;
+        data['drinkEndSound'].play();
+        data['yeetBottleSound'].volume = 0.5;
+        data['yeetBottleSound'].play();
+        if(player.nbWhisky == 0){
+            player.equipeAxe();
+        }
+    }
+
     render(ctx, frame){
         super.render(ctx, data["whisky-spritesheet"], frame, WHISKY_WIDTH, WHISKY_HEIGHT, 0, 0);
     }
@@ -111,6 +132,27 @@ class Tequila extends Consumable {
         this.idle = TEQUILA_IDLE;
         this.use = TEQUILA_DRINK;
         this.addSobriety = 20;
+    }
+
+    behavior(player){
+        super.behavior();
+        if(player.nbTequila == 0){
+            return;
+        }
+        player.isDrunk = true;
+        player.sobriety += TEQUILA_INCREASE_SOBRIETY;
+        player.nbTequila--;
+    }
+
+    afterAnimation(player){
+        super.afterAnimation();
+        data['drinkEndSound'].volume = 0.25;
+        data['drinkEndSound'].play();
+        data['yeetBottleSound'].volume = 0.5;
+        data['yeetBottleSound'].play();
+        if(player.nbTequila == 0){
+            player.equipeAxe();
+        }
     }
 
     render(ctx, frame){
@@ -141,6 +183,30 @@ class Axe extends Weapon {
             this.delay = undefined;
             this.behavior(player,enemies);
         }
+    }
+
+    behavior(player, enemies){
+        enemies.forEach(function(e) {
+            if(e.distance <= player.currentWeapon.range){
+                let u = {
+                    x:player.posX-e.x,
+                    y:player.posY-e.y
+                };
+
+                let v = {
+                    x:player.dirX,
+                    y:player.dirY
+                };
+
+                let x = u.x*v.x + u.y*v.y
+                
+                if(x < 0 && e.health > 0){
+                    e.hit(player.currentWeapon.damage);
+                    player.score += e.dropPoints ?? 0;
+                    //angle = Math.acos(-x/(1));
+                }
+            }
+        },this);
     }
     
     render(ctx, frame){
