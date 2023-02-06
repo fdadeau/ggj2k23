@@ -237,7 +237,7 @@ const SPRITE_ANIM_NB = 4;
 export class Lighter {
 
     constructor(player) {
-        this.state = LIGHTER_OFF;
+        this.state = LIGHTER_ON;
         this.player = player;
         this.shots = [];
         this.lastShot = 0;
@@ -288,11 +288,6 @@ export class Lighter {
     }
 
 
-    toggle() {
-        this.state = (this.state == LIGHTER_OFF) ? LIGHTER_ON : LIGHTER_OFF;
-        this.frame = 0;
-    }
-
     isVisible() {
         return this.state > LIGHTER_OFF;
     }
@@ -305,7 +300,7 @@ export class Lighter {
             this.state = LIGHTER_ON;
         }
         else if (b && this.state == LIGHTER_OFF) {
-            this.state = LIGHTER_BLOW;
+           this.state = LIGHTER_ON;
         }
         this.frame = 0;
     }

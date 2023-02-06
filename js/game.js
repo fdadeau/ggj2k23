@@ -101,9 +101,6 @@ export class Game {
                 case 'KeyD':
                     this.player.strafe(1);
                     break;
-                case 'KeyB':
-                    this.player.lighter.toggle();
-                    break;
                 case 'KeyL':
                     this.player.lighter.blow(true);
                     break;
