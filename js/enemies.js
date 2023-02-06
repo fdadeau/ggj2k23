@@ -405,13 +405,11 @@ class Rabbit extends Enemy {
             this.dirX = 0;
             this.dirY = 0;
             player.haveCarrot = false;
+            player.gaveCarrot = true;
             return;
         }
         
         if (this.killer) {
-            // todo detect wall collision
-            this.dirX = dX / norm;
-            this.dirY = dY / norm;
             this.speed = 0.002;
             this.decZ += dt * JUMP_SPEED;
             this.vMove = this.initVMove+3*Math.sin(this.decZ) * 6;    
@@ -428,7 +426,12 @@ class Rabbit extends Enemy {
     }
 
     hit() {
-        this.killer = true;     // becomes mad and runs after the player
+        if (!this.killer) {
+            this.nibble = false;
+            this.killer = true;     // becomes mad and runs after the player
+            this.setAnimation(ANIM_KILLER);
+            audio.playMusic("ingame2", 0.6);
+        }
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {

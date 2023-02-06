@@ -164,8 +164,11 @@ class Rope extends PowerUp {
         this.points = 0;
     }
 
-    update(dt) {
+    update(dt, player) {
         super.update(dt);
+        if (player.posX - this.x < 0.2 && player.posY - this.y < 0.2) {
+            player.hasExited = (player.gaveCarrot) ? 1 : 2;
+        }
     }
 
     hit() {
