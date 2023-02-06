@@ -24,6 +24,8 @@ const MAX_PITCH = 2000;
 
 const INVISIVILTY_FRAME = 2000;
 
+const PLAYER_HP = 100;
+
 export default class Player {
 
     constructor() {
@@ -58,7 +60,7 @@ export default class Player {
         this.score = 0;
 
         /** player's health */
-        this.health = 10;
+        this.health = PLAYER_HP;
 
         /** player's sobriety */
         this.sobriety = 0;
