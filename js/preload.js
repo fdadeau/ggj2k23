@@ -46,6 +46,8 @@ const data = {
     "ingame1": "./data/sounds/Musique_Calme_V3.mp3",
     "ingame2": "./data/sounds/Musique_dynamique_V3.mp3",
     "titleScreenMusic": "./data/sounds/title_screen_music.mp3",
+    "defeatMusic": "./data/sounds/die_music.mp3",
+    "victoryMusic":"./data/sounds/victory_music.mp3",
     
     // Titles, buttons and cinematics
     "titleScreen": "./data/title-screen.png",

@@ -124,6 +124,11 @@ export class GUI {
             ctx.fillStyle = '#FFFFFF';
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2 - 290, HEIGHT/2 + 75);
+            data["ingame1"].pause();
+            data["ingame2"].pause();
+            data["walkSound"].pause();
+            data["defeatMusic"].loop = false;
+            data["defeatMusic"].play();
         }
     }
     
@@ -142,6 +147,11 @@ export class GUI {
             ctx.fillText("the surface !", WIDTH / 2 - 200, HEIGHT/2);
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2 - 300, HEIGHT/2 + 75);
+            data["ingame1"].pause();
+            data["ingame2"].pause();
+            data["walkSound"].pause();
+            data["victoryMusic"].loop = false;
+            data["victoryMusic"].play();
         }
     }
 
