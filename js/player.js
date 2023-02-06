@@ -32,6 +32,7 @@ export default class Player {
         /** Coordinates */
         this.posX = 0;
         this.posY = 0;
+        this.posZ = 0.5;
 
         /** Direction vector (where the character looks at) */
         this.dirX = 0;
@@ -164,7 +165,7 @@ export default class Player {
         // [ sin(a)  cos(a) ]
 
         this.offset = (this.offset + this.offSpeed) % (2 * Math.PI);
-        this.altitude = 0.5 + 0.01 * Math.cos(this.offset);
+        this.altitude = this.posZ + 0.01 * Math.cos(this.offset);
 
         // move forward/backward
         if (this.speed != 0) {

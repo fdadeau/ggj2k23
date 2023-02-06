@@ -59,10 +59,21 @@ class Enemy {
     }
 
     /** Common behavior */
-    update(dt, player) { 
-        this.x += this.dirX * dt * this.speed;
-        this.y += this.dirY * dt * this.speed;
-        this.behavior(dt, player);
+    update(dt, player, map) { 
+        let newX = this.x + this.dirX * dt * this.speed;
+        if (player.isOnEmptyTile(map, newX, this.y)) {
+            this.x = newX;
+        }
+        else {
+            this.dirX = 0;
+            this.dirY = this.dirY > 0 ? 1 : -1;
+        }
+        let newY = this.y + this.dirY * dt * this.speed;
+        if (player.isOnEmptyTile(map, this.x, newY)) {
+            this.y = newY;
+        }
+
+        this.behavior(dt, player,map);
 
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
@@ -99,7 +110,7 @@ class Enemy {
     }
 
     /** Initially empty, allows to have customized behaviors for a given entity */
-    behavior(player) { }
+    behavior(player, map) { }
 
     /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
@@ -190,8 +201,8 @@ class Tree extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    update(dt,player) {
-        super.update(dt,player);
+    update(dt,player,map) {
+        super.update(dt,player,map);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
@@ -257,8 +268,8 @@ class Turnip extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    update(dt, player) {
-        super.update(dt, player);
+    update(dt, player,map) {
+        super.update(dt, player,map);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
@@ -316,8 +327,8 @@ class Dandelion extends Enemy {
         this.dropPoints = dropPoints;
     }
 
-    update(dt, player) {
-        super.update(dt, player);
+    update(dt, player,map) {
+        super.update(dt, player,map);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
@@ -370,8 +381,8 @@ class Rabbit extends Enemy {
         this.decZ = 0;
     }
 
-    update(dt, player) {
-        super.update(dt, player);
+    update(dt, player,map) {
+        super.update(dt, player,map);
 
         if (this.nibble) {
             return;

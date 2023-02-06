@@ -376,7 +376,7 @@ export class Engine {
             let p = is_floor ? (y - game.player.altitude * H - game.player.pitch) : (game.player.altitude * H - y + game.player.pitch);
 
             // Vertical position of the camera.
-            let posZ = 0.5 * H;
+            let posZ = game.player.posZ * H;
 
             // Horizontal distance from the camera to the floor for the current row.
             // 0.5 is the z position exactly in the middle between floor and ceiling.
