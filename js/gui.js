@@ -154,7 +154,7 @@ export class GUI {
 
         // F / blow
         ctx.drawImage(data.key, 340, 240, 40, 40);
-        ctx.fillText('F',  354, 268);
+        ctx.fillText('F',  355, 268);
         ctx.drawImage(data.mike, 395, 242, 25, 35);
         ctx.fillStyle = '#ffd728';
         ctx.font = "15px pixel-bit-advanced";
@@ -165,7 +165,7 @@ export class GUI {
 
          // I
         ctx.drawImage(data.key, 340, 320, 40, 40);
-        ctx.fillText('I', 354, 348);
+        ctx.fillText('I', 355, 348);
         ctx.fillStyle = '#ffd728';
         ctx.font = "15px pixel-bit-advanced";
         ctx.fillText('I', 450, 330);
@@ -217,19 +217,27 @@ export class GUI {
 
     drawMenuTheme(ctx, title) {
         ctx.textAlign = "center";
+
         // Background image
         for(let i = 0; i < 4; i++) {
             ctx.drawImage(data.wood, 0, HEIGHT / 4 * i, WIDTH, HEIGHT / 4);
         }
+
         // Hanging ropes
         ctx.drawImage(data.rope, WIDTH / 3, -45, 20, 100);
         ctx.drawImage(data.rope, (WIDTH / 3) * 2 - 25, -45, 20, 100);
+
         // Title text
         ctx.textAlign = "center";
         ctx.fillStyle = '#fff';
         ctx.font = "50px pixel-bit-advanced";
         ctx.fillText(title, WIDTH / 2, HEIGHT/2 - 100);
         ctx.fillStyle = '#fff';
+
+        // Home
+        ctx.drawImage(data.home, 15, 15, 40, 40);
+        ctx.font = "12px pixel-bit-advanced";
+        ctx.fillText('click', 36, 75);
     }
 
     /** Waiting to start screen */

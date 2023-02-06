@@ -67,13 +67,14 @@ const data = {
     // outro
     // TO COME
 
-    // Controls
-    "wasd": "./data/controls/wasd.png",
-    "left-click": "./data/controls/left-click.png",
-    "right-click": "./data/controls/right-click.png",
-    "scroll": "./data/controls/scroll.png",
-    "key": "./data/controls/key.png",
-    "mike": "./data/controls/mike.png",
+    // Icons
+    "wasd": "./data/icons/wasd.png",
+    "left-click": "./data/icons/left-click.png",
+    "right-click": "./data/icons/right-click.png",
+    "scroll": "./data/icons/scroll.png",
+    "key": "./data/icons/key.png",
+    "mike": "./data/icons/mike.png",
+    "home": "./data/icons/home.png",
 
     // Sounds
     "axeSound": "./data/sounds/axe.mp3",
