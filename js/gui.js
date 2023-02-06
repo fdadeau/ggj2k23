@@ -318,7 +318,6 @@ export class GUI {
             this.step = 0;
             document.querySelector("canvas").classList.add("fade");
             ctx.textAlign = "center";
-            ctx.font = "40px Times";
             ctx.fillStyle = "white";
         }
         if (now < this.time) {
@@ -332,10 +331,22 @@ export class GUI {
 
     /** Outro animation */
     playOutro(ctx) {
+        let now = Date.now();
         if (this.showOutro == false) {
             this.showOutro = true;
-            // ctx.drawImage(OUTRO_IMG, 0, 0, OUTRO_WIDTH, OUTRO_HEIGHT);
-            // TODO ?
+            this.time = now + 1000;
+            this.step = 0;
+            document.querySelector("canvas").classList.add("fade");
+            ctx.textAlign = "center";
+            ctx.font = "40px Times";
+            ctx.fillStyle = "white";
+        }
+        if (now < this.time) {
+            return;
+        }
+        this.step++
+        if (this.step < OUTRO.length) {
+            OUTRO[this.step](this, ctx, now);
         }
     }
 }
@@ -416,13 +427,45 @@ const INTRO = [
         ctx.drawImage(data["intro5"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
-        t.time = now + 1000;
+        t.time = now + 500;
         ctx.drawImage(data["intro6"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 500;
+        ctx.drawImage(data["intro6_2"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
         t.time = now + 2000;
         drawOldStyle(ctx);
         ctx.fillText('AAAaaaaaaahh!', WIDTH / 2, HEIGHT / 2);
+    },
+    (t,ctx,now) => {
+        t.time = now + 300;
+        ctx.drawImage(data["intro6_3"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 300;
+        ctx.drawImage(data["intro6"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 300;
+        ctx.drawImage(data["intro6_2"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 300;
+        ctx.drawImage(data["intro6_3"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 300;
+        ctx.drawImage(data["intro6"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 300;
+        ctx.drawImage(data["intro6_2"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 300;
+        ctx.drawImage(data["intro6_3"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
         t.time = now + 1000;
@@ -453,6 +496,22 @@ const INTRO = [
         t.game.start();        
         document.querySelector("canvas").classList.remove("fade");
     }
+];
+
+
+const OUTRO = [
+    (t, ctx, now) => {
+        t.time = now + 1000;
+        document.querySelector("canvas").classList.remove("fade");
+        audio.playMusic("", )
+    }, 
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        document.querySelector("canvas").classList.remove("fade");
+        ctx.drawImage(data["fin1"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound("breathing", 0, 0.4, true);
+    },
+
 ]
 
 function drawOldStyle(ctx) {
