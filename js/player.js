@@ -399,7 +399,7 @@ export default class Player {
                         e.taken = true;
                         this.score += e.points;
                         break;
-                    case 'CarrotItem' :
+                    case 'Carrot' :
                         this.haveCarrot = true;
                         e.taken = true;
                         break;
