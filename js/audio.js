@@ -34,6 +34,10 @@ export const audio = {
         }
     },
 
+    audioIsPlaying: function(channel){
+        return this.sounds[channel] && !this.sounds[channel].paused;
+    },
+
 
     reset: function() {
         if (this.ambiance) 

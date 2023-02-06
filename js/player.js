@@ -183,7 +183,8 @@ export default class Player {
             }
 
             let dist = Math.sqrt(Math.pow(this.posX-newX,2) + Math.pow(this.posY-newY,2));
-            if(dist > 0.015){
+
+            if((dist > 0.015 && this.speed == PLAYER_MOVEMENT_SPEED) || (dist > 0.01 && this.speed == -PLAYER_MOVEMENT_SPEED/2)){
                 isMovingX = false;
             }
         }
@@ -220,12 +221,19 @@ export default class Player {
             let dist = Math.sqrt(Math.pow(this.posX-newX,2) + Math.pow(this.posY-newY,2));
 
             if(dist > 0.01){
+            
                isMovingY = false;
             }
         }
 
         if(!isMovingX && !isMovingY){
-            // TODO : stop sound here
+            if(audio.audioIsPlaying(10)){
+                audio.pause(10);
+            }
+        }else{
+            if(!audio.audioIsPlaying(10)){
+                audio.playSound('walkSound',10,1,true);
+            }
         }
 
         this.frameDelay -= dt;
@@ -293,25 +301,33 @@ export default class Player {
     }
 
     stop1() {
-        // TODO : stop sound here
+        if(this.translSpeed == 0){
+            audio.pause(10);
+        }
         this.speed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
 
     stop2() {
-        // TODO : stop sound here
+        if(this.speed == 0){
+            audio.pause(10);
+        }
         this.translSpeed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
 
     walk(dir) {
-       // TODO : play sound here
+        if(!audio.audioIsPlaying(10)){
+            audio.playSound('walkSound',10,1,true);
+        }
         this.speed = PLAYER_MOVEMENT_SPEED * dir;
         this.offSpeed = PLAYER_OFFSET_SPEED * 2;
     }
 
     strafe(dir) {
-        // TODO : play sound here
+        if(!audio.audioIsPlaying(10)){
+            audio.playSound('walkSound',10,1,true);
+        }
         this.translSpeed = PLAYER_ROTATION_SPEED * dir;
     }
     
