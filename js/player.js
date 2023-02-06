@@ -388,11 +388,20 @@ export default class Player {
         let id = this.weapons.lastIndexOf(this.currentWeapon);
         let newWeapon = (id+next)%this.weapons.length;
 
-        if(newWeapon == 0 && this.nbWhisky <= 0){
-            newWeapon = (newWeapon+next)%this.weapons.length;
-        }
-        if(newWeapon == 1 && this.nbTequila <= 0){
-            newWeapon = (newWeapon+next)%this.weapons.length;
+        if(next < 0){
+            if(newWeapon == 1 && this.nbTequila <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
+            if(newWeapon == 0 && this.nbWhisky <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
+        }else{
+            if(newWeapon == 0 && this.nbWhisky <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
+            if(newWeapon == 1 && this.nbTequila <= 0){
+                newWeapon = (newWeapon+next)%this.weapons.length;
+            }
         }
         if(newWeapon < 0){
             newWeapon = 2;
