@@ -1,7 +1,7 @@
 import { Game, STATES } from "./game.js";
 import { Engine } from "./engine.js";
 import { MicrophoneController } from "./microphone-controller.js";
-import { preload } from "./preload.js";
+import { preload, data } from "./preload.js";
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
@@ -74,6 +74,8 @@ document.addEventListener("DOMContentLoaded", async function() {
     document.addEventListener("dblclick", async function(e) {
         if (game.state == STATES.WAITING_TO_START) {
             game.state = STATES.TITLE;
+            data['titleScreenMusic'].volume = 0.1;
+            data['titleScreenMusic'].play();
             engine.initialize();
             await micro.start();
         } 

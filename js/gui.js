@@ -82,6 +82,7 @@ export class GUI {
             if (!document.pointerLockElement) {
                 document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
             }
+            data['titleScreenMusic'].pause();
             this.game.start();
         }
         // If we see the controls
