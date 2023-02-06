@@ -54,15 +54,15 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (e.button == 2) {
             e.stopPropagation();
             e.stopImmediatePropagation();
-            game.press("KeyL");
+            game.press("KeyE");
         }
         else if (document.pointerLockElement && e.button == 0) {
-            game.press("KeyE");
+            game.press("KeyL");
         }
         return false;
     }, true)
     document.addEventListener("mouseup", function(e) {
-        if (e.button == 2) {
+        if (e.button == 0) {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
