@@ -299,27 +299,7 @@ export class GUI {
             audio.pause();
             audio.playSound(won == 1 ? "victoryMusic" : "defeatMusic", "main", 0.4, false);
             document.querySelector("canvas").classList.add("fade");
-<<<<<<< HEAD
             this.game.state = STATES.PLAYING_OUTRO;
-=======
-        
-            this.gameArrived = true;
-            ctx.globalAlpha = 0.5;
-            ctx.textAlign = "center";
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = '#ffd728';
-            ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("You've reached", WIDTH / 2, HEIGHT/2 - 50);
-            ctx.font = "45px pixel-bit-advanced";
-            ctx.fillText("the surface !", WIDTH / 2, HEIGHT/2);
-            ctx.fillStyle = '#fff';
-            ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to continue", WIDTH / 2 - 300, HEIGHT/2 + 75);
-            audio.pause()
-            audio.playSound('victoryMusic',3,1,false);
->>>>>>> 998ca8c6b48c95630bd91a8d00c2ae13d2e0f682
         }
     }
 

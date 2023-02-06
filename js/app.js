@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             game.start();
             return;   
         }
-        game.press(e.code);
+        game.press(e);
     });
     document.addEventListener("keyup", function(e) {
         game.release(e.code);
