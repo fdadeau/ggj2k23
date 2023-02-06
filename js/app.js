@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             var rect = canvas.getBoundingClientRect();
             let clicX = (e.clientX - rect.left) * WIDTH / rect.width;
             let clicY = (e.clientY - rect.top) * HEIGHT / rect.height;
+            console.log(clicX + ', ' + clicY);
             game.gui.clickButton(clicX, clicY);
         } else if (game.state == STATES.CONTROLS || game.state == STATES.CREDITS) {
             game.state = STATES.TITLE;

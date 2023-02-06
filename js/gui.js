@@ -109,6 +109,12 @@ export class GUI {
         // Theme
         this.drawMenuTheme(ctx, 'Controls');
         
+        // Left column
+
+        // Root separator
+        ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 70, 10, 230);
+
+        // Right column
     }
 
     showCredits(ctx) {
