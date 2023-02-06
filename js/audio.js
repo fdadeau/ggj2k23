@@ -7,13 +7,13 @@ import { data } from "./preload.js";
 export const audio = {
 
     ambiance: null,
-    playMusic: function(which) {
+    playMusic: function(which, volume) {
         if (data[which] && data[which] instanceof HTMLAudioElement) {
             if (this.ambiance != null) {
                 this.ambiance.pause();
             }
             this.ambiance = data[which];
-            this.ambiance.volume = 0.4;
+            this.ambiance.volume = volume ? volume : 0.4;
             this.ambiance.currentTime = 0;
             this.ambiance.loop = true;
             this.ambiance.play();
@@ -21,12 +21,13 @@ export const audio = {
     },
 
     sounds: {},
-    playSound: function(which, channel, loop) {
+    playSound: function(which, channel, volume, loop) {
         if (data[which] && data[which] instanceof HTMLAudioElement) {
             if (this.sounds[channel]) {
                 this.sounds[channel].pause();
             }
             this.sounds[channel] = data[which];
+            this.sounds[channel].volume = volume ? volume : 0.5;
             this.sounds[channel].currentTime = 0;
             this.sounds[channel].loop = loop ? loop : false;
             this.sounds[channel].play();

@@ -1,6 +1,8 @@
 
 import { data } from "./preload.js";
 
+import { audio } from "./audio.js";
+
 const SPEED = 0.001;
 const FRAME_DELAY = 100;
 
@@ -394,6 +396,9 @@ class Rabbit extends Enemy {
         this.dirY = dY / norm;
                     
         if (norm < 2 && player.haveCarrot) {
+            if (this.killer) {
+                audio.playMusic("ingame1", 0.4);
+            }
             this.nibble = true;
             this.setAnimation(ANIM_NIBBLER);
             this.dirX = 0;
@@ -412,10 +417,10 @@ class Rabbit extends Enemy {
             return;
         }
 
-
         if (norm < 2 && !player.haveCarrot) {
             this.killer = true;
             this.setAnimation(ANIM_KILLER);
+            audio.playMusic("ingame2", 0.6);
             return;
         }
         
