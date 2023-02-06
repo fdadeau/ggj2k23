@@ -82,6 +82,8 @@ export default class Player {
         this.weapons[0].afterAnimation = function(player) {
             data['drinkEndSound'].volume = 0.25;
             data['drinkEndSound'].play();
+            data['yeetBottleSound'].volume = 0.5;
+            data['yeetBottleSound'].play();
             if(player.nbWhisky == 0){
                 player.equipeAxe();
             }
@@ -100,6 +102,8 @@ export default class Player {
         this.weapons[1].afterAnimation = function(player) {
             data['drinkEndSound'].volume = 0.25;
             data['drinkEndSound'].play();
+            data['yeetBottleSound'].volume = 0.5;
+            data['yeetBottleSound'].play();
             if(player.nbTequila == 0){
                 player.equipeAxe();
             }
