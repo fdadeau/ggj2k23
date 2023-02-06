@@ -138,7 +138,6 @@ class Enemy {
         if(this.animationBeforeHit == undefined){
             this.animationBeforeHit = this.animation;
         }
-        
         this.setAnimation(this.attackA);
     }
 
@@ -205,6 +204,11 @@ class Tree extends Enemy {
 
     update(dt,player,map) {
         super.update(dt,player,map);
+    }
+
+    attack(){
+        super.attack();
+        audio.playSound('whoosh',8,0.8,false);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
@@ -274,6 +278,11 @@ class Turnip extends Enemy {
         super.update(dt, player,map);
     }
 
+    attack(){
+        super.attack();
+        audio.playSound('whoosh',8,0.8,false);
+    }
+
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
         let sourceX = minX / sizeX * this.width | 0;
         let width = (maxX - minX) / sizeX * this.width | 0;
@@ -331,6 +340,11 @@ class Dandelion extends Enemy {
 
     update(dt, player,map) {
         super.update(dt, player,map);
+    }
+
+    attack(){
+        super.attack();
+        audio.playSound('whoosh',8,0.5,false);
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {

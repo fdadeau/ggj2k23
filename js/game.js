@@ -25,7 +25,7 @@ export class Game {
         this.player;
 
         this.gui = new GUI(this);
-        this.currentLevel = 'testFD';
+        this.currentLevel = 'tree';
     }
 
     setLoadingProgress(loaded, total) {
@@ -72,29 +72,47 @@ export class Game {
    
     // Commands
     press(key) {
+        console.log()
         if (this.state == STATES.PLAYING) {
-            switch (key) {
+            switch (key instanceof KeyboardEvent?key.code:key) {
                 case 'ArrowUp': 
                 case 'KeyW':
+                    if(key.repeat){
+                        return;
+                    }
                     this.player.walk(1);
                     break;
                 case 'KeyS':
                 case 'ArrowDown':
+                    if(key.repeat){
+                        return;
+                    }
                     this.player.walk(-0.5);
                     break;
                 case 'ArrowLeft': 
                 case 'KeyA':
+                    if(key.repeat){
+                        return;
+                    }
                     this.player.strafe(-1);
                     break;
                 case 'ArrowRight':
                 case 'KeyD':
+                    if(key.repeat){
+                        return;
+                    }
                     this.player.strafe(1);
                     break;
                 case 'KeyL':
+                    if(key instanceof KeyboardEvent && key.repeat){
+                        return;
+                    }
                     this.player.lighter.blow(true);
                     break;
                 case 'KeyP':
-                    this.paused = !this.paused;
+                    this.state = STATES.PAUSE;
+                    this.player.stop1();
+                    this.player.stop2();
                     break;
                 case 'Semicolon':
                     this.on2D = !this.on2D;
@@ -138,6 +156,24 @@ export class Game {
                 break;
             }
         }
+<<<<<<< HEAD
+=======
+        /* else if (this.state == STATES.ARRIVED) {
+            switch (key) {
+                case 'Space' :
+                case 'Enter' :
+                    this.state = STATES.PLAYING_OUTRO;
+                break;
+            }
+
+        }*/
+         else if(this.state == STATES.PAUSE && key == 'KeyP') {
+            this.state = STATES.PLAYING;
+            this.gui.gamePaused = false;
+            audio.resume();
+        }
+
+>>>>>>> 998ca8c6b48c95630bd91a8d00c2ae13d2e0f682
     }
 
     resetGame() {

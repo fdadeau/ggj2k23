@@ -1,6 +1,7 @@
 
 import {data, preload} from "./preload.js";
 import { WIDTH, HEIGHT } from "./gui.js";
+import { audio } from "./audio.js";
 
 /**
  * Build a weapon of the specified type.
@@ -79,11 +80,12 @@ class Consumable extends Weapon{
 
     setDelay(){
         this.delay = CONSUME_DELAY;
-        data['drinkSound'].play();
-        if(!data['drinkSound'].paused){
-            data['drinkSound'].currentTime = 0;
-            data['drinkSound'].play();
-        }
+        audio.playSound('drinkSound',5, false);
+    }
+
+    afterAnimation(){
+        audio.playSound('drinkEndSound',5, 0.25, false);
+        audio.playSound('yeetBottleSound',6, 0.5, false);
     }
 
     update(dt, player, enemies){
@@ -109,15 +111,14 @@ class Whisky extends Consumable{
             return;
         }
         player.sobriety += WHISKY_INCREASE_SOBRIETY;
+        if(player.sobriety > 100){
+            player.sobriety = 100;
+        }
         player.nbWhisky--;
     }
 
     afterAnimation(player){
         super.afterAnimation();
-        data['drinkEndSound'].volume = 0.25;
-        data['drinkEndSound'].play();
-        data['yeetBottleSound'].volume = 0.5;
-        data['yeetBottleSound'].play();
         if(player.nbWhisky == 0){
             player.equipeAxe();
         }
@@ -143,15 +144,14 @@ class Tequila extends Consumable {
         }
         player.isDrunk = true;
         player.sobriety += TEQUILA_INCREASE_SOBRIETY;
+        if(player.sobriety > 100){
+            player.sobriety = 100;
+        }
         player.nbTequila--;
     }
 
     afterAnimation(player){
         super.afterAnimation();
-        data['drinkEndSound'].volume = 0.25;
-        data['drinkEndSound'].play();
-        data['yeetBottleSound'].volume = 0.5;
-        data['yeetBottleSound'].play();
         if(player.nbTequila == 0){
             player.equipeAxe();
         }
@@ -172,11 +172,7 @@ class Axe extends Weapon {
 
     setDelay(){
         this.delay = AXE_DELAY;
-        data['axeSound'].play();
-        if(!data['axeSound'].paused){
-            data['axeSound'].currentTime = 0;
-            data['axeSound'].play();
-        }
+        audio.playSound('axeSound',5,1, false);
     }
 
     update(dt, player, enemies){
