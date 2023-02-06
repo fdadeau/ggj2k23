@@ -72,13 +72,12 @@ export class Game {
    
     // Commands
     press(key) {
-        console.log()
         if (this.state == STATES.PLAYING) {
             switch (key instanceof KeyboardEvent?key.code:key) {
                 case 'ArrowUp': 
                 case 'KeyW':
                     if(key.repeat){
-                        return;
+                        //return;
                     }
                     this.player.walk(1);
                     break;
@@ -156,24 +155,12 @@ export class Game {
                 break;
             }
         }
-<<<<<<< HEAD
-=======
-        /* else if (this.state == STATES.ARRIVED) {
-            switch (key) {
-                case 'Space' :
-                case 'Enter' :
-                    this.state = STATES.PLAYING_OUTRO;
-                break;
-            }
-
-        }*/
          else if(this.state == STATES.PAUSE && key == 'KeyP') {
             this.state = STATES.PLAYING;
             this.gui.gamePaused = false;
             audio.resume();
         }
 
->>>>>>> 998ca8c6b48c95630bd91a8d00c2ae13d2e0f682
     }
 
     resetGame() {
