@@ -1,5 +1,9 @@
 import { data } from "./preload.js";
 
+import { STATES } from "./game.js";
+
+import { audio } from "./audio.js";
+
 // Assuming 640x400 (10/16 ratio) 
 
 /** Screen width */
@@ -47,10 +51,11 @@ export class GUI {
 
     constructor(game) {
         this.game = game;
-        this.gameDead = false;
-        this.gameArrived = false;
-        this.showIntro = false;
-        this.showOutro = false;
+        this.time = 0;
+        //this.gameDead = false;
+        //this.gameArrived = false;
+        //this.showIntro = false;
+        //this.showOutro = false;
     }
 
     /** Loading screen */
@@ -84,8 +89,8 @@ export class GUI {
             if (!document.pointerLockElement) {
                 document.getElementById("cvs").requestPointerLock({ unadjustedMovement: true });
             }
-            data['titleScreenMusic'].pause();
-            this.game.start();
+            //data['titleScreenMusic'].pause();
+            this.game.state = STATES.PLAYING_INTRO;
         }
         // If we see the controls
         else if (clicX >= BUTTON_CONTROLS.x && clicX <= BUTTON_CONTROLS.x + BUTTON_CONTROLS.width && clicY >= BUTTON_CONTROLS.y && clicY <= BUTTON_CONTROLS.y + BUTTON_CONTROLS.height) {
@@ -133,8 +138,13 @@ export class GUI {
     }
     
     /** Winning screen */
-    arrived(ctx) {
+    finished(ctx, won) {
         if (this.gameArrived == false) {
+            audio.pause();
+            audio.playSound(won == 1 ? "victoryMusic" : "defeatMusic", "main", 0.4, false);
+
+            document.querySelector("canvas").classList.add("fade");
+        
             this.gameArrived = true;
             ctx.globalAlpha = 0.5;
             ctx.fillStyle = '#000';
@@ -157,9 +167,22 @@ export class GUI {
 
     /** Intro animation */
     playIntro(ctx) {
-        if (this.showIntro == false) {
+        let now = Date.now();
+        if (!this.showIntro) {
             this.showIntro = true;
-            //ctx.drawImage(OUTRO_IMG, 0, 0, OUTRO_WIDTH, OUTRO_HEIGHT);
+            this.time = now + 1000;
+            this.step = 0;
+            document.querySelector("canvas").classList.add("fade");
+            ctx.textAlign = "center";
+            ctx.font = "40px Times";
+            ctx.fillStyle = "white";
+        }
+        if (now < this.time) {
+            return;
+        }
+        this.step++
+        if (this.step < INTRO.length) {
+            INTRO[this.step](this, ctx, now);
         }
     }
 
@@ -172,3 +195,148 @@ export class GUI {
         }
     }
 }
+
+
+const INTRO = [
+    (t, ctx, now) => {
+        t.time = now + 1000;
+        document.querySelector("canvas").classList.remove("fade");
+    }, 
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        document.querySelector("canvas").classList.remove("fade");
+        ctx.drawImage(data["intro1"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound("woodSound", 0, 0.4, true);
+    },
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        drawOldStyle(ctx);
+        ctx.textAlign = "center";
+        ctx.font = "40px pixel-bit-advanced";
+        ctx.fillText("Hum... I'm thirsty!", WIDTH / 2, HEIGHT / 2);
+        audio.sounds[0].pause();
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        audio.playSound("drinkSound", 0, 0.4);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        audio.playSound("drinkSound", 0, 0.4);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        audio.playSound("drinkSound", 0, 0.4);
+    },
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        audio.playSound("drinkEndSound", 0, 0.4);
+    },
+    (t,ctx,now) => {
+        t.time = now + 2000;
+        ctx.drawImage(data["intro2"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound("crunch", 0, 0.6);
+    },
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        drawOldStyle(ctx);
+        ctx.textAlign = "center";
+        ctx.font = "40px pixel-bit-advanced";
+        ctx.fillText('Oupsi...', WIDTH / 2, HEIGHT / 2);
+    },
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        ctx.drawImage(data["intro3"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound("foule", 0, 0.4, false);
+    },
+    (t,ctx,now) => {
+        t.time = now + 2000;
+        drawOldStyle(ctx);
+        ctx.textAlign = "center";
+        ctx.font = "40px pixel-bit-advanced";
+        ctx.fillText('Excuse us!', WIDTH / 2, HEIGHT / 2);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        ctx.drawImage(data["intro4"], 0, 0), WIDTH, HEIGHT;
+    },
+    (t,ctx,now) => {
+        t.time = now + 2000;
+        drawOldStyle(ctx);
+        ctx.textAlign = "center";
+        ctx.font = "40px pixel-bit-advanced";
+        ctx.fillText('Hu?!', WIDTH / 2, HEIGHT / 2);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        ctx.drawImage(data["intro5"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        ctx.drawImage(data["intro6"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 2000;
+        drawOldStyle(ctx);
+        ctx.fillText('AAAaaaaaaahh!', WIDTH / 2, HEIGHT / 2);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        ctx.drawImage(data["intro6"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        t.time = now + 2000;
+        ctx.drawImage(data["intro7"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound("throw", 0, 0.5, false);
+    },
+    (t,ctx,now) => {
+        t.time = now + 2000;
+        drawOldStyle(ctx);
+        ctx.textAlign = "center";
+        ctx.font = "40px pixel-bit-advanced";
+        ctx.fillText('So long,', WIDTH / 2, HEIGHT / 2 - 50);
+        ctx.fillText('M****r F****r!', WIDTH / 2, HEIGHT / 2 + 50);
+    },
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        document.querySelector("canvas").classList.add("fade");
+    },
+    (t,ctx,now) => {
+        audio.playSound("ouch", "player", 0.4);
+    },
+    (t) => {
+        document.querySelector("canvas").classList.remove("fade");
+        t.game.start();        
+    }
+]
+
+function drawOldStyle(ctx) {
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx.strokeStyle = "#FFFFFF"; 
+    ctx.lineWidth = 4;
+    ctx.fillStyle = "#FFFFFF";
+    // top-left
+    ctx.beginPath();
+    ctx.moveTo(20, 50);
+    ctx.lineTo(20, 20);
+    ctx.lineTo(50, 20);
+    ctx.stroke();
+    // bottom-left
+    ctx.beginPath();
+    ctx.moveTo(20, HEIGHT-50);
+    ctx.lineTo(20, HEIGHT-20);
+    ctx.lineTo(50, HEIGHT-20);
+    ctx.stroke();
+    // top-right
+    ctx.beginPath();
+    ctx.moveTo(WIDTH - 20, 50);
+    ctx.lineTo(WIDTH - 20, 20);
+    ctx.lineTo(WIDTH - 50, 20);
+    ctx.stroke();
+    // bottom-left
+    ctx.beginPath();
+    ctx.moveTo(WIDTH - 20, HEIGHT-50);
+    ctx.lineTo(WIDTH - 20, HEIGHT-20);
+    ctx.lineTo(WIDTH - 50, HEIGHT-20);
+    ctx.stroke();
+} 

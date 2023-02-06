@@ -92,6 +92,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
 
     document.addEventListener("wheel", function(e) {
+        if (!game.state == STATES.PLAYING) {
+            return;
+        }
         if (e.deltaY > 0) {
             game.player.switchToNextWeapon(-1);
         }

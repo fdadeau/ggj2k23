@@ -18,7 +18,7 @@ canvas {
     top: 50%;
     transform: translate(-50%, -50%);
     background-color: #000;
-    transition: opacity 1s ease-in 0s;
+    transition: opacity 0.5s ease-in 0s;
 }
 
 .fade {

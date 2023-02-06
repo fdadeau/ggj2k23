@@ -9,7 +9,7 @@ import { GUI } from "./gui.js";
 
 
 /** Game states */
-export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6, ARRIVED: 7, TITLE: 8 };
+export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6, FINISHED: 7, TITLE: 8 };
 
 export class Game {
 
@@ -35,18 +35,6 @@ export class Game {
         }
     }
 
-    lookDead() {
-        if (this.state == STATES.PLAYING && this.player.health <= 0) {
-            this.state = STATES.DEAD;
-        }
-    }
-
-    lookArrived() {
-        if (this.state == STATES.PLAYING && this.player.arrived) {
-            this.state = STATES.ARRIVED;
-        }
-    }
-
     start() {
         this.loadLevel();
         this.state = STATES.PLAYING;
@@ -67,15 +55,18 @@ export class Game {
             return false;
         }
         this.enemies.forEach((e) => {
-            e.update(dt,this.player, this.map);   // TODO add player for detecting collisions?
+            e.update(dt, this.player, this.map);   
         });
         this.player.update(dt, this.map, this.enemies);
 
-        //this.player.currentWeapon.update(dt);   // TODO remove (only debug)
-
         /** If the player is dead */
-        this.lookDead();
-        this.lookArrived();
+        if (this.player.health <= 0) {
+            this.state = STATES.DEAD;
+            return;
+        }
+        if (this.player.hasEscaped) {
+            this.state = STATES.FINISHED;
+        }
     }
 
    
@@ -146,14 +137,15 @@ export class Game {
                     this.resetGame();
                 break;
             }
-        } else if (this.state == STATES.ARRIVED) {
+        }
+        /* else if (this.state == STATES.ARRIVED) {
             switch (key) {
                 case 'Space' :
                 case 'Enter' :
                     this.state = STATES.PLAYING_OUTRO;
                 break;
             }
-        }
+        }*/
     }
 
     resetGame() {

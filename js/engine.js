@@ -68,8 +68,8 @@ export class Engine {
             return;
         }
 
-        if (game.state == STATES.ARRIVED) {
-            game.gui.arrived(this.ctx);
+        if (game.state == STATES.FINISHED) {
+            game.gui.finished(this.ctx, game.player.hasExited);
             return;
         }
 

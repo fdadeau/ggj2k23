@@ -94,7 +94,8 @@ const ENEMIES2 = function() {
     const rabbit = buildEnemy("rabbit", 7.5, 7.5, 0, 1);
     //POWER UP
     const carrot = buildPowerUp("carrot", 7.5, 4.5);
-    
+    // const ROPE 
+    const rope = buildPowerUp("rope", 7.7, 7.7);
     return [rabbit, carrot];
 };
 

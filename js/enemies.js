@@ -383,7 +383,7 @@ class Rabbit extends Enemy {
         this.decZ = 0;
     }
 
-    update(dt, player,map) {
+    update(dt, player, map) {
         super.update(dt, player,map);
 
         if (this.nibble) {
