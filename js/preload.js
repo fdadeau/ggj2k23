@@ -67,7 +67,12 @@ const data = {
     "intro6_3": "./data/cinematics/intro-6_3.png",
     "intro7": "./data/cinematics/intro-7.png",
     // outro
-    // TO COME
+    "outro1": "./data/cinematics/fin_1.png",
+    "outro2": "./data/cinematics/fin_2_1.png",
+    "outro3": "./data/cinematics/fin_2_2.png",
+    "outro4": "./data/cinematics/fin_2_3.png",
+    "outro5": "./data/cinematics/fin_3.png",
+    "outro6": "./data/cinematics/fin_4.png",
 
     // Icons
     "wasd": "./data/icons/wasd.png",
@@ -90,7 +95,10 @@ const data = {
     "ouch": "./data/sounds/ouch.mp3",
     "foule": "./data/sounds/foule.mp3",
     'throw': "./data/sounds/throw.mp3",
-    "whoosh": "./data/sounds/whoosh.mp3"
+    "whoosh": "./data/sounds/whoosh.mp3",
+    "flamethrower": "./data/sounds/flamethrower.mp3",
+    "breathing": "./data/sounds/breathing.mp3",
+    "truck-start": "./data/sounds/truck-start.mp3"
 }
 
 /***

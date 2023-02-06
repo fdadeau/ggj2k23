@@ -297,9 +297,9 @@ export class GUI {
     finished(ctx, won) {
         if (this.gameArrived == false) {
             audio.pause();
-            audio.playSound(won == 1 ? "victoryMusic" : "defeatMusic", "main", 0.4, false);
             document.querySelector("canvas").classList.add("fade");
             this.game.state = STATES.PLAYING_OUTRO;
+            this.end = won;
         }
     }
 
@@ -503,12 +503,50 @@ const OUTRO = [
         document.querySelector("canvas").classList.remove("fade");
     }, 
     (t,ctx,now) => {
-        t.time = now + 3000;
-        document.querySelector("canvas").classList.remove("fade");
+        t.time = now + 2000;
         ctx.drawImage(data["fin1"], 0, 0, WIDTH, HEIGHT);
         audio.playSound("breathing", 0, 0.4, true);
     },
-
+    (t,ctx,now) => {
+        t.time = now + 3000;
+        ctx.drawImage(data["fin2"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound("truck-start", 0, 0.4, false);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        ctx.drawImage(data["fin3"], 0, 0, WIDTH, HEIGHT);
+        audio.playSound(won == 1 ? "victoryMusic" : "defeatMusic", "end", 0.4, false);
+    },
+    (t,ctx,now) => {
+        t.time = now + 1000;
+        ctx.drawImage(data["fin4"], 0, 0, WIDTH, HEIGHT);
+    },
+    (t,ctx,now) => {
+        if (this.end == 2) {
+            t.time = now + 3000;
+        }
+        else {
+            drawOldStyle(ctx);
+            ctx.textAlign = "center";
+            ctx.font = "40px pixel-bit-advanced";
+            ctx.fillText('GAME OVER,', WIDTH / 2, HEIGHT / 2 - 50);
+        }
+    },
+    (t,ctx,now) => {
+        if (this.end == 2) {
+            t.time = now + 3000;
+            ctx.drawImage(data["fin4"], 0, 0, WIDTH, HEIGHT);
+        }
+        else {
+            ctx.drawImge(data["rabbit-spritesheet"], 0, 500*3, 500, 500, WIDTH /2 - 150, HEIGHT/2 - 200, 300, 300)
+            ctx.fillText('THANKS FOR PLAYING!', WIDTH / 2, HEIGHT / 2 + 250);
+        }
+    },
+    (t,ctx,now) => {
+        if (this.end == 2) {
+            ctx.drawImage(data["fin5"], 0, 0, WIDTH, HEIGHT);
+        }
+    }  
 ]
 
 function drawOldStyle(ctx) {
