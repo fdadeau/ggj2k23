@@ -76,28 +76,28 @@ export class Game {
             switch (key instanceof KeyboardEvent?key.code:key) {
                 case 'ArrowUp': 
                 case 'KeyW':
-                    if(key.repeat){
-                        //return;
+                    if(key instanceof KeyboardEvent && key.repeat){
+                        return;
                     }
                     this.player.walk(1);
                     break;
                 case 'KeyS':
                 case 'ArrowDown':
-                    if(key.repeat){
+                    if(key instanceof KeyboardEvent && key.repeat){
                         return;
                     }
                     this.player.walk(-0.5);
                     break;
                 case 'ArrowLeft': 
                 case 'KeyA':
-                    if(key.repeat){
+                    if(key instanceof KeyboardEvent && key.repeat){
                         return;
                     }
                     this.player.strafe(-1);
                     break;
                 case 'ArrowRight':
                 case 'KeyD':
-                    if(key.repeat){
+                    if(key instanceof KeyboardEvent && key.repeat){
                         return;
                     }
                     this.player.strafe(1);
@@ -155,7 +155,7 @@ export class Game {
                 break;
             }
         }
-         else if(this.state == STATES.PAUSE && key == 'KeyP') {
+         else if(this.state == STATES.PAUSE && key.code == 'KeyP') {
             this.state = STATES.PLAYING;
             this.gui.gamePaused = false;
             audio.resume();

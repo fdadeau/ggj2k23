@@ -23,6 +23,7 @@ const data = {
     "whisky": "./data/images/whisky.png",
     "carrot": "./data/images/carrot.png",
     "rope": "./data/images/rope.png",
+    "rope-menu": "./data/images/rope-menu.png",
 
     // lighter
     "lighter1": "./data/spritesheets/lighter-spritesheet.png",
