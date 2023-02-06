@@ -2,6 +2,7 @@ import { Game, STATES } from "./game.js";
 import { Engine } from "./engine.js";
 import { MicrophoneController } from "./microphone-controller.js";
 import { preload, data } from "./preload.js";
+import { WIDTH, HEIGHT } from "./gui.js";
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
@@ -43,8 +44,8 @@ document.addEventListener("DOMContentLoaded", async function() {
         e.preventDefault();
         if (game.state == STATES.TITLE) {
             var rect = canvas.getBoundingClientRect();
-            let clicX = (e.clientX - rect.left) * 640 / rect.width;
-            let clicY = (e.clientY - rect.top) * 400 / rect.height;
+            let clicX = (e.clientX - rect.left) * WIDTH / rect.width;
+            let clicY = (e.clientY - rect.top) * HEIGHT / rect.height;
             game.gui.clickButton(clicX, clicY);
         }
         return false;

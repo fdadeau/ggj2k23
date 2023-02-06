@@ -4,18 +4,13 @@
  *  and F. Permadi seminal tutorial (http://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/)
  */
 
-// Assuming 640x400 (10/16 ratio) 
-
-/** Screen width */
-const WIDTH = 640;
-/** Screen height */
-const HEIGHT = WIDTH * 10 / 16;
-
 const DEBUG = false;
 
 import { STATES } from "./game.js";
 
 import { data } from "./preload.js";
+
+import { HEIGHT, WIDTH } from "./gui.js";
 
 export class Engine {
 

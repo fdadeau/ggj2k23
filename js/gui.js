@@ -1,9 +1,11 @@
 import { data } from "./preload.js";
 
+// Assuming 640x400 (10/16 ratio) 
+
 /** Screen width */
-const WIDTH = 640;
+export const WIDTH = 640;
 /** Screen height */
-const HEIGHT = WIDTH * 10 / 16;
+export const HEIGHT = WIDTH * 10 / 16;
 
 const BUTTON_HEIGHT = 50;
 const BUTTON_WIDTH = 300;

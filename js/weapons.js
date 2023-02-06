@@ -1,7 +1,6 @@
 
 import {data, preload} from "./preload.js";
-
-const WIDTH = 640, HEIGHT = 480;
+import { WIDTH, HEIGHT } from "./gui.js";
 
 /**
  * Build a weapon of the specified type.
