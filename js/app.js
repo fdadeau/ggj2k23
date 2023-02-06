@@ -1,8 +1,10 @@
+
 import { Game, STATES } from "./game.js";
 import { Engine } from "./engine.js";
 import { MicrophoneController } from "./microphone-controller.js";
 import { preload, data } from "./preload.js";
 import { WIDTH, HEIGHT } from "./gui.js";
+import { audio } from "./audio.js";
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
 
@@ -50,6 +52,10 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
         return false;
     });
+    document.addEventListener("contextmenu", function(e) {
+        e.preventDefault();
+        return false;
+    });
     document.addEventListener("mousedown", function(e) {
         e.preventDefault();
         if (e.button == 2) {
@@ -57,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             e.stopImmediatePropagation();
             game.press("KeyE");
         }
-        else if (document.pointerLockElement && e.button == 0) {
+        else if (e.button == 0) {
             game.press("KeyL");
         }
         return false;
@@ -75,9 +81,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     document.addEventListener("dblclick", async function(e) {
         if (game.state == STATES.WAITING_TO_START) {
             game.state = STATES.TITLE;
-            data['titleScreenMusic'].volume = 0.1;
-            data['titleScreenMusic'].loop = true;
-            data['titleScreenMusic'].play();
+            audio.playMusic("titleScreenMusic");
             engine.initialize();
             await micro.start();
         } 
