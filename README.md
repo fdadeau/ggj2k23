@@ -10,7 +10,7 @@ and thrown into a rabbit hole in the ground.
 You will have to explore the dark undergrounds, escape its population of dangerous and aggressive plants, 
 and finally reach the surface... 
 
-A return to the roots of FPS games with a 2.5D shooter inspired from Wolfenstein 3D.
+A return to the roots of FPS games with an old-fashioned 2.5D shooter. 
 
 ## How to play
 
@@ -30,6 +30,6 @@ Ready? Play it online: [https://fdadeau.github.io/ggj2k23](https://fdadeau.githu
 ## Diversifiers
 
 - Sharing is caring (Sponsored by GitHub) - there you are
-- No Shortcuts - game engine has been entirely built using VanillaJS and raytracing algorithms
+- No Shortcuts - game engine has been entirely built using VanillaJS and raycasting algorithms
 - Year of the Rabbit - you are in a rabbit hole, right? there are surely some rabbits in it 
-- Is This The End? - make sure you accomplish additional quest before exiting the level...
+- Is This The End? - make sure you accomplish an additional quest before exiting the level...
