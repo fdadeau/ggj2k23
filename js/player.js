@@ -415,6 +415,9 @@ export default class Player {
             return;
         }
         this.health -= damage;
+        if (this.health < 0) {
+            this.health = 0;
+        }
         this.hud.hitAnimation();
         audio.playSound('hitPlayerSound',7,0.5,false);
     }
