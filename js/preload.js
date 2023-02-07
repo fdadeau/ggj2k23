@@ -74,6 +74,7 @@ const data = {
     "outro4": "./data/cinematics/fin_2_3.png",
     "outro5": "./data/cinematics/fin_3.png",
     "outro6": "./data/cinematics/fin_4.png",
+    "outro7": "./data/cinematics/happy_bunny_fin.png",
 
     // Icons
     "wasd": "./data/icons/wasd.png",

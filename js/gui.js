@@ -505,11 +505,11 @@ const OUTRO = [
         ctx.drawImage(data["outro2"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
-        t.time = now + 2000;
+        t.time = now + 2500;
         audio.playSound("truck-start", 0, 0.4, false);
     },
     (t,ctx,now) => {
-        t.time = now + 1000;
+        t.time = now + 500;
         ctx.drawImage(data["outro3"], 0, 0, WIDTH, HEIGHT);
         
     },
@@ -518,16 +518,13 @@ const OUTRO = [
         ctx.drawImage(data["outro4"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
-        if (t.end == 1) {
-            t.time = now + 5000;
-        }
-        else {
-            t.time = now + 4000;
-        }
+        t.time = now + (t.end == 1 ? 6000 : 4000);
         drawOldStyle(ctx);
         ctx.textAlign = "center";
         ctx.font = "40px pixel-bit-advanced";
-        ctx.fillText('GAME OVER', WIDTH / 2, HEIGHT / 2);
+        ctx.fillText('GAME OVER', WIDTH / 2, HEIGHT / 2 - 80);
+        ctx.fillText('THANK YOU', WIDTH / 2, HEIGHT / 2 + 50);
+        ctx.fillText('FOR PLAYING!', WIDTH / 2, HEIGHT / 2 + 120);
     },
     (t,ctx,now) => {
         if (t.end == 2) {
@@ -535,10 +532,7 @@ const OUTRO = [
             ctx.drawImage(data["outro5"], 0, 0, WIDTH, HEIGHT);
         }
         else {
-            ctx.clearRect(0,0, WIDTH, HEIGHT);
-            ctx.drawImage(data["rabbit-spritesheet"], 0, 500*3, 500, 500, WIDTH /2 - 110, HEIGHT/2 - 120, 220, 220)
-            ctx.fillText('THANK YOU', WIDTH / 2, HEIGHT / 2 + 150);
-            ctx.fillText('FOR PLAYING!', WIDTH / 2, HEIGHT / 2 + 200);
+            ctx.drawImage(data["outro7"], 0, 0, WIDTH, HEIGHT);            
         }
     },
     (t,ctx,now) => {
