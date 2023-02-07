@@ -317,11 +317,15 @@ export class Lighter {
     }
     stopBlowing() {
         this.blowing = false;
+        audio.pause("weapon");
     }
 
     addShot() {
         if (this.player.sobriety <= 0) {
             return;
+        }
+        if (this.shots.length == 0) {
+            audio.playSound("flamethrower","weapon",0.5, false); 
         }
         this.shots.push({ 
             x: this.player.posX + this.player.dirX * 0.2, 

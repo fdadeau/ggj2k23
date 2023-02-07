@@ -58,6 +58,7 @@ class Enemy {
 
         this.attackDamage = attackDamage;
         this.range = range;
+        this.autoAttack = true;
     }
 
     /** Common behavior */
@@ -102,7 +103,7 @@ class Enemy {
         }.bind(this));
 
         
-        if(this.distance < this.range){
+        if(this.autoAttack && this.distance < this.range){
             if(player.invisibilityFrame <=0 && this.health > 0){
                 this.attack();
                 player.hit(this.attackDamage)
@@ -395,6 +396,7 @@ class Rabbit extends Enemy {
 
         this.initVMove = 60;
         this.decZ = 0;
+        this.autoAttack = false;
     }
 
     update(dt, player, map) {
