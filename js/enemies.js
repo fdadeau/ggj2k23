@@ -117,8 +117,7 @@ class Enemy {
 
     /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
-        //return false;
-        return Math.abs(x - this.x) < 0.1 && Math.abs(y - this.y) < 0.1;
+        return (this.health > 0) && Math.abs(x - this.x) < 0.1 && Math.abs(y - this.y) < 0.1;
     }
 
     setAnimation(anim) {
@@ -165,6 +164,7 @@ class Enemy {
 
     die(){
         this.setAnimation(this.dieA);
+        this.vMove = 60;
     }
 
     burn(){
