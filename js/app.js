@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
 
         // to remove for the final version
-        if (e.key == "Dead") {
+        if (e.key == "£") {
             if (game.state != STATES.PLAYING) {
                 document.querySelector("canvas").classList.remove("fade");
                 audio.pause();
