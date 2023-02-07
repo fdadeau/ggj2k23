@@ -267,7 +267,7 @@ export class GUI {
             ctx.font = "23px pixel-bit-advanced";
             ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
             audio.pause();
-            audio.playSound('defeatMusic',0,1,false);
+            audio.playSound('wilhelm',0,1,false);
         }
     }
 

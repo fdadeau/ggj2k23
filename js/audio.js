@@ -40,13 +40,18 @@ export const audio = {
 
 
     reset: function() {
-        if (this.ambiance) 
+        this.pause();
+        if (this.ambiance) {
             this.ambiance.currentTime = 0;
+        }
+        this.sounds = {};
     },
 
     pause: function(s) {
-        if (s !== undefined && this.sounds[s]) {
-            this.sounds[s].pause();
+        if (s !== undefined) {
+            if (this.sounds[s]) {
+                this.sounds[s].pause();
+            }
             return;
         }
         if (this.ambiance) 

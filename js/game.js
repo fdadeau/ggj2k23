@@ -47,6 +47,7 @@ export class Game {
         this.player.initialize(levelData.player.posX, levelData.player.posY, levelData.player.dirX, levelData.player.dirY);
         this.map = levelData.map;
         this.textures = levelData.textures;
+        audio.reset();
         audio.playMusic("ingame1", 0.4);
     }
 
@@ -54,10 +55,6 @@ export class Game {
         if (this.state != STATES.PLAYING) {
             return false;
         }
-        this.enemies.forEach((e) => {
-            e.update(dt, this.player, this.map);   
-        });
-        this.player.update(dt, this.map, this.enemies);
 
         /** If the player is dead */
         if (this.player.health <= 0) {
@@ -67,6 +64,15 @@ export class Game {
         if (this.player.hasExited) {
             this.state = STATES.FINISHED;
         }
+
+        this.player.update(dt, this.map, this.enemies);
+
+        this.enemies.forEach((e) => {
+            e.update(dt, this.player, this.map);   
+        });
+
+
+        
     }
 
    

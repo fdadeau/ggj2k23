@@ -100,7 +100,8 @@ const data = {
     "whoosh": "./data/sounds/whoosh.mp3",
     "flamethrower": "./data/sounds/flamethrower.mp3",
     "breathing": "./data/sounds/breathing.mp3",
-    "truck-start": "./data/sounds/truck-start.mp3"
+    "truck-start": "./data/sounds/truck-start.mp3",
+    "wilhelm": "./data/sounds/wilhelm.mp3"
 }
 
 /***
