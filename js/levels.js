@@ -96,7 +96,7 @@ const ENEMIES2 = function() {
     const carrot = buildPowerUp("carrot", 7.5, 4.5);
     // const ROPE 
     const rope = buildPowerUp("rope", 7.7, 7.7);
-    return [rabbit, carrot];
+    return [rabbit, carrot, rope];
 };
 
 const ENEMIES4 = function() {

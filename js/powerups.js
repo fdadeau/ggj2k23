@@ -154,6 +154,7 @@ class Dialog extends PowerUp {
     }
 }
 
+
 class Rope extends PowerUp {
 
     constructor(x, y) {
@@ -165,8 +166,7 @@ class Rope extends PowerUp {
     }
 
     update(dt, player) {
-        super.update(dt);
-        if (player.posX - this.x < 0.2 && player.posY - this.y < 0.2) {
+        if (Math.abs(player.posX - this.x) < 0.1 && Math.abs(player.posY - this.y) < 0.2) {
             player.hasExited = (player.gaveCarrot) ? 1 : 2;
         }
     }
