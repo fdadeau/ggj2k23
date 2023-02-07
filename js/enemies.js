@@ -424,6 +424,7 @@ class Rabbit extends Enemy {
             this.setAnimation(ANIM_NIBBLER);
             this.dirX = 0;
             this.dirY = 0;
+            this.collides = function() { return false; }
             player.haveCarrot = false;
             player.gaveCarrot = true;
             return;
