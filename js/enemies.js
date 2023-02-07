@@ -405,6 +405,10 @@ class Rabbit extends Enemy {
         if (this.nibble) {
             return;
         }
+        if (this.killer) {
+            this.autoAttack = true;
+        }
+
         let dX = player.posX - this.x;
         let dY = player.posY - this.y;
         let norm = Math.sqrt(dX*dX+dY*dY);
