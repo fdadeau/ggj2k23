@@ -457,7 +457,7 @@ const INTRO = [
         ctx.drawImage(data["intro6_3"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
-        t.time = now + 1000;
+        t.time = now + 300;
         ctx.drawImage(data["intro6"], 0, 0, WIDTH, HEIGHT);
     },
     (t,ctx,now) => {
