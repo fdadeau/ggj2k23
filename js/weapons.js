@@ -325,7 +325,8 @@ export class Lighter {
             return;
         }
         if (this.shots.length == 0) {
-            audio.playSound("flamethrower","weapon",0.5, false); 
+            audio.pause(6);
+            audio.playSound("flamethrower",5,0.5, false); 
         }
         this.shots.push({ 
             x: this.player.posX + this.player.dirX * 0.2, 
