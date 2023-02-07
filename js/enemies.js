@@ -63,7 +63,7 @@ class Enemy {
     /** Common behavior */
     update(dt, player, map) { 
         let newX = this.x + this.dirX * dt * this.speed;
-        if (player.isOnEmptyTile(map, newX, this.y)) {
+        if (player.isOnEmptyTile(map, newX, this.y) && !this.collides(player.posX, player.posY)) {
             this.x = newX;
         }
         else {
@@ -71,7 +71,7 @@ class Enemy {
             this.dirY = this.dirY > 0 ? 1 : -1;
         }
         let newY = this.y + this.dirY * dt * this.speed;
-        if (player.isOnEmptyTile(map, this.x, newY)) {
+        if (player.isOnEmptyTile(map, this.x, newY) && !this.collides(player.posX, player.posY)) {
             this.y = newY;
         }
 
@@ -117,7 +117,7 @@ class Enemy {
     /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
         //return false;
-        return Math.abs(x - this.x) < 0.2 && Math.abs(y - this.y) < 0.2;
+        return Math.abs(x - this.x) < 0.1 && Math.abs(y - this.y) < 0.1;
     }
 
     setAnimation(anim) {
@@ -410,7 +410,7 @@ class Rabbit extends Enemy {
         this.dirY = dY / norm;
                     
         
-        if (norm < 0.5 && player.haveCarrot) {
+        if (norm < 0.8 && player.haveCarrot) {
             if (this.killer) {
                 audio.playMusic("ingame1", 0.4);
             }
