@@ -116,8 +116,8 @@ class Enemy {
 
     /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
-        return false;
-        // return x < this.x - 0.1 || x > this.x + 0.1 || y < this.y - 0.1 || y > this.y - 0.1; 
+        //return false;
+        return Math.abs(x - this.x) < 0.2 && Math.abs(y - this.y) < 0.2;
     }
 
     setAnimation(anim) {
