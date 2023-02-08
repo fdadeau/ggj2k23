@@ -103,12 +103,13 @@ class Enemy {
         }.bind(this));
 
         
-        if(this.autoAttack && this.distance < this.range){
-            if(player.invisibilityFrame <=0 && this.health > 0){
-                this.attack();
-                player.hit(this.attackDamage)
-                player.setInvinsibilityFrame();
+        if(this.autoAttack && this.distance < this.range && player.invisibilityFrame <=0 && this.health > 0){
+            if (this.constructor.name == 'Rabbit' && this.nibble) {
+                return;
             }
+            this.attack();
+            player.hit(this.attackDamage);
+            player.setInvinsibilityFrame();
         }
     }
 
@@ -421,12 +422,12 @@ class Rabbit extends Enemy {
                 audio.playMusic("ingame1", 0.4);
             }
             this.nibble = true;
+            this.killer = false;
             this.setAnimation(ANIM_NIBBLER);
             this.dirX = 0;
             this.dirY = 0;
             this.collides = function() { return false; }
             player.haveCarrot = false;
-            player.gaveCarrot = true;
             return;
         }
         
@@ -443,7 +444,6 @@ class Rabbit extends Enemy {
             audio.playMusic("ingame2", 0.6);
             return;
         }
-        
     }
 
     hit() {
