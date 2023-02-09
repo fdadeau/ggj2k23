@@ -428,6 +428,7 @@ class Rabbit extends Enemy {
             this.dirY = 0;
             this.collides = function() { return false; }
             player.haveCarrot = false;
+            player.gaveCarrot = true;
             return;
         }
         
