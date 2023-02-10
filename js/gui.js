@@ -180,38 +180,46 @@ export class GUI {
         // Coding
         ctx.fillStyle = '#ffd728';
         ctx.font = "25px pixel-bit-advanced";
-        ctx.fillText('Coding', WIDTH / 3.5, HEIGHT/2 - 40);
+        ctx.fillText('Coding', 170, 160);
         ctx.fillStyle = '#fff';
         ctx.font = "20px pixel-bit-advanced";
-        ctx.fillText('Fred Dadeau', WIDTH / 3.5, HEIGHT/2);
-        ctx.fillText('Robin Grappe', WIDTH / 3.5, HEIGHT/2 + 30);
-        ctx.fillText('Tayeb Hakkar', WIDTH / 3.5, HEIGHT/2 + 60);
+        ctx.fillText('Fred Dadeau', 170, 200);
+        ctx.fillText('Robin Grappe', 170, 230);
+        ctx.fillText('Tayeb Hakkar', 170, 260);
+
+        // Music
+        ctx.fillStyle = '#ffd728';
+        ctx.font = "25px pixel-bit-advanced";
+        ctx.fillText('Music', 170, 330);
+        ctx.fillStyle = '#fff';
+        ctx.font = "20px pixel-bit-advanced";
+        ctx.fillText('Lancelot Vega', 170, 370);
 
         // Root separator
-        ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 60, 10, 120);
+        ctx.drawImage(data['hud-roots'], WIDTH / 2, 130, 10, 250);
 
         // Game Art
         ctx.fillStyle = '#ffd728';
         ctx.font = "25px pixel-bit-advanced";
-        ctx.fillText('Game Art', (WIDTH / 3.5) * 2.6, HEIGHT/2 - 40);
+        ctx.fillText('Game Art', 480, 160);
         ctx.fillStyle = '#fff';
         ctx.font = "20px pixel-bit-advanced";
-        ctx.fillText('Marie-Almina', (WIDTH / 3.5) * 2.6, HEIGHT/2);
-        ctx.fillText('Gindre', (WIDTH / 3.5) * 2.6, HEIGHT/2 + 30);
-        ctx.fillText('Elea Jacquin', (WIDTH / 3.5) * 2.6, HEIGHT/2 + 60);
+        ctx.fillText('Marie-Almina', 480, 200);
+        ctx.fillText('Gindre', 480, 230);
+        ctx.fillText('Elea Jacquin', 480, 260);
 
-        // Special Thanks
+        // Thanks to
         ctx.fillStyle = '#ffd728';
         ctx.font = "25px pixel-bit-advanced";
-        ctx.fillText('Special Thanks', WIDTH / 2, HEIGHT/2 + 110);
+        ctx.fillText('Thanks to :', 480, 330);
         ctx.fillStyle = '#fff';
         ctx.font = "20px pixel-bit-advanced";
-        ctx.fillText('OFNI association', WIDTH / 2, HEIGHT/2 + 150);
-        ctx.fillText('DPS association', WIDTH / 2, HEIGHT/2 + 180);
+        // ctx.fillText('OFNI', WIDTH / 3.5 * 2.3, HEIGHT/2 + 150);
+        // ctx.fillText('DPS', WIDTH / 3.5 * 2.3, HEIGHT/2 + 180);
 
         //Logos
-        ctx.drawImage(data.logoOFNI, 20, HEIGHT - 75, 130, 70);
-        ctx.drawImage(data.logoDPS, WIDTH - 150, HEIGHT - 75, 130, 50);
+        ctx.drawImage(data.logoOFNI, 380, 350, 100, 28);
+        ctx.drawImage(data.logoDPS, 500, 350, 80, 28);
     }
 
     drawMenuTheme(ctx, title) {
