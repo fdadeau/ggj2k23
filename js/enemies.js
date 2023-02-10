@@ -64,7 +64,7 @@ class Enemy {
     /** Common behavior */
     update(dt, player, map) { 
         let newX = this.x + this.dirX * dt * this.speed;
-        if (player.isOnEmptyTile(map, newX, this.y) && !this.collides(player.posX, player.posY)) {
+        if (player.isOnEmptyTile(map, newX, this.y) && !this.collides.call({x: newX, y: this.y, health: 100}, player.posX, player.posY)) {
             this.x = newX;
         }
         else {
@@ -72,7 +72,7 @@ class Enemy {
             this.dirY = this.dirY > 0 ? 1 : -1;
         }
         let newY = this.y + this.dirY * dt * this.speed;
-        if (player.isOnEmptyTile(map, this.x, newY) && !this.collides(player.posX, player.posY)) {
+        if (player.isOnEmptyTile(map, this.x, newY) && !this.collides.call({x: this.x, y: newY, health: 100}, player.posX, player.posY)) {
             this.y = newY;
         }
 
@@ -117,7 +117,7 @@ class Enemy {
 
     /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
-        return (this.health > 0) && Math.abs(x - this.x) < 0.1 && Math.abs(y - this.y) < 0.1;
+        return (this.health > 0) && Math.abs(x - this.x) < 0.3 && Math.abs(y - this.y) < 0.3;
     }
 
     setAnimation(anim) {
