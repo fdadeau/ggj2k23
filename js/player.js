@@ -196,7 +196,7 @@ export default class Player {
                 vecY = 0;
             if (this.dirY == 0) {
                 vecX = 0
-                vecY = 1;
+                vecY = -1;
             } else if (this.dirY > 0) {
                 vecX = 1;
                 vecY = -this.dirX / this.dirY;
@@ -273,10 +273,10 @@ export default class Player {
 
     isStillOnMap(map, x, y) {
         return this.isOnEmptyTile(map, x, y) &&
-        this.isOnEmptyTile(map, x-0.25, y-0.25) &&
-        this.isOnEmptyTile(map, x-0.25, y+0.25) &&
-        this.isOnEmptyTile(map, x+0.25, y-0.25) &&
-        this.isOnEmptyTile(map, x+0.25, y+0.25);
+        this.isOnEmptyTile(map, x-0.2, y-0.2) &&
+        this.isOnEmptyTile(map, x-0.2, y+0.2) &&
+        this.isOnEmptyTile(map, x+0.2, y-0.2) &&
+        this.isOnEmptyTile(map, x+0.2, y+0.2);
     }
     isOnEmptyTile(map, x, y) {
         let tileX = x | 0, tileY = y | 0;
