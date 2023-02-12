@@ -15,6 +15,7 @@ const TIMBER_WIDTH = 75;
 const TIMBER_HIT = [0,1,2,1,0];
 const TIMBER_IDLE = [0];
 const TIMBER_DED = [4];
+const TIMBER_BLOWING = [3];
 
 const FRAME_DELAY = 150;
 const RED_OVERLAY_DELAY = 200;
@@ -76,6 +77,13 @@ export class Hud {
     render(ctx, player) {
         let hudY_origin = cvs.height - this.height;
        
+        if (player.lighter.blowing) {
+            this.setAnimation(TIMBER_BLOWING)
+        }
+        else if (this.animation == TIMBER_BLOWING) {
+            this.setAnimation(TIMBER_IDLE);
+        }
+
         // Draw the window
         ctx.textAlign = "left";
         ctx.fillStyle = '#0000a6';

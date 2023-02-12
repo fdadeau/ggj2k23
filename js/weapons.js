@@ -246,6 +246,10 @@ export class Lighter {
     }
 
     update(dt) {
+        if (this.blowing && this.state == LIGHTER_BLOW && this.player.sobriety <= 0) {
+            this.state = LIGHTER_OFF;
+        }
+
         this.shots = this.shots.filter(s => {
             s.x += dt * s.dirX * FIRE_SPEED;
             s.y += dt * s.dirY * FIRE_SPEED;
@@ -270,7 +274,7 @@ export class Lighter {
             this.frameDelay = SPRITE_ANIM_DELAY;
         }
         this.lastShot += dt;
-        if (this.blowing && this.lastShot > INTERSHOT_DELAY) {
+        if (this.blowing && this.state == LIGHTER_BLOW && this.lastShot > INTERSHOT_DELAY) {
             this.lastShot = 0;
             this.addShot();
         }
@@ -306,18 +310,11 @@ export class Lighter {
     }
 
     startBlowing() {
-        if (this.state == LIGHTER_BLOW) {
-            if (this.player.sobriety > 0) {
-                this.blowing = true;
-            }
-            else if (!this.blowing) {
-                this.state = LIGHTER_OFF;
-            }
-        }
+        this.blowing = true;
     }
     stopBlowing() {
         this.blowing = false;
-        audio.pause("weapon");
+        audio.pause(6);
     }
 
     addShot() {

@@ -1,6 +1,7 @@
 import { audio } from "./audio.js";
 import { data } from "./preload.js";
 
+import { Engine } from "./engine.js";
 import { STATES } from "./game.js";
 
 // Assuming 640x400 (10/16 ratio) 
@@ -9,6 +10,8 @@ import { STATES } from "./game.js";
 export const WIDTH = 640;
 /** Screen height */
 export const HEIGHT = WIDTH * 10 / 16;
+
+const DEBUG = false;
 
 const BUTTON_HEIGHT = 50;
 const BUTTON_WIDTH = 300;
@@ -37,21 +40,81 @@ const BUTTON_CREDITS = {
     text: "Credits"
 }
 
-const OUTRO_IMG = new Image();
-// OUTRO_IMG.src = "./data/some-outro.png"; // To change
-const OUTRO_HEIGHT = 15200/19 | 0;
-const OUTRO_WIDTH = 800;
-
-const ANIM_DELAY = 100;
-
-const PICS_DELAY = 3000;
 
 export class GUI {
 
-    constructor(game) {
+    constructor(game, cvs) {
         this.game = game;
         this.time = 0;
+
+        // 2D context 
+        this.ctx = cvs.getContext("2d");
+
+        // 2.5D engine
+        this.engine = new Engine(cvs);
+
+        /** Framerate information */
+        this.framerate = 60;
     }
+
+
+    render() {
+
+        switch (this.game.state) {
+            case STATES.LOADING:
+                this.loading(this.ctx);
+                return;
+            case STATES.WAITING_TO_START:
+                if (this.engine.textures == null) {
+                    this.engine.initialize();
+                }
+                this.waitingToStart(this.ctx);
+                return;
+            case STATES.TITLE:
+                this.showTitleScreen(this.ctx);
+                return;
+            case STATES.CONTROLS:
+                this.showControls(this.ctx);
+                return;
+            case STATES.CREDITS:
+                this.showCredits(this.ctx);
+                return;
+            case STATES.PLAYING_INTRO:
+                this.playIntro(this.ctx);
+                return;
+            case STATES.FINISHED:
+                this.finished(ctx, this.game.player.hasExited);
+                return;
+            case STATES.PLAYING_OUTRO:
+                this.playOutro(this.ctx);
+                return;
+            case STATES.PAUSE:
+            case STATES.DEAD:
+            case STATES.PLAYING: 
+                if (this.game.on2D) {
+                    this.engine.render2D(this.game);
+                }
+                else {
+                    // 2.5D rendering
+                    this.engine.render(this.game);
+                    // also render HUD
+                    this.game.player.render(this.ctx);
+                }
+                if (this.game.state == STATES.DEAD) {
+                    this.dead(this.ctx);
+                }
+                else if (this.game.state == STATES.PAUSE) {
+                    this.pause(this.ctx);
+                }
+                return;
+        }
+ 
+        // print framerate & debug info
+        this.ctx.fillStyle = "white";
+        DEBUG && this.ctx.fillText(this.framerate, 10, 10);
+        DEBUG && this.ctx.fillText(game.player.getInfos(), 10, 20);        
+    }
+
 
     /** Loading screen */
     loading(ctx) {
@@ -173,6 +236,7 @@ export class GUI {
         ctx.fillText('Invert mouse', 450, 360);
     }
 
+
     showCredits(ctx) {
         // Theme
         this.drawMenuTheme(ctx, 'Credits');
@@ -260,40 +324,31 @@ export class GUI {
 
     /** Dead screen */
     dead(ctx) {
-        if (this.gameDead == undefined || this.gameDead == false) {
-            this.gameDead = true;
-            ctx.globalAlpha = 0.25;
-            ctx.textAlign = "center";
-            ctx.fillStyle = '#f00';
-            ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            ctx.globalAlpha = 1;
-            ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("You've been", WIDTH / 2, HEIGHT/2 - 50);
-            ctx.font = "45px pixel-bit-advanced";
-            ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
-            ctx.fillStyle = '#fff';
-            ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
-            audio.pause();
-            audio.playSound('wilhelm',0,1,false);
-        }
+        ctx.globalAlpha = 0.25;
+        ctx.textAlign = "center";
+        ctx.fillStyle = '#f00';
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.globalAlpha = 1;
+        ctx.font = "35px pixel-bit-advanced";
+        ctx.fillText("You've been", WIDTH / 2, HEIGHT/2 - 50);
+        ctx.font = "45px pixel-bit-advanced";
+        ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
+        ctx.fillStyle = '#fff';
+        ctx.font = "23px pixel-bit-advanced";
+        ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
     }
 
     /** Pause screen */
     pause(ctx) {
-        if (this.gamePaused == undefined || this.gamePaused == false) {
-            this.gamePaused = true;
-            ctx.globalAlpha = 0.25;
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, WIDTH, HEIGHT);
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = '#fff';
-            ctx.font = "35px pixel-bit-advanced";
-            ctx.fillText("|| PAUSE", WIDTH / 2 - 110, HEIGHT/2 - 50);
-            ctx.font = "23px pixel-bit-advanced";
-            ctx.fillText("Press P to resume", WIDTH / 2 - 170, HEIGHT/2 + 20);
-            audio.pause();
-        }
+        ctx.globalAlpha = 0.25;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#fff';
+        ctx.font = "35px pixel-bit-advanced";
+        ctx.fillText("|| PAUSE", WIDTH / 2 - 110, HEIGHT/2 - 50);
+        ctx.font = "23px pixel-bit-advanced";
+        ctx.fillText("Press P to resume", WIDTH / 2 - 170, HEIGHT/2 + 20);
     }
     
     /** Winning screen */

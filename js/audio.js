@@ -23,7 +23,7 @@ export const audio = {
     sounds: {},
     playSound: function(which, channel, volume, loop) {
         if (data[which] && data[which] instanceof HTMLAudioElement) {
-            if (this.sounds[channel]) {
+            if (this.audioIsPlaying(channel)) {
                 this.sounds[channel].pause();
             }
             this.sounds[channel] = data[which];
@@ -34,7 +34,7 @@ export const audio = {
         }
     },
 
-    audioIsPlaying: function(channel){
+    audioIsPlaying: function(channel) {
         return this.sounds[channel] && !this.sounds[channel].paused;
     },
 
@@ -49,7 +49,7 @@ export const audio = {
 
     pause: function(s) {
         if (s !== undefined) {
-            if (this.sounds[s]) {
+            if (this.audioIsPlaying(s)) {
                 this.sounds[s].pause();
             }
             return;
@@ -57,7 +57,9 @@ export const audio = {
         if (this.ambiance) 
             this.ambiance.pause();
         for (let s in this.sounds) {
-            this.sounds[s].pause();
+            if (this.audioIsPlaying(s)) {
+                this.sounds[s].pause();
+            }
         }
     },
 
@@ -68,8 +70,9 @@ export const audio = {
         }
         if (this.ambiance) this.ambiance.play();
         for (let s in this.sounds) {
-            if (this.sounds[s].loop) 
+            if (this.sounds[s].loop) {
                 this.sounds[s].play();
+            }
         }
     }
 }

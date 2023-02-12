@@ -4,10 +4,6 @@
  *  and F. Permadi seminal tutorial (http://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/)
  */
 
-const DEBUG = false;
-
-import { STATES } from "./game.js";
-
 import { data } from "./preload.js";
 
 import { HEIGHT, WIDTH } from "./gui.js";
@@ -24,8 +20,8 @@ export class Engine {
         /** Image buffer, to be filled by scene renderers (floor, ceiling and wall casters) */
         this.buffer = this.ctx.createImageData(WIDTH, HEIGHT);
         
-        /** Framerate information */
-        this.framerate = 60;
+        /** Set of textures */
+        this.textures = null;
     }
 
     initialize() {
@@ -43,65 +39,6 @@ export class Engine {
      */
     render(game) {
 
-        if (game.state == STATES.LOADING) {
-            game.gui.loading(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.TITLE) {
-            game.gui.showTitleScreen(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.CONTROLS) {
-            game.gui.showControls(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.CREDITS) {
-            game.gui.showCredits(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.PLAYING_INTRO) {
-            game.gui.playIntro(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.WAITING_TO_START) {
-            game.gui.waitingToStart(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.DEAD) {
-            game.gui.dead(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.FINISHED) {
-            game.gui.finished(this.ctx, game.player.hasExited);
-            return;
-        }
-
-        if (game.state == STATES.PAUSE) {
-            game.gui.pause(this.ctx);
-            return;
-        }
-
-        if (game.state == STATES.PLAYING_OUTRO) {
-            game.gui.playOutro(this.ctx);
-            return;
-        }
-
-        if (game.state != STATES.PLAYING) {
-            return;
-        }
-
-        if (game.on2D) {
-            this.render2D(game);
-            return;
-        }
-
         // generate the floor and ceiling
         this.floorCasting(game);
         // 
@@ -111,15 +48,6 @@ export class Engine {
         
         // add the sprites in the visible scene
         this.spriteCasting(game);
-        
-        // 
-        game.player.render(this.ctx);
-
-        // print framerate & debug info
-        this.ctx.fillStyle = "white";
-
-        DEBUG && this.ctx.fillText(this.framerate, 10, 10);
-        DEBUG && this.ctx.fillText(game.player.getInfos(), 10, 20);
     }
 
 

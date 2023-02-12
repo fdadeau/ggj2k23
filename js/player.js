@@ -2,8 +2,6 @@ import { buildWeapon, Lighter } from "./weapons.js";
 
 import { Hud } from "./hud.js";
 
-import { data } from "./preload.js";
-
 import { audio } from "./audio.js";
 
 

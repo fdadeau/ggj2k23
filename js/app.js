@@ -1,9 +1,8 @@
 
 import { Game, STATES } from "./game.js";
-import { Engine } from "./engine.js";
 import { MicrophoneController } from "./microphone-controller.js";
 import { preload, data } from "./preload.js";
-import { WIDTH, HEIGHT } from "./gui.js";
+import { WIDTH, HEIGHT, GUI } from "./gui.js";
 import { audio } from "./audio.js";
 
 const STORAGE_KEY_MOUSE = "ggj2k23-invert-mouse";
@@ -15,11 +14,12 @@ document.addEventListener("DOMContentLoaded", async function() {
     const canvas = document.getElementById("cvs");
     // Game itself 
     const game = new Game();
-    // 2.5D engine
-    const engine = new Engine(canvas);
     // microphone controller
     const micro = new MicrophoneController();
+    // GUI
+    const gui = new GUI(game, canvas);
 
+    
     // preloading... (async)
     const loader = new Promise(function(resolve, reject) {
         preload((loaded, total) => { game.setLoadingProgress(loaded, total); });
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             var rect = canvas.getBoundingClientRect();
             let clicX = (e.clientX - rect.left) * WIDTH / rect.width;
             let clicY = (e.clientY - rect.top) * HEIGHT / rect.height;
-            game.gui.clickButton(clicX, clicY);
+            gui.clickButton(clicX, clicY);
         } else if (game.state == STATES.CONTROLS || game.state == STATES.CREDITS) {
             game.state = STATES.TITLE;
         }
@@ -103,7 +103,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (game.state == STATES.WAITING_TO_START) {
             game.state = STATES.TITLE;
             audio.playMusic("titleScreenMusic");
-            engine.initialize();
             await micro.start();
         } 
         await document.getElementById("cvs").requestFullscreen();
@@ -116,12 +115,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (!game.state == STATES.PLAYING) {
             return;
         }
-        if (e.deltaY > 0) {
-            game.player.switchToNextWeapon(-1);
-        }
-        else if (e.deltaY < 0) {
-            game.player.switchToNextWeapon(1);
-        }
+        game.wheel(e.deltaY);
     });
 
     document.addEventListener("mousemove", function(e) {
@@ -142,12 +136,12 @@ document.addEventListener("DOMContentLoaded", async function() {
         
         micro.update(game);
         game.update(dt);
-        engine.render(game);
+        gui.render();
 
         if (now < framesMeasure + 1000) {
             framerate++;
         } else {
-            engine.framerate = framerate;
+            gui.framerate = framerate;
             framerate = 0;
             framesMeasure = now;
         }

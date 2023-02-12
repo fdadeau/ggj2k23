@@ -5,8 +5,6 @@ import { levels } from "./levels.js";
 
 import { audio } from "./audio.js";
 
-import { GUI } from "./gui.js";
-
 
 /** Game states */
 export const STATES = { LOADING: 0, WAITING_TO_START: 1, PLAYING_INTRO: 2, PLAYING: 3, PAUSE: 4, PLAYING_OUTRO: 5, DEAD: 6, FINISHED: 7, TITLE: 8, CONTROLS: 9, CREDITS: 10 };
@@ -24,7 +22,6 @@ export class Game {
         this.enemies = [];
         this.player;
 
-        this.gui = new GUI(this);
         this.currentLevel = 'tree';
     }
 
@@ -59,10 +56,13 @@ export class Game {
         /** If the player is dead */
         if (this.player.health <= 0) {
             this.state = STATES.DEAD;
+            audio.pause();
+            audio.playSound('wilhelm',0,1,false);
             return;
         }
         if (this.player.hasExited) {
             this.state = STATES.FINISHED;
+            return;
         }
 
         this.player.update(dt, this.map, this.enemies);
@@ -116,6 +116,7 @@ export class Game {
                     break;
                 case 'KeyP':
                     this.state = STATES.PAUSE;
+                    audio.pause();
                     this.player.stop1();
                     this.player.stop2();
                     break;
@@ -163,14 +164,21 @@ export class Game {
         }
          else if(this.state == STATES.PAUSE && key.code == 'KeyP') {
             this.state = STATES.PLAYING;
-            this.gui.gamePaused = false;
             audio.resume();
+        }
+    }
+
+    wheel(dY) {
+        if (dY > 0) {
+            this.player.switchToNextWeapon(-1);
+        }
+        else {
+            this.player.switchToNextWeapon(1);
         }
 
     }
 
     resetGame() {
-        this.gui.gameDead = false;
         this.state = STATES.PLAYING;
         this.start();
     }
@@ -181,16 +189,28 @@ export class Game {
         }
         switch (key) {
             case 'KeyW':
-            case 'KeyS':
             case 'ArrowUp': 
+                if (this.player.speed > 0) {
+                    this.player.stop1();    
+                }
+                break;
+            case 'KeyS':
             case 'ArrowDown':
-                this.player.stop1();
+                if (this.player.speed < 0) {
+                    this.player.stop1();
+                }
                 break;
             case 'KeyA':
-            case 'KeyD':
             case 'ArrowLeft':
+                if (this.player.translSpeed < 0) {
+                    this.player.stop2()
+                }
+                break;
+            case 'KeyD':
             case 'ArrowRight':
-                this.player.stop2()
+                if (this.player.translSpeed > 0) {
+                    this.player.stop2()
+                }
                 break;
             case 'KeyL':
                 this.player.lighter.blow(false);

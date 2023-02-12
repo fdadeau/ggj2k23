@@ -59,6 +59,8 @@ class Enemy {
         this.attackDamage = attackDamage;
         this.range = range;
         this.autoAttack = true;
+
+        this.attackDelay = undefined;
     }
 
     /** Common behavior */
@@ -67,16 +69,12 @@ class Enemy {
         if (player.isOnEmptyTile(map, newX, this.y) && !this.collides.call({x: newX, y: this.y, health: 100}, player.posX, player.posY)) {
             this.x = newX;
         }
-        else {
-            this.dirX = 0;
-            this.dirY = this.dirY > 0 ? 1 : -1;
-        }
         let newY = this.y + this.dirY * dt * this.speed;
         if (player.isOnEmptyTile(map, this.x, newY) && !this.collides.call({x: this.x, y: newY, health: 100}, player.posX, player.posY)) {
             this.y = newY;
         }
 
-        this.behavior(dt, player,map);
+        this.behavior(dt, player, map);
 
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
@@ -104,9 +102,6 @@ class Enemy {
 
         
         if(this.autoAttack && this.distance < this.range && player.invisibilityFrame <=0 && this.health > 0){
-            if (this.constructor.name == 'Rabbit' && this.nibble) {
-                return;
-            }
             this.attack();
             player.hit(this.attackDamage);
             player.setInvinsibilityFrame();
@@ -114,7 +109,7 @@ class Enemy {
     }
 
     /** Initially empty, allows to have customized behaviors for a given entity */
-    behavior(player, map) { }
+    behavior(dt, player, map) { }
 
     /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
@@ -336,7 +331,7 @@ class Dandelion extends Enemy {
         this.factor = 0.5;
         this.height = DANDELION_HEIGHT;
         this.width = DANDELION_WIDTH;
-        this.vMove = 50;
+        this.vMove = 64;
         this.dropPoints = dropPoints;
     }
 
