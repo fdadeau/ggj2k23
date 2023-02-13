@@ -163,7 +163,7 @@ const ENEMIES4 = function() {
             this.yTarget = 6.5;
             this.walk();
         }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.2) {
             this.dirX = -this.dirX;
             this.xTarget += this.dirX * 7;
             this.angle = (this.angle + 180) % 360;
@@ -177,7 +177,7 @@ const ENEMIES4 = function() {
             this.yTarget = 4.5;
             this.walk();
         }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.2) {
             this.dirY = -this.dirY;
             this.yTarget += this.dirY * 2;
             this.angle = (this.angle + 180) % 360;
