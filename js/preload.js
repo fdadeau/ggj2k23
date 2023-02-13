@@ -12,6 +12,8 @@ const data = {
     "rabbit-spritesheet": "./data/spritesheets/rabbit-spritesheet.png",
     "filter-spritesheet": "./data/spritesheets/raymon-scar-spritesheet.png",
     "raymond-spritesheet": "./data/spritesheets/raymond-spritesheet.png",
+    "dandelion-wiggle1-spritesheet": "./data/spritesheets/dandelion_wiggle1_spritesheet.png",
+    "dandelion-wiggle2-spritesheet": "./data/spritesheets/dandelion_wiggle2_spritesheet.png",
 
     // images
     "wood": "./data/textures/wood.png",

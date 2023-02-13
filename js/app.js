@@ -84,6 +84,11 @@ document.addEventListener("DOMContentLoaded", async function() {
             e.stopImmediatePropagation();
             game.press("KeyE");
         }
+        else if (e.button == 1) {
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            game.press("KeyF");
+        }
         else if (e.button == 0) {
             game.press("KeyL");
         }
@@ -95,6 +100,13 @@ document.addEventListener("DOMContentLoaded", async function() {
             e.stopPropagation();
             e.stopImmediatePropagation();
             game.release("KeyL");
+            return false;
+        }
+        else if (e.button == 1) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            game.release("KeyF");
             return false;
         }
     }, true);

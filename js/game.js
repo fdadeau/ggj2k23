@@ -167,6 +167,9 @@ export class Game {
     }
 
     wheel(dY) {
+        if (this.state != STATES.PLAYING) {
+            return;
+        }
         if (dY > 0) {
             this.player.switchToNextWeapon(-1);
         }

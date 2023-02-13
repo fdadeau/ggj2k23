@@ -110,7 +110,7 @@ const ENEMIES4 = function() {
             this.yTarget = 28.5;
             this.walk();
         }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.2) {
             this.dirX = -this.dirX;
             this.xTarget += this.dirX * 5;
             this.angle = (this.angle + 180) % 360;
@@ -130,7 +130,7 @@ const ENEMIES4 = function() {
             this.yTarget = 15.5;
             this.walk();
         }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.2) {
             this.dirY = -this.dirY;
             this.yTarget += this.dirY * 6;
             this.angle = (this.angle + 180) % 360;
@@ -144,7 +144,7 @@ const ENEMIES4 = function() {
             this.yTarget = 4.5;
             this.walk();
         }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.2) {
             this.dirX = -this.dirX;
             this.xTarget += this.dirX * 7;
             this.angle = (this.angle + 180) % 360;
@@ -245,7 +245,7 @@ const ENEMIES3 = function() {
             this.yTarget = 14.5;
             this.walk();
         }
-        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.1) {
+        if ((this.x-this.xTarget)*(this.x-this.xTarget) + (this.y-this.yTarget)*(this.y-this.yTarget) < 0.2) {
             this.dirY = -this.dirY;
             this.yTarget += this.dirY * 4;
             this.angle = (this.angle + 180) % 360;

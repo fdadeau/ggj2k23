@@ -41,6 +41,12 @@ const BUTTON_CREDITS = {
 }
 
 
+const NB_FRAMES = 8;
+let frame = 0;
+const FRAME_DELAY = 80;
+let frameDelay = 0;
+let last = 0;
+
 export class GUI {
 
     constructor(game, cvs) {
@@ -59,6 +65,12 @@ export class GUI {
 
 
     render() {
+
+        let now = Date.now();
+        if (now - last > FRAME_DELAY) {
+            last = now;
+            frame = (frame + 1) % NB_FRAMES;
+        }
 
         switch (this.game.state) {
             case STATES.LOADING:
@@ -129,6 +141,9 @@ export class GUI {
     showTitleScreen() {
         // Background image
         this.ctx.drawImage(data.titleScreen, 0, 0, WIDTH, HEIGHT);
+
+        // dancing dandelion
+        this.ctx.drawImage(data["dandelion-wiggle1-spritesheet"], 0, 800*frame, 800, 800, 0, 120, 200, 200);
 
         // Buttons
         this.ctx.font = "26px pixel-bit-advanced";
@@ -334,6 +349,9 @@ export class GUI {
         this.ctx.font = "45px pixel-bit-advanced";
         this.ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
         this.ctx.fillStyle = '#fff';
+        // dancing dandelion
+        this.ctx.drawImage(data["dandelion-wiggle1-spritesheet"], 0, 800*frame, 800, 800, -25, 50, 160, 160);
+        this.ctx.drawImage(data["dandelion-wiggle2-spritesheet"], 0, 800*((frame+5)%NB_FRAMES), 800, 800, 510, 50, 160, 160);
         this.ctx.font = "23px pixel-bit-advanced";
         this.ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
     }
