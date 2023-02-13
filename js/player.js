@@ -217,7 +217,7 @@ export default class Player {
 
         if(!isMovingX && !isMovingY){
             if(audio.audioIsPlaying(10)){
-//                audio.pause(10);
+                audio.pause(10);
             }
         }else{
             if(!audio.audioIsPlaying(10)){
@@ -268,6 +268,7 @@ export default class Player {
     isOnEmptyTile(map, x, y) {
         let tileX = x | 0, tileY = y | 0;
         let inTileX = x - tileX, inTileY = y - tileY;
+        if (!map[tileX]) { return false; }
         if (map[tileX][tileY] == 1) { return false; }
         if (map[tileX][tileY] == 2 && inTileX <= inTileY) { return false; }
         if (map[tileX][tileY] == 3 && inTileX >= 1-inTileY) { return false; }
