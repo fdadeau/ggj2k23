@@ -383,7 +383,7 @@ export class GUI {
         if (!this.showIntro) {
             this.showIntro = true;
             this.time = now + 1000;
-            this.step = 0;
+            this.step = -1;
             document.querySelector("canvas").classList.add("fade");
             this.ctx.textAlign = "center";
             this.ctx.fillStyle = "white";
@@ -421,16 +421,12 @@ export class GUI {
 
 const INTRO = [
     (t,ctx,now) => {
-        t.time = now + 2000;
-        drawOldStyle(ctx);
-        ctx.font = "40px pixel-bit-advanced";
-        ctx.textAlign = "center";
-        ctx.fillText("A few moments later...", WIDTH / 2, HEIGHT / 2);
-    },
-    (t,ctx,now) => {
         t.time = now + 3000;
         document.querySelector("canvas").classList.remove("fade");
         ctx.drawImage(data["intro1"], 0, 0, WIDTH, HEIGHT);
+        ctx.font = "14px pixel-bit-advanced";
+        ctx.textAlign = "left";
+        ctx.fillText("Press Space or Enter to skip intro", 5, 19);
         audio.playSound("woodSound", 0, 0.4, true);
     },
     (t,ctx,now) => {
@@ -467,7 +463,7 @@ const INTRO = [
         drawOldStyle(ctx);
         ctx.textAlign = "center";
         ctx.font = "40px pixel-bit-advanced";
-        ctx.fillText('Oupsi...', WIDTH / 2, HEIGHT / 2);
+        ctx.fillText('Ooops...', WIDTH / 2, HEIGHT / 2);
     },
     (t,ctx,now) => {
         t.time = now + 3000;
@@ -479,7 +475,7 @@ const INTRO = [
         drawOldStyle(ctx);
         ctx.textAlign = "center";
         ctx.font = "40px pixel-bit-advanced";
-        ctx.fillText('Excuse us!', WIDTH / 2, HEIGHT / 2);
+        ctx.fillText('Hey you!', WIDTH / 2, HEIGHT / 2);
     },
     (t,ctx,now) => {
         t.time = now + 1000;
