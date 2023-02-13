@@ -62,31 +62,31 @@ export class GUI {
 
         switch (this.game.state) {
             case STATES.LOADING:
-                this.loading(this.ctx);
+                this.loading();
                 return;
             case STATES.WAITING_TO_START:
                 if (this.engine.textures == null) {
                     this.engine.initialize();
                 }
-                this.waitingToStart(this.ctx);
+                this.waitingToStart();
                 return;
             case STATES.TITLE:
-                this.showTitleScreen(this.ctx);
+                this.showTitleScreen();
                 return;
             case STATES.CONTROLS:
-                this.showControls(this.ctx);
+                this.showControls();
                 return;
             case STATES.CREDITS:
-                this.showCredits(this.ctx);
+                this.showCredits();
                 return;
             case STATES.PLAYING_INTRO:
-                this.playIntro(this.ctx);
+                this.playIntro();
                 return;
             case STATES.FINISHED:
-                this.finished(ctx, this.game.player.hasExited);
+                this.finished();
                 return;
             case STATES.PLAYING_OUTRO:
-                this.playOutro(this.ctx);
+                this.playOutro();
                 return;
             case STATES.PAUSE:
             case STATES.DEAD:
@@ -101,10 +101,10 @@ export class GUI {
                     this.game.player.render(this.ctx);
                 }
                 if (this.game.state == STATES.DEAD) {
-                    this.dead(this.ctx);
+                    this.dead();
                 }
                 else if (this.game.state == STATES.PAUSE) {
-                    this.pause(this.ctx);
+                    this.pause();
                 }
                 return;
         }
@@ -117,29 +117,29 @@ export class GUI {
 
 
     /** Loading screen */
-    loading(ctx) {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.fillStyle = '#fff';
-        ctx.font = "18px pixel-bit-advanced";
-        ctx.textAlign = "center";
-        ctx.fillText(`Loading assets: ${this.game.loading.loaded * 100 / this.game.loading.total | 0} %...`, WIDTH / 2, HEIGHT/2);
+    loading() {
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "18px pixel-bit-advanced";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText(`Loading assets: ${this.game.loading.loaded * 100 / this.game.loading.total | 0} %...`, WIDTH / 2, HEIGHT/2);
     }
 
-    showTitleScreen(ctx) {
+    showTitleScreen() {
         // Background image
-        ctx.drawImage(data.titleScreen, 0, 0, WIDTH, HEIGHT);
+        this.ctx.drawImage(data.titleScreen, 0, 0, WIDTH, HEIGHT);
 
         // Buttons
-        ctx.font = "26px pixel-bit-advanced";
-        ctx.textAlign = "center";
-        ctx.fillStyle = '#fff';
+        this.ctx.font = "26px pixel-bit-advanced";
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = '#fff';
         [BUTTON_PLAY, BUTTON_CONTROLS, BUTTON_CREDITS].forEach((b,i,a) => {
-            ctx.drawImage(data.woodTexture, b.x, b.y, b.width, b.height);
-            ctx.strokeRect(b.x, b.y, b.width, b.height);
-            ctx.fillText(b.text, b.x + b.width/2, b.y + b.height - 26/2);
+            this.ctx.drawImage(data.woodTexture, b.x, b.y, b.width, b.height);
+            this.ctx.strokeRect(b.x, b.y, b.width, b.height);
+            this.ctx.fillText(b.text, b.x + b.width/2, b.y + b.height - 26/2);
         });
-        ctx.drawImage(data.logoGGJ, WIDTH - 100, HEIGHT - 100, 90, 90);
+        this.ctx.drawImage(data.logoGGJ, WIDTH - 100, HEIGHT - 100, 90, 90);
     }
 
     clickButton(clicX, clicY) {
@@ -165,237 +165,237 @@ export class GUI {
         return clicX >= BUTTON.x && clicX <= BUTTON.x + BUTTON.width && clicY >= BUTTON.y && clicY <= BUTTON.y + BUTTON.height;
     }
 
-    showControls(ctx) {
+    showControls() {
         // Theme
-        this.drawMenuTheme(ctx, 'Controls');
-        ctx.textAlign = "left";
+        this.drawMenuTheme('Controls');
+        this.ctx.textAlign = "left";
         
         // WASD / arrows
-        ctx.drawImage(data.wasd, 15, 140, 80, 80);
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "15px pixel-bit-advanced";
-        ctx.fillText('WASD / arrows', 120, 170);
-        ctx.fillStyle = '#fff';
-        ctx.font = "11.5px pixel-bit-advanced";
-        ctx.fillText('Move', 120, 200);
+        this.ctx.drawImage(data.wasd, 15, 140, 80, 80);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "15px pixel-bit-advanced";
+        this.ctx.fillText('WASD / arrows', 120, 170);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "11.5px pixel-bit-advanced";
+        this.ctx.fillText('Move', 120, 200);
 
         // Left click / L
-        ctx.drawImage(data["left-click"], 15, 240, 35, 40);
-        ctx.drawImage(data.key, 60, 240, 40, 40);
-        ctx.fillText('L', 75, 267);
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "15px pixel-bit-advanced";
-        ctx.fillText('Left click / L', 120, 250);
-        ctx.fillStyle = '#fff';
-        ctx.font = "11.5px pixel-bit-advanced";
-        ctx.fillText('Use the lighter', 120, 280);
+        this.ctx.drawImage(data["left-click"], 15, 240, 35, 40);
+        this.ctx.drawImage(data.key, 60, 240, 40, 40);
+        this.ctx.fillText('L', 75, 267);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "15px pixel-bit-advanced";
+        this.ctx.fillText('Left click / L', 120, 250);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "11.5px pixel-bit-advanced";
+        this.ctx.fillText('Use the lighter', 120, 280);
 
         // Right click / E
-        ctx.drawImage(data["right-click"], 15, 320, 35, 40);
-        ctx.drawImage(data.key, 60, 320, 40, 40);
-        ctx.fillText('E', 75, 347);
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "15px pixel-bit-advanced";
-        ctx.fillText('Right click / E', 120, 330);
-        ctx.fillStyle = '#fff';
-        ctx.font = "11.5px pixel-bit-advanced";
-        ctx.fillText('Attack / equip', 120, 360);
+        this.ctx.drawImage(data["right-click"], 15, 320, 35, 40);
+        this.ctx.drawImage(data.key, 60, 320, 40, 40);
+        this.ctx.fillText('E', 75, 347);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "15px pixel-bit-advanced";
+        this.ctx.fillText('Right click / E', 120, 330);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "11.5px pixel-bit-advanced";
+        this.ctx.fillText('Attack / equip', 120, 360);
 
         // Root separator
-        ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 70, 10, 250);
+        this.ctx.drawImage(data['hud-roots'], WIDTH / 2, HEIGHT / 2 - 70, 10, 250);
 
         // Scroll / space
-        ctx.drawImage(data.scroll, 340, 160, 35, 40);
-        ctx.drawImage(data.key, 380, 170, 50, 15);
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "15px pixel-bit-advanced";
-        ctx.fillText('Scroll / space', 450, 170);
-        ctx.fillStyle = '#fff';
-        ctx.font = "11.5px pixel-bit-advanced";
-        ctx.fillText('Change equipment', 450, 200);
+        this.ctx.drawImage(data.scroll, 340, 160, 35, 40);
+        this.ctx.drawImage(data.key, 380, 170, 50, 15);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "15px pixel-bit-advanced";
+        this.ctx.fillText('Scroll / space', 450, 170);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "11.5px pixel-bit-advanced";
+        this.ctx.fillText('Change equipment', 450, 200);
 
         // F / blow
-        ctx.drawImage(data.key, 385, 240, 40, 40);
-        ctx.fillText('F', 400, 267);
-        ctx.drawImage(data.mike, 345, 242, 25, 35);
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "15px pixel-bit-advanced";
-        ctx.fillText('F / blow (mike)', 450, 250);
-        ctx.fillStyle = '#fff';
-        ctx.font = "11.5px pixel-bit-advanced";
-        ctx.fillText('Blow on the lighter', 450, 280);
+        this.ctx.drawImage(data.key, 385, 240, 40, 40);
+        this.ctx.fillText('F', 400, 267);
+        this.ctx.drawImage(data.mike, 345, 242, 25, 35);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "15px pixel-bit-advanced";
+        this.ctx.fillText('F / blow (mike)', 450, 250);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "11.5px pixel-bit-advanced";
+        this.ctx.fillText('Blow on the lighter', 450, 280);
 
          // I
-        ctx.drawImage(data.key, 385, 320, 40, 40);
-        ctx.fillText('I', 400, 347);
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "15px pixel-bit-advanced";
-        ctx.fillText('I', 450, 330);
-        ctx.fillStyle = '#fff';
-        ctx.font = "11.5px pixel-bit-advanced";
-        ctx.fillText('Invert mouse', 450, 360);
+        this.ctx.drawImage(data.key, 385, 320, 40, 40);
+        this.ctx.fillText('I', 400, 347);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "15px pixel-bit-advanced";
+        this.ctx.fillText('I', 450, 330);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "11.5px pixel-bit-advanced";
+        this.ctx.fillText('Invert mouse', 450, 360);
     }
 
 
-    showCredits(ctx) {
+    showCredits() {
         // Theme
-        this.drawMenuTheme(ctx, 'Credits');
+        this.drawMenuTheme('Credits');
 
         // Coding
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "25px pixel-bit-advanced";
-        ctx.fillText('Coding', 170, 160);
-        ctx.fillStyle = '#fff';
-        ctx.font = "20px pixel-bit-advanced";
-        ctx.fillText('Fred Dadeau', 170, 200);
-        ctx.fillText('Robin Grappe', 170, 230);
-        ctx.fillText('Tayeb Hakkar', 170, 260);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "25px pixel-bit-advanced";
+        this.ctx.fillText('Coding', 170, 160);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "20px pixel-bit-advanced";
+        this.ctx.fillText('Fred Dadeau', 170, 200);
+        this.ctx.fillText('Robin Grappe', 170, 230);
+        this.ctx.fillText('Tayeb Hakkar', 170, 260);
 
         // Music
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "25px pixel-bit-advanced";
-        ctx.fillText('Music', 170, 330);
-        ctx.fillStyle = '#fff';
-        ctx.font = "20px pixel-bit-advanced";
-        ctx.fillText('Lancelot Vega', 170, 370);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "25px pixel-bit-advanced";
+        this.ctx.fillText('Music', 170, 330);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "20px pixel-bit-advanced";
+        this.ctx.fillText('Lancelot Vega', 170, 370);
 
         // Root separator
-        ctx.drawImage(data['hud-roots'], WIDTH / 2, 130, 10, 250);
+        this.ctx.drawImage(data['hud-roots'], WIDTH / 2, 130, 10, 250);
 
         // Game Art
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "25px pixel-bit-advanced";
-        ctx.fillText('Game Art', 480, 160);
-        ctx.fillStyle = '#fff';
-        ctx.font = "20px pixel-bit-advanced";
-        ctx.fillText('Marie-Almina', 480, 200);
-        ctx.fillText('Gindre', 480, 230);
-        ctx.fillText('Elea Jacquin', 480, 260);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "25px pixel-bit-advanced";
+        this.ctx.fillText('Game Art', 480, 160);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "20px pixel-bit-advanced";
+        this.ctx.fillText('Marie-Almina', 480, 200);
+        this.ctx.fillText('Gindre', 480, 230);
+        this.ctx.fillText('Elea Jacquin', 480, 260);
 
         // Thanks to
-        ctx.fillStyle = '#ffd728';
-        ctx.font = "25px pixel-bit-advanced";
-        ctx.fillText('Thanks to :', 480, 330);
-        ctx.fillStyle = '#fff';
-        ctx.font = "20px pixel-bit-advanced";
-        // ctx.fillText('OFNI', WIDTH / 3.5 * 2.3, HEIGHT/2 + 150);
-        // ctx.fillText('DPS', WIDTH / 3.5 * 2.3, HEIGHT/2 + 180);
+        this.ctx.fillStyle = '#ffd728';
+        this.ctx.font = "25px pixel-bit-advanced";
+        this.ctx.fillText('Thanks to :', 480, 330);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "20px pixel-bit-advanced";
+        // this.ctx.fillText('OFNI', WIDTH / 3.5 * 2.3, HEIGHT/2 + 150);
+        // this.ctx.fillText('DPS', WIDTH / 3.5 * 2.3, HEIGHT/2 + 180);
 
         //Logos
-        ctx.drawImage(data.logoOFNI, 380, 350, 100, 28);
-        ctx.drawImage(data.logoDPS, 500, 350, 80, 28);
+        this.ctx.drawImage(data.logoOFNI, 380, 350, 100, 28);
+        this.ctx.drawImage(data.logoDPS, 500, 350, 80, 28);
     }
 
-    drawMenuTheme(ctx, title) {
-        ctx.textAlign = "center";
+    drawMenuTheme(title) {
+        this.ctx.textAlign = "center";
 
         // Background image
         for(let i = 0; i < 4; i++) {
-            ctx.drawImage(data.wood, 0, HEIGHT / 4 * i, WIDTH, HEIGHT / 4);
+            this.ctx.drawImage(data.wood, 0, HEIGHT / 4 * i, WIDTH, HEIGHT / 4);
         }
 
         // Hanging ropes
-        ctx.drawImage(data["rope-menu"], WIDTH / 3, -45, 20, 100);
-        ctx.drawImage(data["rope-menu"], (WIDTH / 3) * 2 - 25, -45, 20, 100);
+        this.ctx.drawImage(data["rope-menu"], WIDTH / 3, -45, 20, 100);
+        this.ctx.drawImage(data["rope-menu"], (WIDTH / 3) * 2 - 25, -45, 20, 100);
 
         // Title text
-        ctx.textAlign = "center";
-        ctx.fillStyle = '#fff';
-        ctx.font = "50px pixel-bit-advanced";
-        ctx.fillText(title, WIDTH / 2, HEIGHT/2 - 100);
-        ctx.fillStyle = '#fff';
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "50px pixel-bit-advanced";
+        this.ctx.fillText(title, WIDTH / 2, HEIGHT/2 - 100);
+        this.ctx.fillStyle = '#fff';
 
         // Home
-        ctx.drawImage(data.home, 15, 15, 40, 40);
-        ctx.font = "12px pixel-bit-advanced";
-        ctx.fillText('click', 36, 75);
+        this.ctx.drawImage(data.home, 15, 15, 40, 40);
+        this.ctx.font = "12px pixel-bit-advanced";
+        this.ctx.fillText('click', 36, 75);
     }
 
     /** Waiting to start screen */
-    waitingToStart(ctx) {
-        ctx.textAlign = "center";
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.fillStyle = '#fff';
-        ctx.font = "23px pixel-bit-advanced";
-        ctx.fillText("Loading complete", WIDTH / 2, HEIGHT/2 - 50);
-        ctx.fillText("Double click to start",  WIDTH/2, HEIGHT/2 +50);
+    waitingToStart() {
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "23px pixel-bit-advanced";
+        this.ctx.fillText("Loading complete", WIDTH / 2, HEIGHT/2 - 50);
+        this.ctx.fillText("Double click to start",  WIDTH/2, HEIGHT/2 +50);
     }
 
     /** Dead screen */
-    dead(ctx) {
-        ctx.globalAlpha = 0.25;
-        ctx.textAlign = "center";
-        ctx.fillStyle = '#f00';
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.globalAlpha = 1;
-        ctx.font = "35px pixel-bit-advanced";
-        ctx.fillText("You've been", WIDTH / 2, HEIGHT/2 - 50);
-        ctx.font = "45px pixel-bit-advanced";
-        ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
-        ctx.fillStyle = '#fff';
-        ctx.font = "23px pixel-bit-advanced";
-        ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
+    dead() {
+        this.ctx.globalAlpha = 0.25;
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = '#f00';
+        this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        this.ctx.globalAlpha = 1;
+        this.ctx.font = "35px pixel-bit-advanced";
+        this.ctx.fillText("You've been", WIDTH / 2, HEIGHT/2 - 50);
+        this.ctx.font = "45px pixel-bit-advanced";
+        this.ctx.fillText("DANDELIONED", WIDTH / 2, HEIGHT/2);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "23px pixel-bit-advanced";
+        this.ctx.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT/2 + 75);
     }
 
     /** Pause screen */
-    pause(ctx) {
-        ctx.globalAlpha = 0.25;
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = '#fff';
-        ctx.font = "35px pixel-bit-advanced";
-        ctx.fillText("|| PAUSE", WIDTH / 2 - 110, HEIGHT/2 - 50);
-        ctx.font = "23px pixel-bit-advanced";
-        ctx.fillText("Press P to resume", WIDTH / 2 - 170, HEIGHT/2 + 20);
+    pause() {
+        this.ctx.globalAlpha = 0.25;
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        this.ctx.globalAlpha = 1;
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "35px pixel-bit-advanced";
+        this.ctx.fillText("|| PAUSE", WIDTH / 2 - 110, HEIGHT/2 - 50);
+        this.ctx.font = "23px pixel-bit-advanced";
+        this.ctx.fillText("Press P to resume", WIDTH / 2 - 170, HEIGHT/2 + 20);
     }
     
     /** Winning screen */
-    finished(ctx, won) {
+    finished() {
         audio.pause();
         this.game.state = STATES.PLAYING_OUTRO;
-        this.end = won;
+        this.end = this.game.player.hasExited;
         this.showOutro = false;
     }
 
     /** Intro animation */
-    playIntro(ctx) {
+    playIntro() {
         let now = Date.now();
         if (!this.showIntro) {
             this.showIntro = true;
             this.time = now + 1000;
             this.step = 0;
             document.querySelector("canvas").classList.add("fade");
-            ctx.textAlign = "center";
-            ctx.fillStyle = "white";
+            this.ctx.textAlign = "center";
+            this.ctx.fillStyle = "white";
         }
         if (now < this.time) {
             return;
         }
         this.step++
         if (this.step < INTRO.length) {
-            INTRO[this.step](this, ctx, now);
+            INTRO[this.step](this, this.ctx, now);
         }
     }
 
     /** Outro animation */
-    playOutro(ctx) {
+    playOutro() {
         let now = Date.now();
         if (!this.showOutro) {
             this.showOutro = true;
             this.time = now + 1000;
             this.step = -1;
             document.querySelector("canvas").classList.add("fade");
-            ctx.textAlign = "center";
-            ctx.fillStyle = "white";
+            this.ctx.textAlign = "center";
+            this.ctx.fillStyle = "white";
         }
         if (now < this.time) {
             return;
         }
         this.step++
         if (this.step < OUTRO.length) {
-            OUTRO[this.step](this, ctx, now);
+            OUTRO[this.step](this, this.ctx, now);
         }
     }
 }

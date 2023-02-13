@@ -4,8 +4,8 @@ import { data } from "./preload.js";
 import { audio } from "./audio.js";
 
 const SPEED = 0.001;
-const FRAME_DELAY = 100;
 
+const FRAME_DELAY = 100;
 
 /**
  * Build an enemy of the specified type.
@@ -60,51 +60,83 @@ class Enemy {
         this.range = range;
         this.autoAttack = true;
 
-        this.attackDelay = undefined;
+        // delay between attacks
+        this.initialAttackDelay = 1500;
+        // current delay before next attack
+        this.attackDelay = 0;
+        // when attacking, delay before hitting the player
+        this.initialHitDelay = 400;
+        // current delay before hitting the player
+        this.hitDelay = undefined;
+        // saved animations
+        this.savedAnimations = [];
     }
 
     /** Common behavior */
     update(dt, player, map) { 
-        let newX = this.x + this.dirX * dt * this.speed;
-        if (player.isOnEmptyTile(map, newX, this.y) && !this.collides.call({x: newX, y: this.y, health: 100}, player.posX, player.posY)) {
-            this.x = newX;
-        }
-        let newY = this.y + this.dirY * dt * this.speed;
-        if (player.isOnEmptyTile(map, this.x, newY) && !this.collides.call({x: this.x, y: newY, health: 100}, player.posX, player.posY)) {
-            this.y = newY;
+
+        // if dead enemy => return
+        if (this.health <= 0) {
+            return;
         }
 
+        // if moving enemy => perform movement
+        if (this.speed != 0) {
+            let newX = this.x + this.dirX * dt * this.speed;
+            if (player.isOnEmptyTile(map, newX, this.y) && !this.collides.call({x: newX, y: this.y, health: 100}, player.posX, player.posY)) {
+                this.x = newX;
+            }
+            let newY = this.y + this.dirY * dt * this.speed;
+            if (player.isOnEmptyTile(map, this.x, newY) && !this.collides.call({x: this.x, y: newY, health: 100}, player.posX, player.posY)) {
+                this.y = newY;
+            }
+        }
+
+        // call additional behavior -- TODO: move to the end of the function?
         this.behavior(dt, player, map);
 
+        // animation 
         this.frameDelay -= dt;
         if (this.frameDelay <= 0) {
             this.frameDelay = FRAME_DELAY;
             this.frame = (this.frame + 1) % this.animation.length;
-            if(this.animation != this.dieA && (this.animation == this.attackA || this.animation == this.hurtA) && this.frame == this.animation.length -1){
-                if(this.animationBeforeHit == this.walkA){
-                    this.walk();
-                }else{
-                    this.stop();
-                }
+            if (this.frame == 0 && (this.animation == this.attackA || this.animation == this.hurtA)) {
+                this.popAnimation();                
             }
         }
 
-        player.lighter.shots.forEach(function(s) {
+        // damage by intersecting a flame
+        player.lighter.shots.forEach((s) => {
             let dX = s.x - this.x;
             let dY = s.y - this.y;
-            if (dX*dX+dY*dY < 0.4) {
+            if (dX*dX+dY*dY < 0.1) {
                 this.hit(5);
                 if (this.health <= 0) {
-                    this.burn();
+                    this.setAnimation(this.burnA);
                 }
             }
-        }.bind(this));
+        });
 
-        
-        if(this.autoAttack && this.distance < this.range && player.invisibilityFrame <=0 && this.health > 0){
+        // if enemy is currently attacking the player
+        if (this.hitDelay !== undefined) {
+            this.hitDelay -= dt;
+            // delay before hit is over, hit player if still on range
+            if (this.hitDelay < 0) {
+                if (this.distance < this.range) {
+                    player.hit(this.attackDamage);
+                }
+                this.hitDelay = undefined;
+            }
+        }
+         
+        // enemy not attacking, but player is in attack range
+        this.attackDelay -= dt;
+        if (this.attackDelay < 0) {
+            this.attackDelay = 0;
+        }
+
+        if (this.autoAttack && this.attackDelay <= 0 && this.hitDelay == undefined && this.distance < this.range){
             this.attack();
-            player.hit(this.attackDamage);
-            player.setInvinsibilityFrame();
         }
     }
 
@@ -117,7 +149,7 @@ class Enemy {
     }
 
     setAnimation(anim) {
-        this.animation = anim;
+        this.animation = anim; 
         this.frameDelay = FRAME_DELAY;
         this.frame = 0;
     }
@@ -127,45 +159,55 @@ class Enemy {
         this.setAnimation(this.walkA);
     }
 
-    attack(){
-        if(this.health <= 0){
-            return;
-        }
-        if(this.animationBeforeHit == undefined){
-            this.animationBeforeHit = this.animation;
-        }
-        this.setAnimation(this.attackA);
-    }
-
+   
     stop() {
         this.speed = 0;
         this.setAnimation(this.idleA);
+    }
+
+    pushAnimation() {
+        this.savedAnimations.push({ 
+            anim: this.animation, 
+            speed: this.speed, 
+            frame: this.frame
+        });
+    }
+    popAnimation() {
+        let s = this.savedAnimations.pop();
+        if (s) {
+            this.animation = s.anim;
+            this.frame = s.frame;
+            this.speed = s.speed;
+        }
+    }
+
+    attack() {
+        this.pushAnimation();
+        this.attackDelay = this.initialAttackDelay;
+        this.hitDelay = this.initialHitDelay;
+        this.setAnimation(this.attackA);
     }
 
     hit(amount){
         if(this.health <= 0){
             return;
         }
-        if(this.animationBeforeHit == undefined){
-            this.animationBeforeHit = this.animation;
-        }
-        this.stop();
         this.health -= amount;
         if(this.health <= 0){
-            this.die();
-        }else{
+            this.setAnimation(this.dieA);
+            this.vMove = 60;
+            return;
+        }
+        this.pushAnimation();
+        if (this.animation == this.attackA) {
+            this.savedAnimations.push({ anim: this.hurtA, frame: 2, speed: 0 });
+        }
+        else {
+            this.stop();
             this.setAnimation(this.hurtA);
         }
     }
 
-    die(){
-        this.setAnimation(this.dieA);
-        this.vMove = 60;
-    }
-
-    burn(){
-        this.setAnimation(this.burnA);
-    }
 }
 
 
@@ -183,7 +225,7 @@ const TREE_WIDTH = 800;
 
 const TREE_ATTACK_DAMAGE = 15;
 const TREE_HP = 120;
-const TREE_ATTACK_DELAY = 500;
+const TREE_ATTACK_DELAY = 1500;
 const TREE_POINTS_DROP = 50;
 const TREE_RANGE = 1.1;
 
@@ -197,6 +239,7 @@ class Tree extends Enemy {
         this.width = TREE_WIDTH;
         this.vMove = 20;
         this.dropPoints = dropPoints;
+        this.initialAttackDelay = TREE_ATTACK_DELAY;
     }
 
     update(dt,player,map) {
@@ -209,9 +252,6 @@ class Tree extends Enemy {
     }
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
-        /*if(this.health <= 0){
-            return;
-        }*/
         
         let sourceX = minX / sizeX * this.width | 0;
         let width = (maxX - minX) / sizeX * this.width | 0;
@@ -254,7 +294,7 @@ const TURNIP_WIDTH = 419;
 
 const TURNIP_ATTACK_DAMAGE = 25;
 const TURNIP_HP = 50;
-const TURNIP_ATTACK_DELAY = 500;
+const TURNIP_ATTACK_DELAY = 1000;
 const TURNIP_POINTS_DROP = 100;
 const TURNIP_RANGE = 0.9;
 
@@ -269,6 +309,7 @@ class Turnip extends Enemy {
         this.width = TURNIP_WIDTH;
         this.vMove = 20;
         this.dropPoints = dropPoints;
+        this.initialAttackDelay = TURNIP_ATTACK_DELAY;
     }
 
     update(dt, player,map) {
@@ -319,7 +360,7 @@ const DANDELION_WIDTH = 500;
 
 const DANDELION_ATTACK_DAMAGE = 5;
 const DANDELION_HP = 1.15;
-const DANDELION_ATTACK_DELAY = 500;
+const DANDELION_ATTACK_DELAY = 1500;
 const DANDELION_POINTS_DROP = 200;
 const DANDELION_RANGE = 1;
 
@@ -333,6 +374,7 @@ class Dandelion extends Enemy {
         this.width = DANDELION_WIDTH;
         this.vMove = 64;
         this.dropPoints = dropPoints;
+        this.initialAttackDelay = DANDELION_ATTACK_DELAY;
     }
 
     update(dt, player,map) {
@@ -377,6 +419,7 @@ const RABBIT_HEIGHT = 500;
 const RABBIT_WIDTH = 500;
 
 const JUMP_SPEED = 0.035;
+const RABBIT_ATTACK_DELAY = 1000;
 
 class Rabbit extends Enemy {
 
@@ -389,6 +432,7 @@ class Rabbit extends Enemy {
         this.vMove = 60;
         this.dropPoints = dropPoints;
         this.range = 0.2;
+        this.initialAttackDelay = RABBIT_ATTACK_DELAY;
 
         this.initVMove = 60;
         this.decZ = 0;
@@ -411,7 +455,6 @@ class Rabbit extends Enemy {
         this.dirX = dX / norm;
         this.dirY = dY / norm;
                     
-        
         if (norm < 0.8 && player.haveCarrot) {
             if (this.killer) {
                 audio.playMusic("ingame1", 0.4);
@@ -428,6 +471,7 @@ class Rabbit extends Enemy {
         }
         
         if (this.killer) {
+            this.setAnimation(ANIM_KILLER);
             this.speed = 0.002;
             this.decZ += dt * JUMP_SPEED;
             this.vMove = this.initVMove+3*Math.sin(this.decZ) * 6;    

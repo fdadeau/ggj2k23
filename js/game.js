@@ -56,8 +56,6 @@ export class Game {
         /** If the player is dead */
         if (this.player.health <= 0) {
             this.state = STATES.DEAD;
-            audio.pause();
-            audio.playSound('wilhelm',0,1,false);
             return;
         }
         if (this.player.hasExited) {

@@ -35,7 +35,7 @@ const AXE_HEIGHT = 5000/5 | 0;
 const AXE_WIDTH = 1000;
 const AXE_DELAY = 375;
 const AXE_DAMAGE = 20;
-const AXE_RANGE = 1.2;
+const AXE_RANGE = 0.4;
 
 const AXE_ATTACK = [0,1,2,3,3,4];
 const AXE_IDLE = [0];

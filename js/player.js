@@ -22,8 +22,6 @@ const PLAYER_OFFSET_SPEED = 0.05;
 
 const MAX_PITCH = 200;
 
-const INVISIVILTY_FRAME = 750;
-
 const PLAYER_HP = 100;
 
 export default class Player {
@@ -90,9 +88,6 @@ export default class Player {
 
         this.hud = new Hud(75);
 
-        /** Invisibilty frame */
-        this.invisibilityFrame = INVISIVILTY_FRAME;
-
         /** Time when the player is drunk */
         this.drunkTime = 10000;
 
@@ -102,10 +97,6 @@ export default class Player {
         this.arrived = false;
     }
     
-    setInvinsibilityFrame(){
-        this.invisibilityFrame = INVISIVILTY_FRAME;
-    }
-
 
 
     initialize(posX, posY, dirX, dirY) {
@@ -226,11 +217,11 @@ export default class Player {
 
         if(!isMovingX && !isMovingY){
             if(audio.audioIsPlaying(10)){
-                audio.pause(10);
+//                audio.pause(10);
             }
         }else{
             if(!audio.audioIsPlaying(10)){
-                audio.playSound('walkSound',10,1,true);
+                audio.playSound('walkSound',10,1,false);
             }
         }
 
@@ -254,8 +245,6 @@ export default class Player {
         this.hud.update(dt);
 
         this.lighter.update(dt);
-
-        this.invisibilityFrame -= dt;
 
         this.collectPowerUp(enemies);
 
@@ -299,7 +288,7 @@ export default class Player {
     }
 
     stop1() {
-        if(this.translSpeed == 0){
+        if(this.translSpeed == 0 && audio.audioIsPlaying(10)){
             audio.pause(10);
         }
         this.speed = 0;
@@ -307,7 +296,7 @@ export default class Player {
     }
 
     stop2() {
-        if(this.speed == 0){
+        if(this.speed == 0 && audio.audioIsPlaying(10)){
             audio.pause(10);
         }
         this.translSpeed = 0;
@@ -316,7 +305,7 @@ export default class Player {
 
     walk(dir) {
         if(!audio.audioIsPlaying(10)){
-            audio.playSound('walkSound',10,1,true);
+   //         audio.playSound('walkSound',10,1,true);
         }
         this.speed = PLAYER_MOVEMENT_SPEED * dir;
         this.offSpeed = PLAYER_OFFSET_SPEED * 2;
@@ -324,7 +313,7 @@ export default class Player {
 
     strafe(dir) {
         if(!audio.audioIsPlaying(10)){
-            audio.playSound('walkSound',10,1,true);
+            //audio.playSound('walkSound',10,1,true);
         }
         this.translSpeed = PLAYER_ROTATION_SPEED * dir;
     }
@@ -413,11 +402,15 @@ export default class Player {
             return;
         }
         this.health -= damage;
-        if (this.health < 0) {
-            this.health = 0;
+        if (this.health <= 0) {
+            this.health = 0;            
+            audio.pause();
+            audio.playSound('wilhelm',7,1,false);
         }
-        this.hud.hitAnimation();
-        audio.playSound('hitPlayerSound',7,0.5,false);
+        else {
+            this.hud.hitAnimation();
+            audio.playSound('hitPlayerSound',7,0.5,false);
+        }
     }
 
     collectPowerUp(powerup) {
