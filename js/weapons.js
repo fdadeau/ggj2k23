@@ -246,7 +246,7 @@ export class Lighter {
     }
 
     update(dt) {
-        if (this.blowing && this.state == LIGHTER_BLOW && this.player.sobriety <= 0) {
+        if (this.blowing && this.state == LIGHTER_BLOW && this.player.sobriety <= 0 && this.frame > 2) {
             this.state = LIGHTER_OFF;
         }
 
