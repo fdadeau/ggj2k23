@@ -145,7 +145,7 @@ class Enemy {
 
     /** Checks if it collides with en entity at coordinates (x,y) */
     collides(x, y) {
-        return (this.health > 0) && Math.abs(x - this.x) < 0.3 && Math.abs(y - this.y) < 0.3;
+        return (this.health > 0) && Math.abs(x - this.x) < 0.2 && Math.abs(y - this.y) < 0.2;
     }
 
     setAnimation(anim) {

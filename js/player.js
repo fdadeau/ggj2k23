@@ -155,8 +155,8 @@ export default class Player {
 
         this.offset = (this.offset + this.offSpeed) % (2 * Math.PI);
         this.altitude = this.posZ + 0.01 * Math.cos(this.offset);
-        let isMovingX = this.speed != 0;
-        let isMovingY = this.translSpeed != 0;
+        
+        let walkingSound = 0;
 
         // move forward/backward
         if (this.speed != 0) {
@@ -165,16 +165,12 @@ export default class Player {
 
             if (this.isStillOnMap(map, newX, this.posY) && !enemies.some(e => e.collides(newX, this.posY))) {
                 this.posX = newX;
+                walkingSound = this.dirX != 0 ? 1 : 0;
             }
             
             if (this.isStillOnMap(map, this.posX, newY) && !enemies.some(e => e.collides(newX, this.posY))) {
                 this.posY = newY;
-            }
-
-            let dist = Math.sqrt(Math.pow(this.posX-newX,2) + Math.pow(this.posY-newY,2));
-
-            if((dist > 0.015 && this.speed == PLAYER_MOVEMENT_SPEED) || (dist > 0.01 && this.speed == -PLAYER_MOVEMENT_SPEED/2)){
-                isMovingX = false;
+                walkingSound = this.dirY != 0 ? 1 : walkingSound;
             }
         }
 
@@ -201,25 +197,19 @@ export default class Player {
             let newX = this.posX + vecX * dt * this.translSpeed;
             if (this.isStillOnMap(map, newX, this.posY) && !enemies.some(e => e.collides(newX, this.posY))) {
                 this.posX = newX;
+                walkingSound = (vecX != 0) ? 2 : walkingSound;
             }
             let newY = this.posY + vecY * dt * this.translSpeed;
             if (this.isStillOnMap(map, this.posX, newY) && !enemies.some(e => e.collides(this.posX, newY))) {
                 this.posY = newY;
-            }
-
-            let dist = Math.sqrt(Math.pow(this.posX-newX,2) + Math.pow(this.posY-newY,2));
-
-            if(dist > 0.01){
-            
-               isMovingY = false;
+                walkingSound = (vecY != 0) ? 2 : walkingSound;
             }
         }
 
-        if(!isMovingX && !isMovingY){
-            if(audio.audioIsPlaying(10)){
-                audio.pause(10);
-            }
-        }else{
+        if(walkingSound == 0){
+            audio.pause(10);
+        }
+        else{
             if(!audio.audioIsPlaying(10)){
                 audio.playSound('walkSound',10,1,false);
             }
@@ -289,33 +279,21 @@ export default class Player {
     }
 
     stop1() {
-        if(this.translSpeed == 0 && audio.audioIsPlaying(10)){
-            audio.pause(10);
-        }
         this.speed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
 
     stop2() {
-        if(this.speed == 0 && audio.audioIsPlaying(10)){
-            audio.pause(10);
-        }
         this.translSpeed = 0;
         this.offSpeed = PLAYER_OFFSET_SPEED;
     }
 
     walk(dir) {
-        if(!audio.audioIsPlaying(10)){
-   //         audio.playSound('walkSound',10,1,true);
-        }
         this.speed = PLAYER_MOVEMENT_SPEED * dir;
         this.offSpeed = PLAYER_OFFSET_SPEED * 2;
     }
 
     strafe(dir) {
-        if(!audio.audioIsPlaying(10)){
-            //audio.playSound('walkSound',10,1,true);
-        }
         this.translSpeed = PLAYER_ROTATION_SPEED * dir;
     }
     

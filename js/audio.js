@@ -35,7 +35,7 @@ export const audio = {
     },
 
     audioIsPlaying: function(channel) {
-        return this.sounds[channel] && !this.sounds[channel].paused && this.sounds[channel].currentTime > 0;
+        return this.sounds[channel] && !this.sounds[channel].paused;// && this.sounds[channel].currentTime > 0;
     },
 
 
@@ -44,7 +44,7 @@ export const audio = {
         if (this.ambiance) {
             this.ambiance.currentTime = 0;
         }
-        this.sounds = {};
+        this.sounds = {}; 
     },
 
     pause: function(s) {
