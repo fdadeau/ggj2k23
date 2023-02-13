@@ -414,7 +414,7 @@ export class Engine {
             //calculate height of the sprite on screen
             let spriteHeight = Math.abs((e.height * e.factor / (transformY)) | 0); //using 'transformY' instead of the real distance prevents fisheye
 
-            let posZ = 1
+            let posZ = 0
             let vMoveScreen = (e.vMove / transformY | 0) + H * game.player.altitude + game.player.pitch + posZ / transformY;
 
             //calculate lowest and highest pixel to fill in current stripe

@@ -48,6 +48,8 @@ class Enemy {
         if (this.angle < 0) {
             this.angle += 360;
         }
+        this.vMove = 64;
+        
         this.walkA = walkAnim;
         this.idleA = idleAnim;
         this.hurtA = hurtAnim;
@@ -112,7 +114,7 @@ class Enemy {
             if (dX*dX+dY*dY < 0.1) {
                 this.hit(5);
                 if (this.health <= 0) {
-                    this.setAnimation(this.burnA);
+                    this.burn();
                 }
             }
         });
@@ -194,8 +196,7 @@ class Enemy {
         }
         this.health -= amount;
         if(this.health <= 0){
-            this.setAnimation(this.dieA);
-            this.vMove = 60;
+            this.die();
             return;
         }
         this.pushAnimation();
@@ -206,6 +207,14 @@ class Enemy {
             this.stop();
             this.setAnimation(this.hurtA);
         }
+    }
+
+    die() {
+        this.setAnimation(this.dieA);
+    }
+
+    burn() {
+        this.setAnimation(this.burnA);
     }
 
 }
@@ -237,7 +246,6 @@ class Tree extends Enemy {
         this.factor = 0.5;
         this.height = TREE_HEIGHT;
         this.width = TREE_WIDTH;
-        this.vMove = 20;
         this.dropPoints = dropPoints;
         this.initialAttackDelay = TREE_ATTACK_DELAY;
     }
@@ -276,7 +284,15 @@ class Tree extends Enemy {
         
         //ctx.fillText(`Tree:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(data["tree-spritesheet"], sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
-    
+    }
+
+    die() {
+        super.die();
+        this.vMove = 48;
+    }
+    burn() {
+        super.burn();
+        this.vMove = 48;
     }
 }
 
@@ -307,7 +323,6 @@ class Turnip extends Enemy {
         this.factor = 0.5;
         this.height = TURNIP_HEIGHT;
         this.width = TURNIP_WIDTH;
-        this.vMove = 20;
         this.dropPoints = dropPoints;
         this.initialAttackDelay = TURNIP_ATTACK_DELAY;
     }
@@ -343,8 +358,19 @@ class Turnip extends Enemy {
         
         //ctx.fillText(`Turnip:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(data["turnip-spritesheet"], sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
-    
     }
+
+    die() {
+        super.die();
+        this.factor = 0.4;
+        this.vMove = 64 / this.factor;
+    }
+    burn() {
+        super.burn();
+        this.factor = 0.5;
+        this.vMove = 64/this.factor;
+    }
+
 }
 
 
@@ -372,7 +398,6 @@ class Dandelion extends Enemy {
         this.factor = 0.5;
         this.height = DANDELION_HEIGHT;
         this.width = DANDELION_WIDTH;
-        this.vMove = 64;
         this.dropPoints = dropPoints;
         this.initialAttackDelay = DANDELION_ATTACK_DELAY;
     }
@@ -385,6 +410,17 @@ class Dandelion extends Enemy {
         super.attack();
         audio.playSound('whoosh',8,0.5,false);
     }
+
+    die() {
+        super.die();
+        this.vMove = 80;
+    }
+    burn() {
+        super.burn();
+        this.factor = 0.5;
+        this.vMove = 64/this.factor;
+    }
+
 
     render(ctx, minX, maxX, sizeX, sizeY, x, y, angle) {
         let sourceX = minX / sizeX * this.width | 0;
@@ -404,7 +440,6 @@ class Dandelion extends Enemy {
          
         //ctx.fillText(`Dandelion:   dirX=${this.dirX.toFixed(2)}, dirY=${this.dirY.toFixed(2)}, angle=${this.angle.toFixed(2)}, angleComputed=${angle} health=${this.health}`, 10, 30);
         ctx.drawImage(data["dandelion-spritesheet"], sourceX, ((this.animation[this.frame]+dec) * this.height), width, this.height, x, y, maxX - minX, sizeY);
-    
     }
 }
 
