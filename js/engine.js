@@ -685,6 +685,7 @@ function initTextures() {
     textures[4] = loadTexture(data.wall5);
     textures[5] = loadTexture(data.wall6);
     textures[6] = loadTexture(data.wall7);
+    textures[7] = loadTexture(data.wall8);
     
     textures[9] = loadTexture(data.wall_diagonal);
     

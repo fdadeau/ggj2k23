@@ -2,7 +2,7 @@ import { buildEnemy } from "./enemies.js";
 
 import { buildPowerUp } from "./powerups.js";
 
-const NB_WALL_TEXTURES = 7;
+const NB_WALL_TEXTURES = 8;
 
 
 /*const MAP0 = [

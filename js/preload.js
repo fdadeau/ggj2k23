@@ -42,6 +42,7 @@ const data = {
     "wall5": "./data/textures/wall5.png",
     "wall6": "./data/textures/wall6.png",
     "wall7": "./data/textures/wall7.png",
+    "wall8": "./data/textures/wall_rocks.png",
     "wall_diagonal": "./data/textures/wall_diagonal.png",
     "floor": "./data/textures/floor.png",
 
